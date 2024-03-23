@@ -47,7 +47,9 @@
                 <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white" href="{{ route('Dashboard') }}">
                     <i class="fa-solid fa-home "></i><span class="textoSidebar ml-2">Inicio</span>
                 </a>
-                
+                <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white" href="{{ route('Examen.index') }}">
+                <i class="fa-solid fa-file-lines"></i>  <span class="textoSidebar ml-2">Examenes</span>
+                </a>
             </nav>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf

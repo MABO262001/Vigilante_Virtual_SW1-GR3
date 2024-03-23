@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExamenController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,4 +21,10 @@ Route::get('/', function () {
 
 Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('Dashboard');
+
+    /**
+     * Routes pertenecientes a los examenes y preguntas
+     */
+    Route::get('/examenes', [ExamenController::class, 'index'])->name('Examen.index');
+
 });
