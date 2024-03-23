@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ejecucion;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,14 +14,36 @@ class ExamenController extends Controller
      */
     public function index()
     {
-        $id_user = Auth::user()->id;
-        $user = User::find($id_user); //Para poder manipularlo como un objeto Usuario
-        
+        /**
+         * Actualmente se esta manejando con usuario, luego se tiene que cambiar
+         * por docente.
+         */
+
+        $id_user = Auth::user()->id; 
+        $user = User::find($id_user); //Para poder manipularlo como un objeto User
+
         if ($user) {
 
-            $examenes = $user->examenes();
+            $examenes = $user->examenes()->get();
+
+            $creados = count($examenes);
+            
+            $ejecutados = 0;
+            foreach($examenes as $examen){
+                $ejecutados += count($examen->ejecuciones()->get());
+            }
+
+            $data = array(
+                'user_id' => $user->id,
+                'min' => 1
+            );
+            $ejecutando = Ejecucion::getExamenesEjecutandose($data)[0];
+
             $data = compact(
-                'examenes'
+                'examenes',
+                'ejecutados',
+                'creados',
+                'ejecutando'
             );
             return view('VistaExamen.index')->with($data);
         }

@@ -12,16 +12,16 @@ class Examen extends Model
     protected $fillable = [
         'tema',
         'descripcion',
-        'fecha',
-        'hora_inicio',
-        'hora_final',
-        'ponderacion',
-        'contrasena',
-        'id_docente',
+        'docente_id',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function ejecuciones()
+    {
+        return $this->hasMany(Ejecucion::class);
     }
 }
