@@ -15,7 +15,7 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
 
 
@@ -26,9 +26,9 @@
     <div class="bg-blue-900 text-white shadow w-full p-2 flex items-center justify-between">
         <div class="flex items-center">
             <span class="font-extrabold uppercase text-xl">Verificador</span><span class=" text-xl uppercase ml-1">online.com</span>
-            <div class="md:hidden flex items-center"> 
+            <div class="md:hidden flex items-center">
                 <button id="menuBtn">
-                    <i class="fas fa-bars text-gray-500 text-lg"></i> 
+                    <i class="fas fa-bars text-gray-500 text-lg"></i>
                 </button>
             </div>
         </div>
@@ -47,6 +47,9 @@
                 <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white" href="{{ route('Dashboard') }}">
                     <i class="fa-solid fa-home "></i><span class="textoSidebar ml-2">Inicio</span>
                 </a>
+                <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white" href="{{ route('Usuario.index') }}">
+                    <i class="fa-solid fa-user"></i>  <span class="textoSidebar ml-2">Usuario</span>
+                    </a>
                 <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white" href="{{ route('Examen.index') }}">
                 <i class="fa-solid fa-file-lines"></i>  <span class="textoSidebar ml-2">Examenes</span>
                 </a>
@@ -78,7 +81,7 @@
         sideNav.classList.toggle('hidden');
     });
 
-    
+
 </script>
 </body>
 
