@@ -31,10 +31,11 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     //  Routes pertenecientes a los usuarios
     Route::get('/usuarios', [UsuarioController::class, 'index'])->name('Usuario.index');
     Route::get('/usuarios/create', [UsuarioController::class, 'create'])->name('Usuario.create');
-    Route::get('/usuarios/edit', [UsuarioController::class, 'edit'])->name('Usuario.edit');
+    Route::get('/usuarios/edit/{id}', [UsuarioController::class, 'edit'])->name('Usuario.edit');
     Route::get('/usuarios/show', [UsuarioController::class, 'show'])->name('Usuario.show');
     Route::delete('/usuarios/destroy/{id}', [UsuarioController::class, 'destroy'])->name('Usuario.destroy');
     Route::get('/usuarios/buscar', [UsuarioController::class, 'buscar'])->name('Usuario.buscar');
     Route::post('/usuarios/store', [UsuarioController::class, 'store'])->name('Usuario.store');
+    Route::put('/usuarios/update/{id}', [UsuarioController::class, 'update'])->name('Usuario.update');
 
 });
