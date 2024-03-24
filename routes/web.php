@@ -33,7 +33,8 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/usuarios/create', [UsuarioController::class, 'create'])->name('Usuario.create');
     Route::get('/usuarios/edit', [UsuarioController::class, 'edit'])->name('Usuario.edit');
     Route::get('/usuarios/show', [UsuarioController::class, 'show'])->name('Usuario.show');
-    Route::get('/usuarios/destroy', [UsuarioController::class, 'destroy'])->name('Usuario.destroy');
-    Route::get('/usuarios/buscar', [UsuarioController::class, 'buscar'])->name('usuarios.buscar');
+    Route::delete('/usuarios/destroy/{id}', [UsuarioController::class, 'destroy'])->name('Usuario.destroy');
+    Route::get('/usuarios/buscar', [UsuarioController::class, 'buscar'])->name('Usuario.buscar');
+    Route::post('/usuarios/store', [UsuarioController::class, 'store'])->name('Usuario.store');
 
 });

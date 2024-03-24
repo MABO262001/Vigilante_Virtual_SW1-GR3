@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UsuarioController extends Controller
 {
@@ -39,14 +40,15 @@ class UsuarioController extends Controller
                         ->with('roles')
                         ->get();
 
-        if ($request->has('rol')) {
-            if ($request->input('rol') == 'TodosMenosMaster') {
+        if ($request->has('rol') && $request->input('rol') != '') {
+            $rol = decrypt($request->input('rol'));
+            if ($rol == 'TodosMenosMaster') {
                 $usuarios = $usuarios->reject(function ($usuario) {
                     return $usuario->roles->contains('name', 'Master');
                 });
-            } elseif ($request->input('rol') != 'Todos') {
-                $usuarios = $usuarios->filter(function ($usuario) use ($request) {
-                    return $usuario->roles->contains('name', $request->input('rol'));
+            } elseif ($rol != 'Todos') {
+                $usuarios = $usuarios->filter(function ($usuario) use ($rol) {
+                    return $usuario->roles->contains('name', $rol);
                 });
             }
         } elseif (auth()->check() && !auth()->user()->hasRole('Master')) {
@@ -73,14 +75,42 @@ class UsuarioController extends Controller
     public function create()
     {
         $roles = Role::all();
+
+        if (auth()->check() && !auth()->user()->hasRole('Master')) {
+            $roles = $roles->reject(function ($role) {
+                return $role->name == 'Master' || $role->name == 'Administrativo Premium' ||
+                        $role->name == 'Docente Premium' || $role->name == 'Administrativo';
+            });
+        }
+
         return view('VistaUsuario.create', compact('roles'));
     }
 
-
-
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'role' => 'required|string|max:255',
+            'profile_photo_path' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $user = new User;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+
+        if($request->hasFile('profile_photo_path')) {
+            $imageName = $request->name.'.'.$request->profile_photo_path->extension();
+            $request->profile_photo_path->move(public_path('images/user'), $imageName);
+            $user->profile_photo_path = '/images/user/'.$imageName;
+        }
+
+        $user->save();
+
+        $user->assignRole($request->role);
+        return redirect()->route('Usuario.index')->with('success','Usuario creado exitosamente.');
     }
 
 
@@ -104,6 +134,7 @@ class UsuarioController extends Controller
 
     public function destroy(string $id)
     {
-        //
+        User::destroy($id);
+        return redirect()->route('Usuario.index')->with('success', 'Usuario eliminado con éxito');
     }
 }
