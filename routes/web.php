@@ -26,5 +26,6 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
      * Routes pertenecientes a los examenes y preguntas
      */
     Route::get('/examenes', [ExamenController::class, 'index'])->name('Examen.index');
+    Route::get('/examenes/create', [ExamenController::class, 'create'])->name('Examen.create');
 
 });

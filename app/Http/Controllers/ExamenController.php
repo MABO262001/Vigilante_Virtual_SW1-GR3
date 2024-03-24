@@ -54,7 +54,7 @@ class ExamenController extends Controller
      */
     public function create()
     {
-        //
+        return view('VistaExamen.create');
     }
 
     /**
