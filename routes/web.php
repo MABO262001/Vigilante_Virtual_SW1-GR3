@@ -4,7 +4,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExamenController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Roles;
+use App\Http\Controllers\Permisos;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,5 +36,9 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/usuarios/show', [UsuarioController::class, 'show'])->name('Usuario.show');
     Route::get('/usuarios/destroy', [UsuarioController::class, 'destroy'])->name('Usuario.destroy');
     Route::get('/usuarios/buscar', [UsuarioController::class, 'buscar'])->name('usuarios.buscar');
+    
 
+    // Routes para roles y permisos
+    Route::resource('Permisos', Permisos::class);
+    Route::resource('Roles', Roles::class);
 });

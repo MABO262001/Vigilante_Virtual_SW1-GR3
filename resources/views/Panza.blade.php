@@ -50,6 +50,9 @@
                 <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white" href="{{ route('Usuario.index') }}">
                     <i class="fa-solid fa-user"></i>  <span class="textoSidebar ml-2">Usuario</span>
                     </a>
+                <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white" href="{{ route('Roles.index') }}">
+                    <i class="fa-solid fa-lock"></i>  <span class="textoSidebar ml-2">Roles y Permisos</span>
+                    </a>
                 <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white" href="{{ route('Examen.index') }}">
                 <i class="fa-solid fa-file-lines"></i>  <span class="textoSidebar ml-2">Examenes</span>
                 </a>
