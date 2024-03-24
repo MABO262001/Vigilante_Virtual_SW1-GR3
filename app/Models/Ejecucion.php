@@ -25,6 +25,11 @@ class Ejecucion extends Model
         return $this->belongsTo(Examen::class);
     }
 
+    public function estadoEjecucion()
+    {
+        return $this->belongsTo(EstadoEjecucion::class);
+    }
+
     public static function getExamenesEjecutandose($data){
 
         $today = Carbon::now()->format('Y-m-d');

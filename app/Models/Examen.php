@@ -26,10 +26,6 @@ class Examen extends Model
         return $this->hasMany(Ejecucion::class);
     }
 
-    public function estado_examen()
-    {
-        return $this->belongsTo(EstadoEjecucion::class);
-    }
 
     public function preguntas()
     {

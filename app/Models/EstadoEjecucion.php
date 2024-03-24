@@ -17,4 +17,9 @@ class EstadoEjecucion extends Model
     {
         return $this->hasMany(Examen::class);
     }
+
+    public function ejecuciones()
+    {
+        return $this->hasMany(Ejecucion::class);
+    }
 }
