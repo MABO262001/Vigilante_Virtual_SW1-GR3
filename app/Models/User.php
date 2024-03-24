@@ -30,6 +30,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'nombre',
+        'apellido_paterno',
+        'apellido_materno',
+        'telefono',
+        'fecha_nacimiento',
+        // 'profile_photo_path',
     ];
 
     /**

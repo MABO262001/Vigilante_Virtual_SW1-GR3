@@ -32,13 +32,9 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     //  Routes pertenecientes a los usuarios
     Route::get('/usuarios', [UsuarioController::class, 'index'])->name('Usuario.index');
     Route::get('/usuarios/create', [UsuarioController::class, 'create'])->name('Usuario.create');
-    Route::get('/usuarios/edit', [UsuarioController::class, 'edit'])->name('Usuario.edit');
+    Route::get('/usuarios/edit/{id}', [UsuarioController::class, 'edit'])->name('Usuario.edit');
     Route::get('/usuarios/show', [UsuarioController::class, 'show'])->name('Usuario.show');
     Route::get('/usuarios/destroy', [UsuarioController::class, 'destroy'])->name('Usuario.destroy');
     Route::get('/usuarios/buscar', [UsuarioController::class, 'buscar'])->name('usuarios.buscar');
-    
 
-    // Routes para roles y permisos
-    Route::resource('Permisos', Permisos::class);
-    Route::resource('Roles', Roles::class);
 });
