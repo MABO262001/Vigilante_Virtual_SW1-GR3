@@ -60,7 +60,7 @@
             <div class="bg-gradient-to-r from-blue-300 to-blue-500 h-px mt-2"></div>
         </div>
         <div class="flex-1 p-4 w-full md:w-1/2">
-            <div class="mt-1  flex flex-wrap space-x-0 space-y-2 md:space-x-4 md:space-y-0">
+            <div class="mt-1 h-full flex flex-wrap space-x-0 space-y-2 md:space-x-4 md:space-y-0">
                 <div class="flex-1  bg-white p-4 shadow rounded-lg w-full">
                     @yield('Panza')
                 </div>
