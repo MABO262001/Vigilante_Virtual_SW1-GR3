@@ -24,11 +24,6 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('Dashboard');
 
-
-    //  Routes pertenecientes a los examenes y preguntas
-    Route::get('/examenes', [ExamenController::class, 'index'])->name('Examen.index');
-    Route::get('/examenes/create', [ExamenController::class, 'create'])->name('Examen.create');
-
     //  Routes pertenecientes a los usuarios
     Route::get('/usuarios', [UsuarioController::class, 'index'])->name('Usuario.index');
     Route::get('/usuarios/create', [UsuarioController::class, 'create'])->name('Usuario.create');
@@ -36,5 +31,8 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/usuarios/show', [UsuarioController::class, 'show'])->name('Usuario.show');
     Route::get('/usuarios/destroy', [UsuarioController::class, 'destroy'])->name('Usuario.destroy');
     Route::get('/usuarios/buscar', [UsuarioController::class, 'buscar'])->name('usuarios.buscar');
+
+    Route::resource('Permisos', Permisos::class);
+    Route::resource('Roles', Roles::class);
 
 });

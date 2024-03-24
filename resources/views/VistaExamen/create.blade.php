@@ -2,8 +2,15 @@
 @section('Panza')
 
 
-<h1 class="text-gray-800 font-semibold uppercase text-xl border-b pb-1 ">Crear Examen</h1>
+<div class=" border-b pb-1 flex justify-between">
+    <h1 class="text-gray-800 font-semibold uppercase text-xl">Crear Examen</h1>
+    <div class="gap-x-2 fflex flex-wrap -translate-y-1">
+        <button id="save" class="text-white bg-green-500 px-2 py-1 rounded-md"><i class="fa-solid fa-circle-check mr-1"></i>Guardar</button>
+        <a href="{{route('Examen.index')}}" class="text-white bg-red-500 px-2 py-1 rounded-md">
+            <i class="fa-solid fa-circle-xmark mr-1"></i></i>Cancelar</a>
+    </div>
 
+</div>
 <div class="grid md:grid-cols-2 md:gap-x-2 mt-4 h-5/6">
 
     <div class="p-2 md:border-r pr-4 ">
@@ -19,20 +26,19 @@
         </div>
 
         <div class="mt-6 overflow-hidden">
-            <button id="ejecucion" class="font-semibold"><i id="arrow" class="fa-solid fa-caret-down"></i> Configurar ejecucion</button>
+            <div class="flex items-center gap-x-1 ml-1">
+            <input type="checkbox" id="ejecucion" class="rounded-full border-2"></input> <span class="font-semibold -translate-y-[1px]">Configurar ejecucion</span>
+            </div>
 
             <div class="grid md:grid-cols-2 gap-x-4 animate-fade-down 
             animate-duration-[400ms] animate-ease-out hidden" id="contenedor">
 
                 <div class="mt-4">
-                    <label for="fecha_inicio" class="text-sm font-semibold block text-gray-700 translate-x-2">Fecha inicio</label>
-                    <input type="date" name="fecha_inicio" id="fecha_inicio" class="rounded-xl w-full">
+                    <label for="fecha" class="text-sm font-semibold block text-gray-700 translate-x-2">Fecha</label>
+                    <input type="date" name="fecha" id="fecha" class="rounded-xl w-full">
                 </div>
 
-                <div class="mt-4">
-                    <label for="fecha_final" class="text-sm font-semibold block text-gray-700 translate-x-2">Fecha final</label>
-                    <input type="date" name="fecha_final" id="fecha_final" class="rounded-xl w-full">
-                </div>
+                <div></div>
 
                 <div class="mt-4">
                     <label for="hora_inicio" class="text-sm font-semibold block text-gray-700 translate-x-2">Hora inicio</label>
@@ -67,7 +73,7 @@
     <div class="p-2">
         <span class="font-semibold text-sm text-gray-700">Preguntas</span>
 
-        <div class="mt-4" id="contenedorPreguntas">
+        <div class="mt-4" id="questions_container">
 
         </div>
 
@@ -185,245 +191,6 @@
         </div>
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-
-        const contenedor = document.getElementById('contenedor');
-        const ejecucion = document.getElementById('ejecucion');
-
-        ejecucion.addEventListener('click', () => {
-            contenedor.classList.toggle('hidden');
-        });
-
-        const randomPassword = document.getElementById('randomPassword');
-        const contrasena = document.getElementById('contrasena');
-        randomPassword.addEventListener('click', () => {
-            let password = '';
-            for (let i = 0; i < 5; i++) {
-                password += Math.floor(Math.random() * 10);
-            }
-            contrasena.value = password;
-        });
-
-
-        const ponderacion = document.getElementById('ponderacion');
-        ponderacion.addEventListener('input', (event) => {
-            if (event.target.value > 100) {
-                event.target.value = 100;
-            }
-        });
-
-        const crear_pregunta_modal = document.getElementById('crear_pregunta_modal');
-        const btn_agregar_pregunta = document.getElementById('btn_agregar_pregunta');
-        const close_pregunta_modal = document.getElementById('close_pregunta_modal');
-
-        btn_agregar_pregunta.addEventListener('click', () => {
-            crear_pregunta_modal.classList.remove('hidden');
-        });
-
-        close_pregunta_modal.addEventListener('click', () => {
-            crear_pregunta_modal.classList.add('hidden');
-        });
-
-        const vfRadio = document.getElementById('vf');
-        const multipleRadio = document.getElementById('multiple');
-        const abiertaRadio = document.getElementById('abierta');
-
-        const vf_container = document.getElementById('vf_container');
-        const no_option_container = document.getElementById('no_option_container');
-        const multiple_container = document.getElementById('multiple_container');
-        const abierta_container = document.getElementById('abierta_container');
-
-        var flag = 'n';
-
-
-        vfRadio.addEventListener('change', function() {
-            vf_container.classList.remove('hidden');
-            no_option_container.classList.add('hidden');
-            multiple_container.classList.add('hidden');
-            abierta_container.classList.add('hidden');
-            flag = 'vf';
-
-        });
-
-        multipleRadio.addEventListener('change', function() {
-            vf_container.classList.add('hidden');
-            no_option_container.classList.add('hidden');
-            multiple_container.classList.remove('hidden');
-            abierta_container.classList.add('hidden');
-            flag = 'ml';
-
-        });
-
-        abiertaRadio.addEventListener('change', function() {
-            vf_container.classList.add('hidden');
-            no_option_container.classList.add('hidden');
-            multiple_container.classList.add('hidden');
-            abierta_container.classList.remove('hidden');
-            flag = 'a';
-        });
-
-        const agregar_opcion = document.getElementById('agregar_opcion');
-        const contenedor_opciones = document.getElementById('contenedor_opciones');
-        var contador_opciones = 0;
-
-        agregar_opcion.addEventListener('click', () => {
-
-            contador_opciones++;
-            var div = document.createElement('div');
-            div.classList.add('flex', 'flex-wrap', 'gap-x-2', 'p-2',
-                'justify-center', 'items-center', 'bg-blue-100', 'rounded-xl',
-                'mb-2');
-            div.id = "opcion" + contador_opciones;
-
-            var check = document.createElement('input');
-            check.type = 'checkbox';
-            check.id = 'check' + contador_opciones;
-            check.classList.add('bg-blue-100', 'border-2', 'rounded-full',
-                'mr-2');
-
-            var text = document.createElement('input');
-            text.type = 'text';
-            text.classList.add('border-x-transparent', 'border-t-transparent',
-                'border-b-2', 'focus:outline-none', 'focus:border-transparent', 'h-8',
-                'bg-blue-100', 'border-gray-400');
-
-            text.id = 'text' + contador_opciones;
-
-            var button = document.createElement('button');
-            button.className = 'text-gray-300 hover:text-red-500 ml-2 text-xl';
-            button.innerHTML = '<i class="fa-solid fa-trash"></i>';
-
-            button.onclick = function() {
-                borrarOpcion(div.id);
-            };
-
-
-            div.appendChild(check);
-            div.appendChild(text);
-            div.appendChild(button);
-
-            contenedor_opciones.appendChild(div);
-        });
-
-
-        function deleteOption(id) {
-            const div = document.getElementById(id);
-            contenedor_opciones.removeChild(div)
-        }
-
-        var preguntas = [];
-
-        const add = document.getElementById('add');
-        const loading_gif = document.getElementById('loading_gif');
-
-        const descripcion_pregunta = document.getElementById('descripcion_pregunta');
-        const comentario_pregunta = document.getElementById('comentario_pregunta');
-        const ponderacion_pregunta = document.getElementById('ponderacion_pregunta');
-
-        var contador_preguntas = 0;
-
-        add.addEventListener('click', () => {
-            loading_gif.classList.remove('hidden');
-
-            add.setAttribute('disabled', true);
-            add.classList.remove('bg-blue-600', 'text-white');
-            add.classList.add('bg-blue-700', 'text-gray-300');
-
-            var respuestas = [];
-            var tp = 0;
-            switch (flag) {
-                case 'vf':
-
-                    var respuesta = {
-                        'contenido': 'verdadero',
-                        'es_correcta': document.getElementById('v').checked,
-                    };
-                    respuestas.push(respuesta);
-                    respuesta = {
-                        'contenido': 'falso',
-                        'es_correcta': document.getElementById('f').checked,
-                    };
-                    respuestas.push(respuesta);
-                    tp = 1;
-
-                    break;
-                case 'ml':
-                    var opciones = contenedor_opciones.querySelectorAll('div');
-                    opciones.forEach(function(opcion) {
-
-                        respuesta = {
-                            'contenido': opcion.querySelector('input[type="text"]').value,
-                            'es_correcta': opcion.querySelector('input[type="checkbox"]').checked
-                        }
-                        respuestas.push(respuesta);
-                    });
-                    tp = 2;
-
-                    break;
-                case 'a':
-                    tp = 3;
-
-                    break;
-            }
-
-            contador_preguntas++;
-
-            var pregunta = {
-                'id': contador_preguntas,
-                'descripcion_pregunta': descripcion_pregunta.value,
-                'comentario_pregunta': comentario_pregunta.value,
-                'ponderacion_pregunta': ponderacion_pregunta.value,
-                'tipo_pregunta': tp,
-                'respuestas': respuestas
-            }
-
-            preguntas.push(pregunta);
-
-            descripcion_pregunta.value = '';
-            comentario_pregunta.value = '';
-            ponderacion_pregunta.value = '';
-
-            contenedor_opciones.innerHTML = '';
-
-            setTimeout(() => {
-
-                add.setAttribute('disabled', false);
-                add.classList.add('bg-blue-600', 'text-white');
-                add.classList.remove('bg-blue-700', 'text-gray-300');
-
-                crear_pregunta_modal.classList.add('hidden');
-            }, 300);
-
-
-            actualizarContenedorPreguntas();
-        });
-
-        function actualizarContenedorPreguntas() {
-            preguntas.forEach(function(pregunta) {
-
-                var div = document.createElement('div');
-                div.id = pregunta['id'];
-                div.classList.add('p-4', 'bg-blue-600', 'rounded-xl', 'w-full', 'flex', 'justify-between');
-
-                var qc_container = document.createElement('div');
-
-                var q = document.createElement('h3');
-                q.classList.add('text-white', 'font-bold', 'text-xl');
-                q.textContent = pregunta['descripcion_pregunta'];
-
-                var c = document.createElement('h4');
-                c.classList.add('text-white', 'font-semibold', 'text-lg');
-                var comentario = pregunta['comentario_pregunta'];
-                if (comentario.length > 40) {
-                    comentario = comentario.substring(0, 40) + '...';
-                }
-                c.textContent = comentario;
-                
-            });
-        }
-    });
-</script>
+<script src="{{asset('js/examenes.js')}}"></script>
 
 @endsection
