@@ -16,9 +16,11 @@ return new class extends Migration
             $table->string('tema');
             $table->string('descripcion')->nullable;
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('estado_ejecucion_id');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('estado_ejecucion_id')->references('id')->on('estado_ejecucions')->onDelete('cascade');
             //Esta asociado temporalmente con usuario, hasta que se desarrolle la parte de docente, no reniene(n)
             //Att: papitas
         });

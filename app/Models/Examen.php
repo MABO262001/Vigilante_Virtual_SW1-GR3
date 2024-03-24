@@ -13,6 +13,7 @@ class Examen extends Model
         'tema',
         'descripcion',
         'docente_id',
+        'estado_examen_id',
     ];
 
     public function user()
@@ -24,4 +25,15 @@ class Examen extends Model
     {
         return $this->hasMany(Ejecucion::class);
     }
+
+    public function estado_examen()
+    {
+        return $this->belongsTo(EstadoEjecucion::class);
+    }
+
+    public function preguntas()
+    {
+        return $this->hasMany(Pregunta::class);
+    }
+
 }
