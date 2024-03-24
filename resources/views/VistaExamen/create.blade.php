@@ -72,7 +72,7 @@
 
 </div>
 
-<div id="renovarModal" class="fixed z-50 inset-0  overflow-auto ">
+<div id="renovarModal" class="fixed z-50 inset-0 hidden overflow-auto ">
     <div class="modal-overlay absolute w-full h-full bg-gray-900 bg-opacity-75"></div>
     <div class="modal-container mx-auto mt-8 rounded-lg overflow-hidden shadow-lg animate-fadea-down animate-duration-300 bg-white max-w-4xl">
         <div class="modal-content text-left relative">
@@ -84,7 +84,7 @@
 
             <div class="p-4 bg-white">
                 <div class="grid md:grid-cols-2">
-                    <div class="border-r pr-4">
+                    <div class="md:border-r md:pr-4">
 
                         <div class="w-full">
                             <label for="descripcion_pregunta" class="text-sm font-semibold block text-gray-700">Descripcion</label>
@@ -122,8 +122,32 @@
 
                     </div>
 
-                    <div class="">
+                    <div class="md:pl-4">
 
+                        <div class="text-center hidden" id="vfContainer">
+                            <h2 class="text-sm font-semibold block text-gray-700">Respuesta</h2>
+
+                            <div class=" flex gap-x-4 text-sm  text-gray-700 justify-center flex-wrap mt-4">
+                                <div class="text-center">
+                                    <span class="block">Verdadero</span>
+                                    <input type="radio" name="respuesta_vf" id="v">
+                                </div>
+
+                                <div class="text-center">
+                                    <span class="block">Falso</span>
+                                    <input type="radio" name="respuesta_vf" id="f">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center" id="multipleContainer">
+                            <h2 class="text-sm font-semibold block text-gray-700 ">Respuesta</h2>
+                            <span class="text-sm mb-4 block">(Seleccione las opciones correctas)</span>
+                            <div class="mb-4" id="contenedor_opciones">
+
+                            </div>
+                            <button id="agregar_opcion" class="text-sm px-2 py-1 hover:bg-blue-500 shadow-md shadow-gray-300 bg-blue-600 text-white rounded-xl">Agregar opcion</button>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -165,18 +189,53 @@
         const abiertaRadio = document.getElementById('abierta');
 
         vfRadio.addEventListener('change', function() {
-            // Instrucciones para el caso de V/F
             console.log('Seleccionaste V/F');
         });
 
         multipleRadio.addEventListener('change', function() {
-            // Instrucciones para el caso de Multiple
             console.log('Seleccionaste Multiple');
         });
 
         abiertaRadio.addEventListener('change', function() {
-            // Instrucciones para el caso de Abierta
             console.log('Seleccionaste Abierta');
+        });
+
+        const agregar_opcion = document.getElementById('agregar_opcion');
+        const contenedor_opciones = document.getElementById('contenedor_opciones');
+        var contador_opciones = 0;
+
+        agregar_opcion.addEventListener('click', () => {
+
+            contador_opciones++;
+            var div = document.createElement('div');
+            div.classList.add('flex', 'flex-wrap', 'gap-x-2', 'p-2',
+                'justify-center', 'items-center', 'bg-blue-100', 'rounded-xl',
+                'mb-2');
+            div.id = "opcion" + contador_opciones;
+
+            var check = document.createElement('input');
+            check.type = 'checkbox';
+            check.id = 'check' + contador_opciones;
+            check.classList.add('bg-blue-100', 'border-2', 'rounded-full',
+                'mr-2');
+
+            var text = document.createElement('input');
+            text.type = 'text';
+            text.classList.add('border-x-transparent', 'border-t-transparent',
+                'border-b-2', 'focus:outline-none', 'focus:border-transparent', 'h-8',
+                'bg-blue-100', 'border-gray-400');
+
+            text.id = 'text' + contador_opciones;
+
+            var button = document.createElement('button');
+            button.className = 'text-gray-300 hover:text-red-500 ml-2 text-xl';
+            button.innerHTML = '<i class="fa-solid fa-trash"></i>';
+            
+            div.appendChild(check);
+            div.appendChild(text);
+            div.appendChild(button);
+
+            contenedor_opciones.appendChild(div);
         });
 
     });
