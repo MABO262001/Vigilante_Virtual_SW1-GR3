@@ -19,8 +19,6 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            //Esta asociado temporalmente con usuario, hasta que se desarrolle la parte de docente, no reniene(n)
-            //Att: papitas
         });
     }
 
