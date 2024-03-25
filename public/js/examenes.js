@@ -310,6 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (responseData['msg'] == 'ok') {
                     window.location.reload();
                 }
+                console.log(responseData);
             });
     });
 });

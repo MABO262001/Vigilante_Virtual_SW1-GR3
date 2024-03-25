@@ -62,7 +62,10 @@ class ExamenController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = Auth::user();
+        if($user){
+            return $request->preguntas;
+        }
     }
 
     /**

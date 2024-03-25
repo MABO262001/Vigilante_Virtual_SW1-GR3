@@ -56,7 +56,7 @@
         </form>
     </div>
 
-    <div class="mt-8">
+    <div class="mt-8 overflow-x-auto">
         <table class="w-full table-auto">
             <thead>
                 <tr class="bg-gray-200">
