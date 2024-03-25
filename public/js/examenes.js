@@ -302,6 +302,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'fecha':        fecha.value,
             'hora_inicio':  hora_inicio.value,
             'hora_final':   hora_final.value,
+            'ponderacion':  ponderacion.value,
+            'contrasena':   contrasena.value
         }
         fetch('/examenes/store', {
             method: 'POST',
@@ -319,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(responseData => {
                 if (responseData['msg'] == 'ok') {
-                    window.location.reload();
+                    window.location.href = '/examenes';
                 }
                 console.log(responseData);
             });

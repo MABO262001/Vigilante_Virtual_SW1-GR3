@@ -44,7 +44,8 @@ class Ejecucion extends Model
             //Logica cuando se requiera datos mas informacion, por ahora no
         }
 
-        $query->leftJoin('examens', 'examens.id', 'ejecucions.examen_id');
+        $query->leftJoin('examens', 'examens.id', 'ejecucions.examen_id')
+        ->whereIn('estado_ejecucion_id', [3,2]);
 
         if(isset($data['user_id'])
         && $data['user_id'] != ''){

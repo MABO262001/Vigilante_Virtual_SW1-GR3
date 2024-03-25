@@ -33,7 +33,7 @@ class ExamenController extends Controller
             
             $ejecutados = 0;
             foreach($examenes as $examen){
-                $ejecutados += count($examen->ejecuciones()->get());
+                $ejecutados += count($examen->ejecuciones()->where('estado_ejecucion_id', 1)->get());
             }
 
             $data = array(
@@ -66,7 +66,7 @@ class ExamenController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        return $request;
+        
         //Colocar filtro de profesor
         if($user){
 
@@ -86,18 +86,18 @@ class ExamenController extends Controller
             foreach($preguntas as $item_pregunta){
 
                 $pregunta = Pregunta::create([
-                    'descripcion'       =>  $item_pregunta->descripcion_pregunta,
-                    'ponderacion'       =>  $item_pregunta->ponderacion_pregunta,
-                    'comentario'        =>  $item_pregunta->comentario_pregunta,
-                    'tipo_pregunta_id'  =>  $item_pregunta->tipo_pregunta,
+                    'descripcion'       =>  $item_pregunta['descripcion_pregunta'],
+                    'ponderacion'       =>  $item_pregunta['ponderacion_pregunta'],
+                    'comentario'        =>  $item_pregunta['comentario_pregunta'],
+                    'tipo_pregunta_id'  =>  $item_pregunta['tipo_pregunta'],
                     'examen_id'         =>  $examen->id,
                 ]);
 
-                $respuestas = $item_pregunta->respuestas;
+                $respuestas = $item_pregunta['respuestas'];
                 foreach($respuestas as $item_respuesta){
                     $respuesta = Respuesta::create([
-                        'descripcion' => $item_respuesta->descripcion,
-                        'ponderacion' => $item_respuesta->ponderacion,
+                        'descripcion' => $item_respuesta['descripcion'],
+                        'es_correcta' => $item_respuesta['es_correcta'],
                         'pregunta_id' => $pregunta->id,
                     ]);
                 }
@@ -114,8 +114,12 @@ class ExamenController extends Controller
                     'examen_id'             =>  $examen->id,
                     'estado_ejecucion_id'   =>  3
                 ]);
+
+                toastr('Ejecucion de examen programada correctamete', 'success','Ejecucion de examen');
             }
+            toastr('Examen creado correctamente', 'success','Examen');
             
+            return array('msg' => 'ok');
         }
     }
 

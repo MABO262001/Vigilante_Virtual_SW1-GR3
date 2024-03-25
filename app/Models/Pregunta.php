@@ -16,6 +16,8 @@ class Pregunta extends Model
         'examen_id',
     ];
 
+    protected $table = 'preguntas';
+
     public function tipoPregunta()
     {
         return $this->belongsTo(TipoPregunta::class);
