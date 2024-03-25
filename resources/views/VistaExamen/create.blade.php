@@ -191,6 +191,8 @@
         </div>
     </div>
 </div>
+
+<input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
 <script src="{{asset('js/examenes.js')}}"></script>
 
 @endsection

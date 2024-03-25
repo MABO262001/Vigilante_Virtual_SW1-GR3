@@ -12,8 +12,7 @@ class Examen extends Model
     protected $fillable = [
         'tema',
         'descripcion',
-        'docente_id',
-        'estado_examen_id',
+        'user_id',
     ];
 
     public function user()

@@ -17,7 +17,8 @@ class Ejecucion extends Model
         'hora_final',
         'ponderacion',
         'contrasena',
-        'examen_id'
+        'examen_id',
+        'estado_ejecucion_id'
     ];
 
     public function examen()

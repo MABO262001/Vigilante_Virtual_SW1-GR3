@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ejecucion;
+use App\Models\Examen;
+use App\Models\Pregunta;
+use App\Models\Respuesta;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -63,8 +66,56 @@ class ExamenController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
+        return $request;
+        //Colocar filtro de profesor
         if($user){
-            return $request->preguntas;
+
+            $request->validate([
+                'tema' => 'required|string|max:100',
+                'descripcion' => 'required|string|max:255',
+            ]);
+
+            $examen = Examen::create([
+                'tema'          =>  $request->tema,
+                'descripcion'   =>  $request->descripcion,
+                'user_id'       =>  $user->id
+            ]);
+
+            $preguntas = $request->preguntas;
+
+            foreach($preguntas as $item_pregunta){
+
+                $pregunta = Pregunta::create([
+                    'descripcion'       =>  $item_pregunta->descripcion_pregunta,
+                    'ponderacion'       =>  $item_pregunta->ponderacion_pregunta,
+                    'comentario'        =>  $item_pregunta->comentario_pregunta,
+                    'tipo_pregunta_id'  =>  $item_pregunta->tipo_pregunta,
+                    'examen_id'         =>  $examen->id,
+                ]);
+
+                $respuestas = $item_pregunta->respuestas;
+                foreach($respuestas as $item_respuesta){
+                    $respuesta = Respuesta::create([
+                        'descripcion' => $item_respuesta->descripcion,
+                        'ponderacion' => $item_respuesta->ponderacion,
+                        'pregunta_id' => $pregunta->id,
+                    ]);
+                }
+            }
+
+            if ($request->ejecucion) {
+
+                $ejecucion = Ejecucion::create([
+                    'fecha'                 =>  $request->fecha,
+                    'hora_inicio'           =>  $request->hora_inicio,
+                    'hora_final'            =>  $request->hora_final,
+                    'ponderacion'           =>  $request->ponderacion,
+                    'contrasena'            =>  $request->contrasena,
+                    'examen_id'             =>  $examen->id,
+                    'estado_ejecucion_id'   =>  3
+                ]);
+            }
+            
         }
     }
 

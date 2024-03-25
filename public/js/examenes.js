@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var flag = 'n';
 
 
-    vfRadio.addEventListener('change', function() {
+    vfRadio.addEventListener('change', function () {
         vf_container.classList.remove('hidden');
         no_option_container.classList.add('hidden');
         multiple_container.classList.add('hidden');
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
-    multipleRadio.addEventListener('change', function() {
+    multipleRadio.addEventListener('change', function () {
         vf_container.classList.add('hidden');
         no_option_container.classList.add('hidden');
         multiple_container.classList.remove('hidden');
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
-    abiertaRadio.addEventListener('change', function() {
+    abiertaRadio.addEventListener('change', function () {
         vf_container.classList.add('hidden');
         no_option_container.classList.add('hidden');
         multiple_container.classList.add('hidden');
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         button.className = 'text-gray-300 hover:text-red-500 ml-2 text-xl';
         button.innerHTML = '<i class="fa-solid fa-trash"></i>';
 
-        button.onclick = function() {
+        button.onclick = function () {
             deleteOption(div.id);
         };
 
@@ -148,12 +148,12 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'vf':
 
                 var respuesta = {
-                    'contenido': 'verdadero',
+                    'descripcion': 'verdadero',
                     'es_correcta': document.getElementById('v').checked,
                 };
                 respuestas.push(respuesta);
                 respuesta = {
-                    'contenido': 'falso',
+                    'descripcion': 'falso',
                     'es_correcta': document.getElementById('f').checked,
                 };
                 respuestas.push(respuesta);
@@ -162,10 +162,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'ml':
                 var opciones = contenedor_opciones.querySelectorAll('div');
-                opciones.forEach(function(opcion) {
+                opciones.forEach(function (opcion) {
 
                     respuesta = {
-                        'contenido': opcion.querySelector('input[type="text"]').value,
+                        'descripcion': opcion.querySelector('input[type="text"]').value,
                         'es_correcta': opcion.querySelector('input[type="checkbox"]').checked
                     }
                     respuestas.push(respuesta);
@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         questions_container.innerHTML = '';
 
-        preguntas.forEach(function(pregunta) {
+        preguntas.forEach(function (pregunta) {
 
             var div = document.createElement('div');
             div.id = pregunta['id'];
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
             delete_button.className = 'text-gray-300 hover:text-red-500 ml-2 text-xl';
             delete_button.innerHTML = '<i class="fa-solid fa-trash"></i>';
 
-            delete_button.onclick = function() {
+            delete_button.onclick = function () {
                 deleteQuestion(pregunta['id']);
             }
 
@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var question = questions_container.querySelector('div[id="' + id + '"]');
         questions_container.removeChild(question);
 
-        preguntas = preguntas.filter(function(pregunta) {
+        preguntas = preguntas.filter(function (pregunta) {
             return pregunta['id'] !== id;
         });
 
@@ -273,33 +273,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const save = document.getElementById('save');
 
-    const hora_inicio = document.getElementById('hora_incio');
+    const hora_inicio = document.getElementById('hora_inicio');
     const hora_final = document.getElementById('hora_final');
     const fecha = document.getElementById('fecha');
     const tema = document.getElementById('tema');
     const descripcion = document.getElementById('descripcion');
+
+    const fechaActual = new Date();
+    const fechaString = fechaActual.toISOString().split('T')[0]; 
+    const horaInicioString = '12:00';
+    const horaFinalString = '13:00';
+    const csrfToken = document.getElementById('csrf_token').value;
+
     
+    fecha.value = fechaString;
+    hora_inicio.value = horaInicioString;
+    hora_final.value = horaFinalString;
+    ponderacion.value = 40;
+
 
     save.addEventListener('click', () => {
 
         var data = {
-            'preguntas' :   preguntas,
-            'tema':         tema,
-            'descripcion':  descripcion,
+            'preguntas':    preguntas,
+            'tema':         tema.value,
+            'descripcion':  descripcion.value,
             'ejecucion':    ejecucion.checked,
-            'fecha':        fecha,
-            'hora_inicio':  hora_inicio,
-            'hora_final':   hora_final,
-            'preguntas':    preguntas
+            'fecha':        fecha.value,
+            'hora_inicio':  hora_inicio.value,
+            'hora_final':   hora_final.value,
         }
         fetch('/examenes/store', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify(data)
-            })
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify(data)
+        })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Error al enviar los datos');
