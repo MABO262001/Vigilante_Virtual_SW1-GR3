@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
-
 class Roles extends Controller
 {
     /**
@@ -93,10 +92,13 @@ class Roles extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
-    {
-        $role = Role::find($id);
-        $role->delete();
+{
+    $role = Role::findOrFail($id);
+
+    $role->Delete();
         return redirect()->route('Roles.index')
                         ->with('success','Rol eliminado exitosamente.');
-    }
+
+}
+
 }

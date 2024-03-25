@@ -40,6 +40,14 @@
     </div>
 </div>
 
+<script>
+    $('form').submit(function(e) {
+    if ($('input[type=checkbox]:checked').length === 0) {
+        e.preventDefault();
+        alert('Por favor, selecciona al menos un permiso.');
+    }
+});
 
+</script>
 
 @endsection
