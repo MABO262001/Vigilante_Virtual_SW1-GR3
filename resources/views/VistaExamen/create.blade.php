@@ -54,8 +54,12 @@
                     <label for="ponderacion" class="text-sm font-semibold block text-gray-700 translate-x-2">Ponderacion</label>
                     <input type="number" name="ponderacion" id="ponderacion" class="rounded-xl w-full" min="0" max="100">
                 </div>
-                <div>
+
+                <div class="mt-4">
+                    <label for="nro_preguntas" class="text-sm font-semibold block text-gray-700 translate-x-2">Cantidad de preguntas</label>
+                    <input type="number" name="nro_preguntas" id="nro_preguntas" class="rounded-xl w-full" min="0" max="100">
                 </div>
+
                 <div class="mt-4">
                     <label for="contrasena" class="text-sm font-semibold block text-gray-700 translate-x-2">Contraseña</label>
                     <input type="text" name="contrasena" id="contrasena" class="rounded-xl w-full">

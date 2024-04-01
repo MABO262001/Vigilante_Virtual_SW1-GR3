@@ -278,6 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fecha = document.getElementById('fecha');
     const tema = document.getElementById('tema');
     const descripcion = document.getElementById('descripcion');
+    const nro_preguntas = document.getElementById('nro_preguntas');
 
     const fechaActual = new Date();
     const fechaString = fechaActual.toISOString().split('T')[0]; 
@@ -290,9 +291,15 @@ document.addEventListener('DOMContentLoaded', () => {
     hora_inicio.value = horaInicioString;
     hora_final.value = horaFinalString;
     ponderacion.value = 40;
+    nro_preguntas.value = 1;
 
 
     save.addEventListener('click', () => {
+
+        if(preguntas.length < nro_preguntas.value){
+            alert('Cantidad de preguntas invalida');
+            return;
+        }
 
         var data = {
             'preguntas':    preguntas,
@@ -303,7 +310,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'hora_inicio':  hora_inicio.value,
             'hora_final':   hora_final.value,
             'ponderacion':  ponderacion.value,
-            'contrasena':   contrasena.value
+            'contrasena':   contrasena.value,
+            'nro_preguntas':   nro_preguntas.value
         }
         fetch('/examenes/store', {
             method: 'POST',

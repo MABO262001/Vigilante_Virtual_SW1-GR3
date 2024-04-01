@@ -18,6 +18,7 @@ class Ejecucion extends Model
         'ponderacion',
         'contrasena',
         'examen_id',
+        'nro_preguntas',
         'estado_ejecucion_id'
     ];
 
@@ -45,7 +46,7 @@ class Ejecucion extends Model
         }
 
         $query->leftJoin('examens', 'examens.id', 'ejecucions.examen_id')
-        ->whereIn('estado_ejecucion_id', [3,2]);
+        ->whereIn('estado_ejecucion_id', [1,3]);
 
         if(isset($data['user_id'])
         && $data['user_id'] != ''){
@@ -53,5 +54,10 @@ class Ejecucion extends Model
         }
 
         return $query->get();
+    }
+    
+    public function estudiantes(){
+        return $this->belongsToMany(User::class, 'calificacions', 'user_id', 'ejecucion_id')->withTimestamps();
+
     }
 }

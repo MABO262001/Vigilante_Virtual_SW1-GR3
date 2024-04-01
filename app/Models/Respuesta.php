@@ -20,4 +20,9 @@ class Respuesta extends Model
     {
         return $this->belongsTo(Pregunta::class);
     }
+
+    public function calificaciones(){
+        return $this->belongsToMany(Calificacion::class, 'respueta_calificacions', 'respuesta_id', 'calificacion_id')->withTimestamps();
+
+    }
 }

@@ -36,7 +36,9 @@ class Roles extends Controller
             'name' => 'required|unique:roles,name',
         ]);
     
-        $role = Role::create(['name' => $request->name]);
+        $role = Role::create(['name' => $request->name,
+        'guard_name' => 'web'    
+    ]);
     
         if ($request->permissions) {
             $permissions = Permission::whereIn('id', $request->permissions)->get();
@@ -92,13 +94,11 @@ class Roles extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
-{
-    $role = Role::findOrFail($id);
-
-    $role->Delete();
-        return redirect()->route('Roles.index')
-                        ->with('success','Rol eliminado exitosamente.');
-
-}
+    {
+        $role = Role::findOrFail($id);
+        //dd($role);
+        $role->Delete();
+        return redirect()->route('Roles.index');
+    }
 
 }

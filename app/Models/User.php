@@ -73,4 +73,8 @@ class User extends Authenticatable
         return $this->hasMany(Examen::class);
     }
 
+    public function ejecuciones(){
+        return $this->belongsToMany(Ejecucion::class, 'calificacions', 'ejecucion_id', 'user_id')->withTimestamps();
+    }
+
 }
