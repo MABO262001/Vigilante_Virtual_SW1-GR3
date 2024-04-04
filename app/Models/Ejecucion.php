@@ -32,13 +32,19 @@ class Ejecucion extends Model
         return $this->belongsTo(EstadoEjecucion::class);
     }
 
+    public function anomalias()
+    {
+        return $this->belongsToMany(User::class, 'anomalias', 'ejecucion_id', 'user_id')
+                    ->withTimestamps();
+    }
+    
     public static function getExamenesEjecutandose($data){
 
         $today = Carbon::now()->format('Y-m-d');
 
         $query = DB::table('ejecucions');
-        if(isset($data['min']) 
-        && $data['min'] === 1){                
+        if(isset($data['min'])
+        && $data['min'] === 1){
                 $query->select(DB::raw('COUNT(ejecucions.id) as total'));
             }
         else{
@@ -55,7 +61,7 @@ class Ejecucion extends Model
 
         return $query->get();
     }
-    
+
     public function estudiantes(){
         return $this->belongsToMany(User::class, 'calificacions', 'user_id', 'ejecucion_id')->withTimestamps();
 

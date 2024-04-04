@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             EstadoEjecucionSeeder::class,
             TipoPreguntaSeeder::class,
+            TipoAnomaliaSeeder::class,
             // mas seeders
         ]);
     }

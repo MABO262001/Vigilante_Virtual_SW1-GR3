@@ -74,7 +74,14 @@ class User extends Authenticatable
     }
 
     public function ejecuciones(){
-        return $this->belongsToMany(Ejecucion::class, 'calificacions', 'ejecucion_id', 'user_id')->withTimestamps();
+        return $this->belongsToMany(Ejecucion::class, 'calificacions', 'ejecucion_id', 'user_id')
+                    ->withTimestamps();
+    }
+
+    public function anomalias()
+    {
+        return $this->belongsToMany(Ejecucion::class, 'anomalias', 'user_id', 'ejecucion_id')
+                    ->withTimestamps();
     }
 
 }
