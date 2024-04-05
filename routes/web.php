@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EstudianteController;
 use App\Http\Controllers\ExamenController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ReconocimientoFacialController;
@@ -109,4 +110,8 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     // Route::put('/anomalias/{id}', [AnomaliaController::class, 'update'])->name('Anomalia.update');
     // Route::delete('/anomalias/{id}', [AnomaliaController::class, 'destroy'])->name('Anomalia.destroy');
 
+    //Routes de Estudiantes
+    Route::get('/estudiante', [EstudianteController::class, 'index'])->name('Estudiante.index');
+    Route::get('/agregarcurso', [EstudianteController::class, 'agregarcurso'])->name('Estudiante.agregarcurso');
+    Route::get('/historialexamenes', [EstudianteController::class, 'examenes'])->name('Estudiante.examenes');
 });

@@ -73,6 +73,10 @@
                     href="{{ route('GrupoMateria.index') }}">
                     <i class="fas fa-users"></i> <span class="textoSidebar ml-2">Grupos Y Materias</span>
                 </a>
+                <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white"
+                    href="{{ route('Estudiante.index') }}">
+                    <i class="fas fa-users"></i> <span class="textoSidebar ml-2">Estudiante</span>
+                </a>
 
             </nav>
             <form method="POST" action="{{ route('logout') }}">
