@@ -67,8 +67,13 @@
                 </a>
                 <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white"
                     href="{{ route('Servicio.index') }}">
-                    <i class="fa-solid fa-user"></i> <span class="textoSidebar ml-2">Servicios</span>
+                    <i class="fas fa-store"></i> <span class="textoSidebar ml-2">Servicios</span>
                 </a>
+                <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white"
+                    href="{{ route('GrupoMateria.index') }}">
+                    <i class="fas fa-users"></i> <span class="textoSidebar ml-2">Grupos Y Materias</span>
+                </a>
+
             </nav>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf

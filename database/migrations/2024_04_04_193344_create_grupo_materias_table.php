@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('grupo_id');
             $table->unsignedBigInteger('materia_id');
-            $table->string('contraseña')->nullable();
+            $table->string('contraseña');
             $table->integer('cantidad_estudiantes');
             $table->integer('cantidad_estudiantes_inscritos');
             $table->timestamps();

@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Roles;
 use App\Http\Controllers\Permisos;
 use App\Http\Controllers\ServicioController;
+use App\Http\Controllers\GrupoMateriaController;
+use App\Http\Controllers\GrupoController;
+use App\Http\Controllers\MateriaController;
+use App\Http\Controllers\GestionController;
+// use App\Http\Controllers\InscripcionController;
+// use App\Http\Controllers\AnomaliaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -47,6 +53,15 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
 
     // Falta hacer
 
+    //GRUPO MATERIA
+    Route::get('/grupo-materia', [GrupoMateriaController::class, 'index'])->name('GrupoMateria.index');
+    Route::post('/grupo-materia/store', [GrupoMateriaController::class, 'store'])->name('GrupoMateria.store');
+    Route::get('/grupo-materia/create', [GrupoMateriaController::class, 'create'])->name('GrupoMateria.create');
+    Route::get('/grupo-materia/{id}', [GrupoMateriaController::class, 'show'])->name('GrupoMateria.show');
+    Route::get('/grupo-materia/{id}/edit', [GrupoMateriaController::class, 'edit'])->name('GrupoMateria.edit');
+    Route::put('/grupo-materia/{id}', [GrupoMateriaController::class, 'update'])->name('GrupoMateria.update');
+    Route::delete('/grupo-materia/{id}', [GrupoMateriaController::class, 'destroy'])->name('GrupoMateria.destroy');
+
 
     // Routes De Grupos
     Route::get('/grupos', [GrupoController::class, 'index'])->name('Grupo.index');
@@ -76,22 +91,22 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::delete('/gestion/{id}', [GestionController::class, 'destroy'])->name('Gestion.destroy');
 
     // Routes Inscripcion
-    Route::get('/inscripcion', [InscripcionController::class, 'index'])->name('Inscripcion.index');
-    Route::post('/inscripcion/store', [InscripcionController::class, 'store'])->name('Inscripcion.store');
-    Route::get('/inscripcion/create', [InscripcionController::class, 'create'])->name('Inscripcion.create');
-    Route::get('/inscripcion/{id}', [InscripcionController::class, 'show'])->name('Inscripcion.show');
-    Route::get('/inscripcion/{id}/edit', [InscripcionController::class, 'edit'])->name('Inscripcion.edit');
-    Route::put('/inscripcion/{id}', [InscripcionController::class, 'update'])->name('Inscripcion.update');
-    Route::delete('/inscripcion/{id}', [InscripcionController::class, 'destroy'])->name('Inscripcion.destroy');
+    // Route::get('/inscripcion', [InscripcionController::class, 'index'])->name('Inscripcion.index');
+    // Route::post('/inscripcion/store', [InscripcionController::class, 'store'])->name('Inscripcion.store');
+    // Route::get('/inscripcion/create', [InscripcionController::class, 'create'])->name('Inscripcion.create');
+    // Route::get('/inscripcion/{id}', [InscripcionController::class, 'show'])->name('Inscripcion.show');
+    // Route::get('/inscripcion/{id}/edit', [InscripcionController::class, 'edit'])->name('Inscripcion.edit');
+    // Route::put('/inscripcion/{id}', [InscripcionController::class, 'update'])->name('Inscripcion.update');
+    // Route::delete('/inscripcion/{id}', [InscripcionController::class, 'destroy'])->name('Inscripcion.destroy');
 
 
     // Routes de Anomalias
-    Route::get('/anomalias', [AnomaliaController::class, 'index'])->name('Anomalia.index');
-    Route::post('/anomalias/store', [AnomaliaController::class, 'store'])->name('Anomalia.store');
-    Route::get('/anomalias/create', [AnomaliaController::class, 'create'])->name('Anomalia.create');
-    Route::get('/anomalias/{id}', [AnomaliaController::class, 'show'])->name('Anomalia.show');
-    Route::get('/anomalias/{id}/edit', [AnomaliaController::class, 'edit'])->name('Anomalia.edit');
-    Route::put('/anomalias/{id}', [AnomaliaController::class, 'update'])->name('Anomalia.update');
-    Route::delete('/anomalias/{id}', [AnomaliaController::class, 'destroy'])->name('Anomalia.destroy');
+    // Route::get('/anomalias', [AnomaliaController::class, 'index'])->name('Anomalia.index');
+    // Route::post('/anomalias/store', [AnomaliaController::class, 'store'])->name('Anomalia.store');
+    // Route::get('/anomalias/create', [AnomaliaController::class, 'create'])->name('Anomalia.create');
+    // Route::get('/anomalias/{id}', [AnomaliaController::class, 'show'])->name('Anomalia.show');
+    // Route::get('/anomalias/{id}/edit', [AnomaliaController::class, 'edit'])->name('Anomalia.edit');
+    // Route::put('/anomalias/{id}', [AnomaliaController::class, 'update'])->name('Anomalia.update');
+    // Route::delete('/anomalias/{id}', [AnomaliaController::class, 'destroy'])->name('Anomalia.destroy');
 
 });
