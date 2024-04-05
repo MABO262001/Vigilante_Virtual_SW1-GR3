@@ -20,6 +20,13 @@ class Calificacion extends Pivot
 
     public function preguntas(){
         return $this->belongsToMany(Pregunta::class, 'respueta_calificacions', 'calificacion_id', 'respuesta_id')->withTimestamps();
-
     }
+
+    // public function user(){
+    //     return $this->belongsTo(User::class);
+    // }
+
+    // public function ejecucion(){
+    //     return $this->belongsTo(Ejecucion::class);
+    // }
 }

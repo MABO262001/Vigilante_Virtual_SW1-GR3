@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->string('profile_photo_path', 2048)->nullable();
+            $table->unsignedBigInteger('jefe_id')->nullable();
+
 
             //Perfil del usuario
             $table->string('nombre')->nullable();
@@ -26,6 +28,8 @@ return new class extends Migration
             $table->string('telefono')->nullable();
             $table->string('fecha_nacimiento')->nullable();
             $table->timestamps();
+
+            $table->foreign('jefe_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

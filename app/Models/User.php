@@ -35,6 +35,7 @@ class User extends Authenticatable
         'apellido_materno',
         'telefono',
         'fecha_nacimiento',
+        'jefe_id',
         // 'profile_photo_path',
     ];
 
@@ -84,4 +85,19 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
+    public function jefe()
+    {
+        return $this->belongsTo(User::class, 'jefe_id');
+    }
+
+    public function subalternos()
+    {
+        return $this->hasMany(User::class, 'jefe_id');
+    }
+
+    public function grupo_materia()
+    {
+        return $this->belongsToMany(GrupoMateria::class, 'ingresos', 'user_id', 'grupo_materia_id')
+                    ->withTimestamps();
+    }
 }

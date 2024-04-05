@@ -32,4 +32,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
 
     Route::get('/reconocimiento-facial', [ReconocimientoFacialController::class, 'index'])->name('Reconocimiento-Facial.index');
     Route::post('/reconocimiento-facial/guardar_anomalia', [ReconocimientoFacialController::class, 'guardarAnomalia'])->name('guardar_anomalia');
+
+
+    
 });

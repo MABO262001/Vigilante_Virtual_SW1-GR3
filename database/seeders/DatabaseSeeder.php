@@ -16,6 +16,10 @@ class DatabaseSeeder extends Seeder
             EstadoEjecucionSeeder::class,
             TipoPreguntaSeeder::class,
             TipoAnomaliaSeeder::class,
+            GrupoSeeder::class,
+            MateriaSeeder::class,
+            GestionSeeder::class,
+            ServicioSeeder::class,
             // mas seeders
         ]);
     }
