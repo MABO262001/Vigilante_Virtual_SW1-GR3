@@ -3,27 +3,40 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 class="font-extrabold text-blue-900 text-3xl mt-2 uppercase">Administración De Grupo y Materia</h1>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-            <div class="bg-white p-4 rounded-xl shadow-md text-center">
-                <h3 id="creados" class="font-extrabold text-4xl sm:text-5xl lg:text-6xl">{{ $totalGrupoMaterias }}</h3>
-                <i class="fas fa-users-cog text-2xl sm:text-3xl lg:text-4xl"></i>
-                <span class="mt-1 font-semibold text-lg sm:text-xl lg:text-2xl">Total De Materias Con Grupos</span>
-            </div>
-            <div class="bg-white p-4 rounded-xl shadow-md text-center">
-                <h3 id="ejecutando" class="font-extrabold text-4xl sm:text-5xl lg:text-6xl">{{ $totalMaterias }}</h3>
-                <i class="fas fa-book text-2xl sm:text-3xl lg:text-4xl"></i>
-                <span class="mt-1 font-semibold text-lg sm:text-xl lg:text-2xl">Total De Materias</span>
-            </div>
-            <div class="bg-white p-4 rounded-xl shadow-md text-center">
-                <h3 id="ejecutados" class="font-extrabold text-4xl sm:text-5xl lg:text-6xl">{{ $totalGrupos }}</h3>
-                <i class="fas fa-users text-2xl sm:text-3xl lg:text-4xl"></i>
-                <span class="mt-1 font-semibold text-lg sm:text-xl lg:text-2xl">Total De Grupos</span>
-            </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 items-stretch">
+            <a href="{{ route('Materia.index') }}" class="transform transition duration-300 ease-in-out hover:scale-105">
+                <div class="bg-blue-500 p-4 rounded-xl shadow-md text-center hover:bg-blue-600 hover:text-white">
+                    <h3 id="ejecutando" class="font-extrabold text-4xl sm:text-5xl lg:text-6xl">{{ $totalMaterias }}</h3>
+                    <i class="fas fa-book text-2xl sm:text-3xl lg:text-4xl"></i>
+                    <span class="mt-1 font-semibold text-lg sm:text-xl lg:text-2xl">Total De Materias</span>
+                </div>
+            </a>
+            <a href="{{ route('GrupoMateria.index') }}" class="transform transition duration-300 ease-in-out hover:scale-105">
+                <div class="bg-green-500 p-4 rounded-xl shadow-md text-center hover:bg-green-600 hover:text-white">
+                    <h3 id="creados" class="font-extrabold text-4xl sm:text-5xl lg:text-6xl">{{ $totalGrupoMaterias }}</h3>
+                    <i class="fas fa-users-cog text-2xl sm:text-3xl lg:text-4xl"></i>
+                    <span class="mt-1 font-semibold text-lg sm:text-xl lg:text-2xl">Total De Materias Con Grupos</span>
+                </div>
+            </a>
+            <a href="{{ route('Grupo.index') }}" class="transform transition duration-300 ease-in-out hover:scale-105">
+                <div class="bg-yellow-500 p-4 rounded-xl shadow-md text-center hover:bg-yellow-600 hover:text-white">
+                    <h3 id="ejecutados" class="font-extrabold text-4xl sm:text-5xl lg:text-6xl">{{ $totalGrupos }}</h3>
+                    <i class="fas fa-users text-2xl sm:text-3xl lg:text-4xl"></i>
+                    <span class="mt-1 font-semibold text-lg sm:text-xl lg:text-2xl">Total De Grupos</span>
+                </div>
+            </a>
         </div>
 
-        <div class="flex justify-center mt-8">
+
+        <div class="flex justify-center mt-8 space-x-4">
+            <a href="{{ route('Grupo.index') }}"
+                class="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 rounded shadow-md">Ir a Grupos</a>
             <a href="{{ route('GrupoMateria.create') }}"
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded shadow-md">Crear Grupo</a>
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded shadow-md">Crear
+                GrupoMateria</a>
+
+            <a href="{{ route('Materia.index') }}"
+                class="bg-red-500 hover:bg-red-700 text-white font-bold py-3 px-6 rounded shadow-md">Ir a Materias</a>
         </div>
 
         @if (session('success'))
