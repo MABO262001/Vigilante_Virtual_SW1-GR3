@@ -65,6 +65,10 @@
                     href="{{ route('Reconocimiento-Facial.index') }}">
                     <i class="fa-solid fa-user"></i> <span class="textoSidebar ml-2">Reconocimiento Facial</span>
                 </a>
+                <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white"
+                    href="{{ route('Servicio.index') }}">
+                    <i class="fa-solid fa-user"></i> <span class="textoSidebar ml-2">Servicios</span>
+                </a>
             </nav>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf

@@ -17,7 +17,7 @@ class ServicioSeeder extends Seeder
         Servicio::create([
             'id' => 1,
             'nombre' => 'Matricula',
-            'descripcion' => 'Costo de ingripcion por matricula',
+            'descripcion' => 'Costo de incripcion por matricula',
             'fecha' => '2024-01-01',
             'precio' => 45.00,
         ]);
