@@ -49,7 +49,7 @@ class UserSeeder extends Seeder
             'email' => 'juliogutierrezv15@gmail.com',
             'password' => Hash::make('123456789'),
         ]);
-        $user->assignRole('Administrativo');
+        $user->assignRole('Master');
 
         $user = User::create([
             'id' => 6,

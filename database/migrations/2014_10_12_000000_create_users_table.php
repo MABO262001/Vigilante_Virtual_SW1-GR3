@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('apellido_materno')->nullable();
             $table->string('telefono')->nullable();
             $table->string('fecha_nacimiento')->nullable();
+            $table->integer('usuarios_creables')->nullable();
             $table->timestamps();
 
             $table->foreign('jefe_id')->references('id')->on('users')->onDelete('cascade');

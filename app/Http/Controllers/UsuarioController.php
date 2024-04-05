@@ -5,13 +5,14 @@ use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UsuarioController extends Controller
 {
     public function index()
     {
         $usuarios = User::with('roles')->get();
-
+        
         $usuariosSinMaster = $usuarios->reject(function ($usuario) {
             return $usuario->roles->contains('name', 'Master');
         });
@@ -27,8 +28,12 @@ class UsuarioController extends Controller
         })->count();
 
         $roles = Role::all();
-
-        return view('VistaUsuario.index', compact('usuarios', 'totalUsuarios', 'totalDocentes', 'totalEstudiantes'));
+        $usuarios_creables = null;
+        $user = Auth::user();
+        if($user->hasRole('Administrativo') || $user->hasRole('Administrativo Premium')){
+            $usuarios_creables = $user->usuarios_creables;
+        }
+        return view('VistaUsuario.index', compact('usuarios', 'totalUsuarios', 'totalDocentes', 'totalEstudiantes', 'usuarios_creables'));
     }
 
     public function buscar(Request $request)
@@ -75,6 +80,7 @@ class UsuarioController extends Controller
     public function create()
     {
         $roles = Role::all();
+        $user = Auth::user();
 
         if (auth()->check() && !auth()->user()->hasRole('Master')) {
             $roles = $roles->reject(function ($role) {
@@ -82,19 +88,25 @@ class UsuarioController extends Controller
                         $role->name == 'Docente Premium' || $role->name == 'Administrativo';
             });
         }
+        
+        if($user->hasRole('Administrativo') || $user->hasRole('Administrativo Premium')){
+            if($user->usuarios_creables > 0){
+                return view('VistaUsuario.create', compact('roles'));
+            }
+            else{
+                return redirect()->route('Usuario.index')->with('error','Usuario sin usuarios creables.');
+            }
+        }
+        if($user->hasRole('Master')){
+            return view('VistaUsuario.create', compact('roles'));
+        }
 
-        return view('VistaUsuario.create', compact('roles'));
+        
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'role' => 'required|string|max:255',
-            'profile_photo_path' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+
 
         $user = new User;
         $user->name = $request->name;
@@ -106,10 +118,17 @@ class UsuarioController extends Controller
             $request->profile_photo_path->move(public_path('images/user'), $imageName);
             $user->profile_photo_path = '/images/user/'.$imageName;
         }
-
+        $user->usuarios_creables = $request->cantidad_usuarios;
         $user->save();
 
         $user->assignRole($request->role);
+
+        $userauth  = Auth::user();
+        if($userauth->hasRole('Administrativo') || $userauth->hasRole('Administrativo Premium')){
+            $userauth->usuarios_creables = $userauth->usuarios_creables - 1;
+            $userauth->save();
+        }
+        
         return redirect()->route('Usuario.index')->with('success','Usuario creado exitosamente.');
     }
 
