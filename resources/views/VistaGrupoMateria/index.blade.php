@@ -22,7 +22,8 @@
         </div>
 
         <div class="flex justify-center mt-8">
-            <a href="{{ route('GrupoMateria.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded shadow-md">Crear Grupo</a>
+            <a href="{{ route('GrupoMateria.create') }}"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded shadow-md">Crear Grupo</a>
         </div>
 
         @if (session('success'))
@@ -53,32 +54,32 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('totalGrupos').textContent = "{{ $totalGrupos }}";
-
+        });
+        window.onload = function() {
             var flashMessage = document.getElementById('flash-message');
             if (flashMessage) {
                 setTimeout(function() {
                     flashMessage.style.display = 'none';
                 }, 3000);
             }
-        });
-
+        };
         document.getElementById('searchForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
             var searchValue = document.getElementById('searchInput').value;
 
-            axios.get('{{ route("GrupoMateria.index") }}', {
-                params: {
-                    search: searchValue
-                }
-            })
-            .then(function(response) {
-                document.getElementById('tableContainer').innerHTML = response.data;
-                document.getElementById('clearButton').style.display = 'inline-flex';
-            })
-            .catch(function(error) {
-                console.error(error);
-            });
+            axios.get('{{ route('GrupoMateria.index') }}', {
+                    params: {
+                        search: searchValue
+                    }
+                })
+                .then(function(response) {
+                    document.getElementById('tableContainer').innerHTML = response.data;
+                    document.getElementById('clearButton').style.display = 'inline-flex';
+                })
+                .catch(function(error) {
+                    console.error(error);
+                });
         });
 
         document.getElementById('clearButton').addEventListener('click', function() {
