@@ -39,5 +39,10 @@ class MateriaSeeder extends Seeder
             'sigla' => 'BD-210',
             'nombre' => 'Base de Datos II',
         ]);
+        Materia::create([
+            'id' => 6,
+            'sigla' => 'BD-310',
+            'nombre' => 'Base de Datos III',
+        ]);
     }
 }

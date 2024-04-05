@@ -3,15 +3,16 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 class="font-extrabold text-blue-900 text-3xl mt-2 uppercase">Administración De Servicios</h1>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-            <div class="mx-auto">
-                <div class="bg-white p-4 rounded-xl shadow-md text-center">
+        <div class=" grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 flex justify-center items-center">
+            <a href="{{ route('Servicio.index') }}" class="transform transition duration-300 ease-in-out hover:scale-105">
+                <div class="bg-green-500 p-4 rounded-xl shadow-md text-center hover:bg-green-600 hover:text-white">
                     <h3 id="totalServicios" class="font-extrabold text-4xl sm:text-5xl lg:text-6xl">{{ $totalServicios }}</h3>
-                    <i class="fa-solid fa-box-open text-2xl sm:text-3xl lg:text-4xl"></i>
+                    <i class="fas fa-box-open text-2xl sm:text-3xl lg:text-4xl"></i>
                     <span class="mt-1 font-semibold text-lg sm:text-xl lg:text-2xl">Total de Servicios</span>
                 </div>
-            </div>
+            </a>
         </div>
+
 
         <div class="flex justify-center mt-8">
             <a href="{{ route('Servicio.create') }}"
@@ -60,18 +61,18 @@
 
             var searchValue = document.getElementById('searchInput').value;
 
-            axios.get('{{ route("Servicio.index") }}', {
-                params: {
-                    search: searchValue
-                }
-            })
-            .then(function(response) {
-                document.getElementById('tableContainer').innerHTML = response.data;
-                document.getElementById('clearButton').style.display = 'inline-flex';
-            })
-            .catch(function(error) {
-                console.error(error);
-            });
+            axios.get('{{ route('Servicio.index') }}', {
+                    params: {
+                        search: searchValue
+                    }
+                })
+                .then(function(response) {
+                    document.getElementById('tableContainer').innerHTML = response.data;
+                    document.getElementById('clearButton').style.display = 'inline-flex';
+                })
+                .catch(function(error) {
+                    console.error(error);
+                });
         });
 
         document.getElementById('clearButton').addEventListener('click', function() {

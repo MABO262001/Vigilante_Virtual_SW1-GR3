@@ -13,7 +13,7 @@ class EstudianteController extends Controller
 {
     public function index()
     {
-        $materias = Materia::all(); //Luego acomodar el codigo con la materia que deberia de tener
+        $materias = Materia::all();
         return view('VistaEstudiante.index', compact('materias'));
     }
 
@@ -36,7 +36,7 @@ class EstudianteController extends Controller
                 'tema' => $examen->tema,
                 'descripcion' => $examen->descripcion,
                 'fecha_ejecucion' => $ejecucion->fecha,
-                'estado' => $ejecucion->estado_ejecucion_id, 
+                'estado' => $ejecucion->estado_ejecucion_id,
             ];
             $examenes_dados[] = $datos_examen;
         }
