@@ -29,11 +29,11 @@
                         <td class="text-center py-2 border border-gray-400">{{ $grupoMateria->cantidad_estudiantes }}</td>
                         <td class="text-center py-2 border border-gray-400">{{ $grupoMateria->cantidad_estudiantes_inscritos }}</td>
                         <td class="py-2 px-4 text-center border border-gray-400">
-                            <a href="{{ route('GrupoMateria.edit', $grupoMateria->id) }}"
+                            {{-- <a href="{{ route('GrupoMateria.edit', $grupoMateria->id) }}"
                                 class="text-blue-500 hover:text-blue-700 font-bold mr-3 transition duration-300 transform hover:scale-110">
                                 <i class="fas fa-edit fa-lg"></i>
-                            </a>
-                            <form action="{{ route('GrupoMateria.destroy', $grupoMateria->id) }}" method="POST"
+                            </a> --}}
+                            {{-- <form action="{{ route('GrupoMateria.destroy', $grupoMateria->id) }}" method="POST"
                                 class="inline">
                                 @csrf
                                 @method('DELETE')
@@ -41,7 +41,7 @@
                                     class="text-red-500 hover:text-red-700 font-bold mr-3 transition duration-300 transform hover:scale-110">
                                     <i class="fas fa-trash fa-lg"></i>
                                 </button>
-                            </form>
+                            </form> --}}
                             <a href="{{ route('ListaEstudiantes.show', $grupoMateria->id) }}"
                                 class="text-gray-500 hover:text-blue-500 font-bold transition duration-300 transform hover:scale-110">
                                 <i class="fas fa-eye fa-lg"></i>

@@ -29,9 +29,9 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('/usuarios/edit/{id}', 'edit')->name('Usuario.edit');
         Route::post('/usuarios/store', 'store')->name('Usuario.store');
         Route::post('/usuarios/update', 'update')->name('Usuario.update');
-        Route::get('/usuarios/show', 'show')->name('Usuario.show');
+        Route::get('/usuarios/show', 'show')->name('Usuario.show'); // sin ocupar (que se visualice el perfil desde aqui)
         Route::get('/usuarios/destroy', 'destroy')->name('Usuario.destroy');
-        Route::get('/usuarios/buscar', 'buscar')->name('Usuario.buscar');
+        Route::get('/usuarios/buscar', 'buscar')->name('Usuario.buscar'); // arreglar
     });
 
     // Routes Permisos y Roles
@@ -41,7 +41,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     // Rutas DE IA
     Route::controller(ReconocimientoFacialController::class)->group(function () {
         Route::get('/reconocimiento-facial', 'index')->name('Reconocimiento-Facial.index');
-        Route::post('/reconocimiento-facial/guardar_anomalia', 'guardarAnomalia')->name('guardar_anomalia');
+        Route::post('/reconocimiento-facial/guardar_anomalia', 'guardarAnomalia')->name('guardar_anomalia');// sin ocupar
     });
 
     // Rutas De Servicios
@@ -49,20 +49,18 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('/servicios', 'index')->name('Servicio.index');
         Route::post('/servicios/store', 'store')->name('Servicio.store');
         Route::get('/servicios/create', 'create')->name('Servicio.create');
-        Route::get('/servicios/{id}', 'show')->name('Servicio.show');
+        Route::get('/servicios/{id}', 'show')->name('Servicio.show'); //sin ocupar
         Route::get('/servicios/{id}/edit', 'edit')->name('Servicio.edit');
         Route::put('/servicios/{id}', 'update')->name('Servicio.update');
         Route::delete('/servicios/{id}', 'destroy')->name('Servicio.destroy');
     });
-
-    // Falta hacer
 
     //Rutas De Grupo-Materia
     Route::controller(GrupoMateriaController::class)->group(function () {
         Route::get('/grupo-materia', 'index')->name('GrupoMateria.index');
         Route::post('/grupo-materia/store', 'store')->name('GrupoMateria.store');
         Route::get('/grupo-materia/create', 'create')->name('GrupoMateria.create');
-        Route::get('/grupo-materia/{id}', 'show')->name('GrupoMateria.show');
+        Route::get('/grupo-materia/{id}', 'show')->name('GrupoMateria.show'); //vamos a poner la vista de la materia desde administracion
         Route::get('/grupo-materia/{id}/edit', 'edit')->name('GrupoMateria.edit');
         Route::put('/grupo-materia/{id}', 'update')->name('GrupoMateria.update');
         Route::delete('/grupo-materia/{id}', 'destroy')->name('GrupoMateria.destroy');
@@ -89,20 +87,8 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::delete('/materia/{id}', 'destroy')->name('Materia.destroy');
     });
 
-
-    // Routes Gestion
-    Route::controller(GestionController::class)->group(function () {
-        Route::get('/gestion', 'index')->name('Gestion.index');
-        Route::post('/gestion/store', 'store')->name('Gestion.store');
-        Route::get('/gestion/create', 'create')->name('Gestion.create');
-        Route::get('/gestion/{id}', 'show')->name('Gestion.show');
-        Route::get('/gestion/{id}/edit', 'edit')->name('Gestion.edit');
-        Route::put('/gestion/{id}', 'update')->name('Gestion.update');
-        Route::delete('/gestion/{id}', 'destroy')->name('Gestion.destroy');
-    });
-
-
     // Rutas Inscripcion
+        // falta hacer
     Route::controller(InscripcionController::class)->group(function () {
         Route::get('/inscripcion', 'index')->name('Inscripcion.index');
         Route::post('/inscripcion/store', 'store')->name('Inscripcion.store');
