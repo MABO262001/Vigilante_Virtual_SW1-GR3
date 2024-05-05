@@ -119,6 +119,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('/estudiante', 'index')->name('Estudiante.index');
         Route::get('/unirse-curso', 'unirseCurso')->name('Estudiante.unirse_curso');
         Route::get('/historial-examenes', 'examenes')->name('Estudiante.examenes');
+        Route::get('/lista-estudiantes', 'listaEstudiantes')->name('ListaEstudiantes.show');
     });
 
 });

@@ -50,6 +50,25 @@ class GrupoController extends Controller
         return view('VistaGrupoMateria.VistaGrupo.edit', compact('grupo'));
     }
 
+    public function show(Request $request, $id)
+    {
+        $grupo = Grupo::findOrFail($id);
+        $search = $request->get('search');
+        $totalGrupos = GrupoMateria::where('grupo_id', $id)->count();
+
+        if ($search) {
+            $grupoMaterias = GrupoMateria::where('grupo_id', $id)
+                ->whereHas('materia', function ($query) use ($search) {
+                    $query->where('nombre', 'LIKE', "%{$search}%");
+                })->get();
+        } else {
+            $grupoMaterias = GrupoMateria::where('grupo_id', $id)->get();
+        }
+        $fromShow = true;
+
+        return view('VistaGrupoMateria.VistaGrupo.show', compact('grupo', 'grupoMaterias', 'totalGrupos', 'fromShow'));
+    }
+    
     public function update(Request $request, $id)
     {
         $request->validate([

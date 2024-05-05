@@ -42,6 +42,11 @@ class EstudianteController extends Controller
         return view('VistaEstudiante.historialexamen', ['examenes_dados' => $examenes_dados]);
     }
 
+    public function listaEstudiantes ()
+    {
+        return view('VistaEstudiante.listaestudiante');
+    }
+
     public function create()
     {
 

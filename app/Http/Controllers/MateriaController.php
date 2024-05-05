@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Materia;
+use App\Models\GrupoMateria;
 use Illuminate\Http\Request;
 
 class MateriaController extends Controller
@@ -52,10 +53,23 @@ class MateriaController extends Controller
     }
 
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $materia = Materia::findOrFail($id);
-        return view('VistaGrupoMateria.VistaMateria.show', compact('materia'));
+        $search = $request->get('search');
+        $totalMaterias = GrupoMateria::where('materia_id', $id)->count();
+
+        if ($search) {
+            $grupoMaterias = GrupoMateria::where('materia_id', $id)
+                ->whereHas('grupo', function ($query) use ($search) {
+                    $query->where('nombre', 'LIKE', "%{$search}%");
+                })->get();
+        } else {
+            $grupoMaterias = GrupoMateria::where('materia_id', $id)->get();
+        }
+        $fromShow = true;
+
+        return view('VistaGrupoMateria.VistaMateria.show', compact('materia', 'grupoMaterias', 'totalMaterias', 'fromShow'));
     }
 
     public function edit($id)
