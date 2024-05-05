@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Grupo;
 use App\Models\Materia;
-use App\Models\Ejecucion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,7 +16,7 @@ class EstudianteController extends Controller
         return view('VistaEstudiante.index', compact('materias'));
     }
 
-    public function unirse_curso()
+    public function unirseCurso()
     {
         $grupos = Grupo::all();
         $materias = Materia::all();

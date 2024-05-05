@@ -15,9 +15,6 @@ use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
 
-// use App\Http\Controllers\InscripcionController;
-// use App\Http\Controllers\AnomaliaController;
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -44,7 +41,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     // Rutas DE IA
     Route::controller(ReconocimientoFacialController::class)->group(function () {
         Route::get('/reconocimiento-facial', 'index')->name('Reconocimiento-Facial.index');
-        // Route::post('/reconocimiento-facial/guardar_anomalia', 'guardarAnomalia')->name('guardar_anomalia');
+        Route::post('/reconocimiento-facial/guardar_anomalia', 'guardarAnomalia')->name('guardar_anomalia');
     });
 
     // Rutas De Servicios
@@ -120,7 +117,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     //Rutas de Estudiantes
     Route::controller(EstudianteController::class)->group(function () {
         Route::get('/estudiante', 'index')->name('Estudiante.index');
-        Route::get('/unirse-curso', 'unirse_curso')->name('Estudiante.unirse_curso');
+        Route::get('/unirse-curso', 'unirseCurso')->name('Estudiante.unirse_curso');
         Route::get('/historial-examenes', 'examenes')->name('Estudiante.examenes');
     });
 
