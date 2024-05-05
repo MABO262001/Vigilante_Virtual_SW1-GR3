@@ -8,7 +8,7 @@ class MateriaController extends Controller
 {
     public function index()
     {
-
+        return view('VistaGrupoMateria.VistaMateria.index');
     }
 
     public function create()

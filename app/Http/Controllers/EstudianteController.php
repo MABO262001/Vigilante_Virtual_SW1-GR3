@@ -17,11 +17,11 @@ class EstudianteController extends Controller
         return view('VistaEstudiante.index', compact('materias'));
     }
 
-    public function agregarcurso()
+    public function unirse_curso()
     {
         $grupos = Grupo::all();
         $materias = Materia::all();
-        return view('VistaEstudiante.agregarcurso', compact('grupos', 'materias'));
+        return view('VistaEstudiante.UnirseCurso', compact('grupos', 'materias'));
     }
 
     public function examenes()

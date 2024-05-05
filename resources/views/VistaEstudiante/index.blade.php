@@ -22,7 +22,7 @@
     </div>
 
     <div class="text-center mt-4">
-        No tienes una clase? <a href="{{ route('Estudiante.agregarcurso') }}" class="text-blue-600 hover:underline">Únete a tu clase.</a>
+        No tienes una clase? <a href="{{ route('Estudiante.unirse_curso') }}" class="text-blue-600 hover:underline">Únete a tu clase.</a>
     </div>
 
     <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -52,9 +52,9 @@
             </div>
         </div>
 
-        
+
     </div>
 </div>
-    
+
 
 @endsection
