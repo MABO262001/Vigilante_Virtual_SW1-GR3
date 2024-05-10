@@ -43,61 +43,76 @@
     </div>
 
     <div class="flex-1 flex flex-wrap">
-        <div class="p-2 bg-yellow-50 w-full md:w-60 flex flex-col md:flex hidden " id="sideNav">
+        <div class="p-2 bg-white w-full md:w-60 flex flex-col md:flex hidden shadow-lg" id="sideNav">
             <nav>
-                <!-- ACA AÑADAN LOS A PARA REDIRIGIR, AOPAUS -->
-                <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white"
-                    href="{{ route('Dashboard') }}">
-                    <i class="fa-solid fa-home "></i><span class="textoSidebar ml-2">Inicio</span>
+                <div id="profile" class="space-y-3 p-4 shadow">
+                    <img
+                        src="{{ Auth::user()->photo_url ?: 'https://img.freepik.com/premium-vector/user-profile-icon-flat-style-member-avatar-vector-illustration-isolated-background-human-permission-sign-business-concept_157943-15752.jpg' }}"
+                        alt="Avatar de {{ Auth::user()->name }}"
+                        class="w-16 h-16 md:w-24 md:h-24 rounded-full mx-auto"
+                    />
+                    <div>
+                        <h2 class="font-medium text-sm md:text-lg text-center text-blue-900">
+                            {{ Auth::user()->name }}
+                        </h2>
+                        <p class="text-xs md:text-sm text-gray-500 text-center">
+                            {{ Auth::user()->email }}
+                        </p>
+                    </div>
+                </div>
+                <!-- Enlaces individuales -->
+                <a class="flex items-center text-gray-500 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-700 to-blue-900 hover:text-white shadow-sm"
+                   href="{{ route('Dashboard') }}">
+                   <i class="fa-solid fa-home text-lg mr-2"></i><span class="text-base">Inicio</span>
                 </a>
-                <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white"
-                    href="{{ route('Usuario.index') }}">
-                    <i class="fa-solid fa-user"></i> <span class="textoSidebar ml-2">Usuario</span>
+                <a class="flex items-center text-gray-500 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-700 to-blue-900 hover:text-white shadow-sm"
+                   href="{{ route('Usuario.index') }}">
+                   <i class="fa-solid fa-user text-lg mr-2"></i><span class="text-base">Usuario</span>
                 </a>
-                <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white"
-                    href="{{ route('Roles.index') }}">
-                    <i class="fa-solid fa-lock"></i> <span class="textoSidebar ml-2">Roles y Permisos</span>
+                <a class="flex items-center text-gray-500 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-700 to-blue-900 hover:text-white shadow-sm"
+                   href="{{ route('Roles.index') }}">
+                   <i class="fa-solid fa-lock text-lg mr-2"></i><span class="text-base">Roles y Permisos</span>
                 </a>
-                <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white"
-                    href="{{ route('Examen.index') }}">
-                    <i class="fa-solid fa-file-lines"></i> <span class="textoSidebar ml-2">Examenes</span>
+                <a class="flex items-center text-gray-500 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-700 to-blue-900 hover:text-white shadow-sm"
+                   href="{{ route('Examen.index') }}">
+                   <i class="fa-solid fa-file-lines text-lg mr-2"></i><span class="text-base">Examenes</span>
                 </a>
-                <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white"
-                    href="{{ route('Reconocimiento-Facial.index') }}">
-                    <i class="fa-solid fa-user"></i> <span class="textoSidebar ml-2">Reconocimiento Facial</span>
+                <a class="flex items-center text-gray-500 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-700 to-blue-900 hover:text-white shadow-sm"
+                   href="{{ route('Reconocimiento-Facial.index') }}">
+                   <i class="fa-solid fa-user text-lg mr-2"></i><span class="text-base">Reconocimiento Facial</span>
                 </a>
-                <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white"
-                    href="{{ route('Servicio.index') }}">
-                    <i class="fas fa-store"></i> <span class="textoSidebar ml-2">Servicios</span>
+                <a class="flex items-center text-gray-500 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-700 to-blue-900 hover:text-white shadow-sm"
+                   href="{{ route('Servicio.index') }}">
+                   <i class="fas fa-store text-lg mr-2"></i><span class="text-base">Servicios</span>
                 </a>
-                <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white"
-                    href="{{ route('GrupoMateria.index') }}">
-                    <i class="fas fa-users"></i> <span class="textoSidebar ml-2">Grupos Y Materias</span>
+                <a class="flex items-center text-gray-500 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-700 to-blue-900 hover:text-white shadow-sm"
+                   href="{{ route('GrupoMateria.index') }}">
+                   <i class="fas fa-users text-lg mr-2"></i><span class="text-base">Grupos Y Materias</span>
                 </a>
-                <a class="block text-gray-500 py-1 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white"
-                    href="{{ route('Estudiante.index') }}">
-                    <i class="fas fa-users"></i> <span class="textoSidebar ml-2">Estudiante</span>
+                <a class="flex items-center text-gray-500 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-700 to-blue-900 hover:text-white shadow-sm"
+                   href="{{ route('Estudiante.index') }}">
+                   <i class="fas fa-users text-lg mr-2"></i><span class="text-base">Estudiante</span>
                 </a>
-
             </nav>
-            <form method="POST" action="{{ route('logout') }}">
+            <form method="POST" action="{{ route('logout') }}" class="mt-auto p-4">
                 @csrf
                 <button
-                    class="block text-gray-500 py-1 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-500 hover:text-white mt-auto"
+                    class="w-full text-gray-500 py-2 px-4 rounded transition duration-300 hover:bg-gradient-to-r from-blue-700 to-blue-900 hover:text-white shadow"
                     type="submit">
-                    <i class="fa-solid fa-right-from-bracket "></i><span class="textoSidebar ml-2">Cerrar sesión</span>
+                    <i class="fa-solid fa-right-from-bracket mr-2"></i><span>Cerrar sesión</span>
                 </button>
             </form>
-            <div class="bg-gradient-to-r from-blue-300 to-blue-500 h-px mt-2"></div>
+            <div class="bg-gradient-to-r from-blue-300 to-blue-500 h-px mx-4 my-2"></div>
         </div>
         <div class="flex-1 p-4 w-full md:w-1/2">
             <div class="mt-1 min-h-full flex flex-wrap space-x-0 space-y-2 md:space-x-4 md:space-y-0">
-                <div class="flex-1  bg-white p-4 shadow rounded-lg w-full">
+                <div class="flex-1 bg-white p-4 shadow rounded-lg w-full">
                     @yield('Panza')
                 </div>
             </div>
         </div>
     </div>
+    
 </div>
 <script>
     const menuBtn = document.getElementById('menuBtn');
@@ -109,6 +124,6 @@
         sideNav.classList.toggle('hidden');
     });
 </script>
-</body>
 
-</html>
+
+<html>
