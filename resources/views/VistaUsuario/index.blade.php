@@ -19,7 +19,7 @@
             <i class="fa-solid fa-user-graduate text-2xl sm:text-3xl lg:text-4xl"></i>
             <span class="mt-1 font-semibold text-lg sm:text-xl lg:text-2xl">Estudiantes</span>
         </div>
-        @if (auth()->user()->hasRole('Administrativo Premium'))
+        @if (auth()->user()->hasRole('Administrativo Premium') || auth()->user()->hasRole('Administrativo'))
         <div class="bg-white p-4 rounded-xl shadow-md text-center">
             <h3 id="ejecutados" class="font-extrabold text-4xl sm:text-5xl lg:text-6xl">{{ $usuarios_creables }}</h3>
             <i class="fa-solid fa-user-graduate text-2xl sm:text-3xl lg:text-4xl"></i>
