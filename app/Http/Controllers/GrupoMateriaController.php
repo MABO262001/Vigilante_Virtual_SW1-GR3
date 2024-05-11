@@ -112,4 +112,10 @@ class GrupoMateriaController extends Controller
 
         return redirect()->route('GrupoMateria.index')->with('success', 'GrupoMateria eliminado exitosamente.');
     }
+
+    public function listaestudiantes()
+    {
+        return view('VistaGrupoMateria.listadoestudiantes');
+
+    }
 }
