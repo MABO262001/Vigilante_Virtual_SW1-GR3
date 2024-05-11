@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Grupo;
 use App\Models\GrupoMateria;
 use App\Models\Materia;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -39,7 +40,9 @@ class GrupoMateriaController extends Controller
     {
         $grupos = Grupo::all();
         $materias = Materia::all();
-        return view('VistaGrupoMateria.create', compact('grupos', 'materias'));
+        $docentes = User::whereHas('roles', function ($query) {
+            $query->whereIn('name', ['Docente', 'Docente Premium']);})->orderBy('id', 'desc')->get();
+            return view('VistaGrupoMateria.create', compact('grupos', 'materias', 'docentes'));
     }
 
     public function store(Request $request)
@@ -47,6 +50,7 @@ class GrupoMateriaController extends Controller
         $request->validate([
             'grupo_id' => 'required|exists:grupos,id',
             'materia_id' => 'required|exists:materias,id',
+            'user_docente_id' => 'required|exists:users,id',
             'contraseña' => 'required|string',
             'cantidad_estudiantes' => 'required|integer|min:0',
             'cantidad_estudiantes_inscritos' => 'required|integer|min:0',
@@ -59,6 +63,7 @@ class GrupoMateriaController extends Controller
         $grupoMateria = new GrupoMateria;
         $grupoMateria->grupo_id = $request->input('grupo_id');
         $grupoMateria->materia_id = $request->input('materia_id');
+        $grupoMateria->user_docente_id = $request->input('user_docente_id');
         $grupoMateria->contraseña = $request->input('contraseña');
         $grupoMateria->cantidad_estudiantes = $request->input('cantidad_estudiantes');
         $grupoMateria->cantidad_estudiantes_inscritos = $request->input('cantidad_estudiantes_inscritos');

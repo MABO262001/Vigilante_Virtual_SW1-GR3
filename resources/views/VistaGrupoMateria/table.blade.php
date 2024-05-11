@@ -5,10 +5,11 @@
                 <th class="w-1/12 py-3 border border-black">No.</th>
                 <th class="w-1/12 py-3 border border-black">Grupo</th>
                 <th class="w-2/12 py-3 border border-black">Materia</th>
+                <th class="w-2/12 py-3 border border-black">Docente</th>
                 <th class="w-2/12 py-3 border border-black">Contraseña</th>
                 <th class="w-2/12 py-3 border border-black">Cantidad de Estudiantes</th>
                 <th class="w-2/12 py-3 border border-black">Estudiantes Inscritos</th>
-                <th class="w-2/12 py-3 border border-black">Acciones</th>
+                <th class="w-3/12 py-3 border border-black">Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -24,8 +25,9 @@
                     <tr class="{{ $loop->even ? 'bg-gray-100' : 'bg-white' }} transition-colors duration-300 hover:bg-blue-400">
                         <td class="text-center py-2 border border-gray-400">{{ $counter++ }}</td>
                         <td class="py-2 px-4 text-center border border-gray-400">{{ $grupoMateria->grupo->nombre }}</td>
-                        <td class="py-2 px-4 border border-gray-400">{{ $grupoMateria->materia->nombre }}</td>
-                        <td class="text-center py-2 border border-gray-400">{{ $grupoMateria->contraseña }}</td>
+                        <td class="py-2 text-center px-4 border border-gray-400">{{ $grupoMateria->materia->nombre }}</td>
+                        <td class="py-2 text-center px-4 border border-gray-400">{{ optional($grupoMateria->userDocente)->name }}</td>
+                        <td class="py-2 text-center px-4 border border-gray-400">{{ $grupoMateria->contraseña }}</td>
                         <td class="text-center py-2 border border-gray-400">{{ $grupoMateria->cantidad_estudiantes }}</td>
                         <td class="text-center py-2 border border-gray-400">{{ $grupoMateria->cantidad_estudiantes_inscritos }}</td>
                         <td class="py-2 px-4 text-center border border-gray-400">
