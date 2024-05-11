@@ -64,8 +64,9 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('/grupo-materia/{id}/edit', 'edit')->name('GrupoMateria.edit');
         Route::put('/grupo-materia/{id}', 'update')->name('GrupoMateria.update');
         Route::delete('/grupo-materia/{id}', 'destroy')->name('GrupoMateria.destroy');
+        Route::get('/grupo-materia/estudiantes', 'listaestudiantes')->name('GrupoMateria.listaestudiantes');
     });
-    Route::get('/grupo-materia/estudiantes', [GrupoMateriaController::class, 'listaestudiantes'])->name('GrupoMateria.listaestudiantes');
+    // Route::get('/grupo-materia/estudiantes', [GrupoMateriaController::class, 'listaestudiantes'])->name('GrupoMateria.listaestudiantes');
         //Acomodar despues para mandar bien la peticion
 
 
