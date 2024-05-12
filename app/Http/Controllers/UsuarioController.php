@@ -133,11 +133,9 @@ class UsuarioController extends Controller
     }
 
 
-    public function show()
+    public function show(string $id)
     {
-        // 
-        $user = Auth::user();
-        return view('VistaUsuario.show', compact('user'));
+        //
     }
 
 
@@ -184,5 +182,4 @@ class UsuarioController extends Controller
         User::destroy($id);
         return redirect()->route('Usuario.index')->with('success', 'Usuario eliminado con éxito');
     }
-
 }

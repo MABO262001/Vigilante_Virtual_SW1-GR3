@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Calendar;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -12,18 +11,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $all_events = Calendar::all();
-        $events = [];
-
-        foreach ($all_events as $event){
-            $events[] = [
-                'title' => $event->event,
-                'start' => $event->start_date,
-                'end' => $event->end_date,
-            ];
-        }
-
-        return view('VistaDashboard.index',compact('events'));
+        return view('VistaDashboard.index');
     }
 
     /**
