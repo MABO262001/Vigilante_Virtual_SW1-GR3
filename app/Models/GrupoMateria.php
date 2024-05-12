@@ -15,6 +15,7 @@ class GrupoMateria extends Model
         'id',
         'grupo_id',
         'materia_id',
+        'user_docente_id',
         'contraseña',
         'cantidad_estudiante',
         'cantidad_estudiantes_inscritos',
@@ -28,6 +29,11 @@ class GrupoMateria extends Model
     public function materia()
     {
         return $this->belongsTo(Materia::class);
+    }
+
+    public function userDocente()
+    {
+        return $this->belongsTo(User::class, 'user_docente_id');
     }
 
     public function gestion()

@@ -100,4 +100,10 @@ class User extends Authenticatable
         return $this->belongsToMany(GrupoMateria::class, 'ingresos', 'user_id', 'grupo_materia_id')
                     ->withTimestamps();
     }
+
+    public function grupo_materia_docente()
+    {
+        return $this->hasMany(GrupoMateria::class, 'user_docente_id');
+    }
+
 }

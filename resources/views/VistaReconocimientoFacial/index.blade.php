@@ -12,7 +12,7 @@
 
         <!-- MEDIAPIPE OUTPUT -->
         <canvas class="output2" width="512" height="512"></canvas>
-        
+
         <div class="loading">
             <div class="spinner"></div>
         </div>
@@ -138,7 +138,7 @@
 
             startFaceCheck();
         </script>
-        
+
     </div>
 
 @endsection
