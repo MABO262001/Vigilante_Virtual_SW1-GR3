@@ -45,4 +45,8 @@ class EstudianteController extends Controller
     {
         return view('VistaEstudiante.listaestudiante');
     }
+
+    public function calificaciones(){
+        return view('VistaEstudiante.calificaciones');
+    }
 }

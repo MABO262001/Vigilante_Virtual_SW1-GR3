@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\EstudianteController;
 use App\Http\Controllers\GestionController;
 use App\Http\Controllers\GrupoController;
@@ -110,6 +111,15 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('/unirse-curso', 'unirseCurso')->name('Estudiante.unirse_curso');
         Route::get('/historial-examenes', 'examenes')->name('Estudiante.examenes');
         Route::get('/lista-estudiantes', 'listaEstudiantes')->name('ListaEstudiantes.show');
+        Route::get('/calificaciones', 'calificaciones')->name('Estudiante.calificaciones');
+    });
+
+
+    //RUTAS docente
+
+    Route::controller(DocenteController::class)->group(function () {
+        Route::get('/docente', 'index')->name('Docente.index');
+        Route::get('/docente-materia', 'materia')->name('Docente.materia');
     });
 
 });
