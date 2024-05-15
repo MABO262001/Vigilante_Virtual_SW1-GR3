@@ -3,11 +3,11 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\EstudianteController;
-use App\Http\Controllers\GestionController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\GrupoMateriaController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\MateriaController;
+use App\Http\Controllers\PagoServicioController;
 use App\Http\Controllers\Permisos;
 use App\Http\Controllers\ReconocimientoFacialController;
 use App\Http\Controllers\Roles;
@@ -55,6 +55,15 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::put('/servicios/{id}', 'update')->name('Servicio.update');
         Route::delete('/servicios/{id}', 'destroy')->name('Servicio.destroy');
     });
+
+    //Rutas De Pagos
+    Route::controller(PagoServicioController::class)->group(function () {
+        Route::get('/pagos-servicios', 'index')->name('PagoServicio.index');
+
+
+    });
+
+
 
     //Rutas De Grupo-Materia
     Route::controller(GrupoMateriaController::class)->group(function () {
@@ -119,5 +128,6 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('/docente', 'index')->name('Docente.index');
         Route::get('/docente-materia', 'materia')->name('Docente.materia');
     });
+
 
 });

@@ -14,7 +14,7 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -62,7 +62,7 @@
                         </div>
                     </div>
                 </a>
-                
+
                 <a class="flex items-center text-gray-900 py-2 px-4 my-2 rounded transition duration-100 hover:bg-gradient-to-r from-blue-600 to-blue-600 hover:text-white shadow-sm"
                     href="{{ route('Dashboard') }}">
                     <i class="fa-solid fa-home text-lg mr-2"></i><span class="text-base">Inicio</span>
@@ -104,6 +104,8 @@
                 </a>
                 {{--@endif--}}
 
+                
+
             </nav>
             <form method="POST" action="{{ route('logout') }}" class="mt-auto p-4">
                 @csrf
@@ -123,7 +125,7 @@
             </div>
         </div>
     </div>
-    
+
 </div>
 <script>
     const menuBtn = document.getElementById('menuBtn');
