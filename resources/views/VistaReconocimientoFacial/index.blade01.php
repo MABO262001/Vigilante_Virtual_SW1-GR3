@@ -37,14 +37,14 @@
             <div id="results" class="mt-4 p-4 border rounded bg-gray-800"></div>
         </footer>
     </div>
-    <!-- <script src="{{ asset('js/camera_utils.js') }}" ></script>
-    <script src="{{ asset('js/face_mesh.js') }}" ></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.1/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="{{ asset('js/camera_utils.js') }}" ></script>
+    <script src="{{ asset('js/face_mesh.js') }}" ></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.1/camera_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils@0.1/control_utils.js" crossorigin="anonymous">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.1/drawing_utils.js" crossorigin="anonymous">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.1/face_mesh.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.1/face_mesh.js" crossorigin="anonymous"></script> --}}
 
     <script>
         const video = document.getElementById('inputVideo');

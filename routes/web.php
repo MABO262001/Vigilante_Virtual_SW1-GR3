@@ -67,8 +67,6 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::delete('/grupo-materia/{id}', 'destroy')->name('GrupoMateria.destroy');
         Route::get('/grupo-materia/estudiantes', 'listaestudiantes')->name('GrupoMateria.listaestudiantes');
     });
-    // Route::get('/grupo-materia/estudiantes', [GrupoMateriaController::class, 'listaestudiantes'])->name('GrupoMateria.listaestudiantes');
-        //Acomodar despues para mandar bien la peticion
 
 
     // Rutas De Grupos
