@@ -22,6 +22,7 @@ return new class extends Migration
 
 
             //Perfil del usuario
+            $table->integer('carnet_identidad')->nullable();
             $table->string('nombre')->nullable();
             $table->string('apellido_paterno')->nullable();
             $table->string('apellido_materno')->nullable();

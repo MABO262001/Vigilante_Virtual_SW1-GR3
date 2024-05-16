@@ -30,6 +30,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'carnet_identidad',
         'nombre',
         'apellido_paterno',
         'apellido_materno',
@@ -105,5 +106,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(GrupoMateria::class, 'user_docente_id');
     }
+
+
 
 }

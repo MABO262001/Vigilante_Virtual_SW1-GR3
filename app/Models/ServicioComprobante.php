@@ -15,6 +15,7 @@ class ServicioComprobante extends Model
         'comprobante_id',
         'servicio_id',
         'precio_s',
+        'usado'
     ];
 
     public function comprobante()

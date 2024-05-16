@@ -2,63 +2,101 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comprobante;
+use App\Models\ServicioComprobante;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+
 
 class PagoServicioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function index(Request $request)
     {
-        return view('VistaPago.index');
+        $search = $request->get('search');
+        $date = $request->get('date');
+
+        $comprobantes = Comprobante::query()
+            ->with('servicioComprobantes')
+            ->whereHas('userEstudiante', function ($query) use ($search) {
+                $query->where('name', 'LIKE', "%{$search}%");
+            })
+            ->whereHas('userAdministrativo', function ($query) use ($search) {
+                $query->where('name', 'LIKE', "%{$search}%");
+            })
+
+            ->when($date, function ($query, $date) {
+                $date = Carbon::createFromFormat('d-m-Y', $date)->format('Y-m-d');
+                $query->whereDate('fecha', $date);
+            })
+            ->get();
+
+        $totalComprobantes = $comprobantes->count();
+        $totalServiciosSinUtilizar = ServicioComprobante::where('usado', false)->count();
+        $totalComprobantesDelDia = Comprobante::whereDate('created_at', now()->today())->count();
+
+        return view('VistaPago.index', compact('comprobantes', 'totalComprobantes', 'totalServiciosSinUtilizar', 'totalComprobantesDelDia'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function buscarComprobantes(Request $request)
+    {
+        $search = $request->get('search');
+        $date = $request->get('date');
+
+        $comprobantes = Comprobante::query()
+            ->with('servicioComprobantes')
+            ->whereHas('userEstudiante', function ($query) use ($search) {
+                $query->where('name', 'LIKE', "%{$search}%");
+            })
+            ->whereHas('userAdministrativo', function ($query) use ($search) {
+                $query->where('name', 'LIKE', "%{$search}%");
+            })
+
+            ->when($date, function ($query, $date) {
+                $date = Carbon::createFromFormat('d-m-Y', $date)->format('Y-m-d');
+                $query->whereDate('fecha', $date);
+            })
+            ->get();
+
+        $totalComprobantes = $comprobantes->count();
+        $totalServiciosSinUtilizar = ServicioComprobante::where('usado', false)->count();
+        $totalComprobantesDelDia = Comprobante::whereDate('created_at', now()->today())->count();
+
+        return view('VistaPago.table', compact('comprobantes', 'totalComprobantes', 'totalServiciosSinUtilizar', 'totalComprobantesDelDia'));
+    }
+
+
     public function create()
     {
-        //
+        return view('VistaPago.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        $comprobante = Comprobante::with('servicioComprobantes')->findOrFail($id);
+        return view('VistaPago.show', compact('comprobante'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        //
+        $comprobante = Comprobante::findOrFail($id);
+        return view('VistaPago.edit', compact('comprobante'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        $comprobante = Comprobante::findOrFail($id);
+        $comprobante->delete();
+        return redirect()->route('PagoServicio.index')->with('success', 'Comprobante eliminado exitosamente.');
     }
 }

@@ -59,8 +59,14 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     //Rutas De Pagos
     Route::controller(PagoServicioController::class)->group(function () {
         Route::get('/pagos-servicios', 'index')->name('PagoServicio.index');
+        Route::get('/pagos-servicios/comprobante', 'buscarComprobantes')->name('PagoServicio.comprobantes');
 
-
+        Route::post('/pagos-servicios/store', 'store')->name('PagoServicio.store');
+        Route::get('/pagos-servicios/create', 'create')->name('PagoServicio.create');
+        Route::get('/pagos-servicios/{id}', 'show')->name('PagoServicio.show');
+        Route::get('/pagos-servicios/{id}/edit', 'edit')->name('PagoServicio.edit');
+        Route::put('/pagos-servicios/{id}', 'update')->name('PagoServicio.update');
+        Route::delete('/pagos-servicios/{id}', 'destroy')->name('PagoServicio.destroy');
     });
 
 

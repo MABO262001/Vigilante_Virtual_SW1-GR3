@@ -47,11 +47,9 @@
             <nav>
                 <a href="{{ route('Usuario.show') }}" class="block text-center">
                     <div id="profile" class="space-y-3 p-4 shadow">
-                        <img
-                            src="{{ Auth::user()->photo_url ?: 'https://img.freepik.com/premium-vector/user-profile-icon-flat-style-member-avatar-vector-illustration-isolated-background-human-permission-sign-business-concept_157943-15752.jpg' }}"
+                        <img src="{{ Auth::user()->photo_url ?: 'https://img.freepik.com/premium-vector/user-profile-icon-flat-style-member-avatar-vector-illustration-isolated-background-human-permission-sign-business-concept_157943-15752.jpg' }}"
                             alt="Avatar de {{ Auth::user()->name }}"
-                            class="w-16 h-16 md:w-24 md:h-24 rounded-full mx-auto"
-                        />
+                            class="w-16 h-16 md:w-24 md:h-24 rounded-full mx-auto" />
                         <div>
                             <h2 class="font-medium text-sm md:text-lg text-blue-900">
                                 {{ Auth::user()->name }}
@@ -79,10 +77,16 @@
                     href="{{ route('Examen.index') }}">
                     <i class="fa-solid fa-file-lines text-lg mr-2"></i><span class="text-base">Examenes</span>
                 </a>
-                <a class="flex items-center text-gray-900 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-600 to-blue-600 hover:text-white shadow-sm"
+                {{-- <a class="flex items-center text-gray-900 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-600 to-blue-600 hover:text-white shadow-sm"
                     href="{{ route('Reconocimiento-Facial.index') }}">
                     <i class="fa-solid fa-user text-lg mr-2"></i><span class="text-base">Reconocimiento Facial</span>
+                </a> --}}
+                
+                <a class="flex items-center text-gray-900 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-600 to-blue-600 hover:text-white shadow-sm"
+                    href="{{ route('PagoServicio.index') }}">
+                    <i class="fas fa-shopping-cart text-lg mr-2"></i><span class="text-base">Pagos</span>
                 </a>
+
                 <a class="flex items-center text-gray-900 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-600 to-blue-600 hover:text-white shadow-sm"
                     href="{{ route('Servicio.index') }}">
                     <i class="fas fa-store text-lg mr-2"></i><span class="text-base">Servicios</span>
@@ -91,20 +95,21 @@
                     href="{{ route('GrupoMateria.index') }}">
                     <i class="fas fa-users text-lg mr-2"></i><span class="text-base">Grupos Y Materias</span>
                 </a>
-                {{--@if (auth()->user()->hasRole('Estudiante'))--}}
+                {{-- @if (auth()->user()->hasRole('Estudiante')) --}}
                 <a class="flex items-center text-gray-900 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-600 to-blue-600 hover:text-white shadow-sm"
                     href="{{ route('Estudiante.index') }}">
                     <i class="fas fa-users text-lg mr-2"></i><span class="text-base">Perfil Estudiante</span>
                 </a>
-                {{--@endif--}}
-                {{--@if (auth()->user()->hasRole('Estudiante'))--}}
+                {{-- @endif --}}
+                {{-- @if (auth()->user()->hasRole('Estudiante')) --}}
                 <a class="flex items-center text-gray-900 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-600 to-blue-600 hover:text-white shadow-sm"
                     href="{{ route('Docente.index') }}">
                     <i class="fas fa-users text-lg mr-2"></i><span class="text-base">Perfil Docente</span>
                 </a>
-                {{--@endif--}}
+                {{-- @endif --}}
 
-                
+
+
 
             </nav>
             <form method="POST" action="{{ route('logout') }}" class="mt-auto p-4">
