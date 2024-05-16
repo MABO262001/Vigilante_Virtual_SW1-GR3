@@ -15,10 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('comprobante_id');
             $table->unsignedBigInteger('servicio_id');
-            $table->decimal('precio_s', 8, 2);
-
+            // $table->decimal('precio_s', 8, 2);
             $table->Boolean('usado')->default(false);
-            
+
             $table->timestamps();
 
             $table->foreign('comprobante_id')->references('id')->on('comprobantes')->onDelete('cascade');

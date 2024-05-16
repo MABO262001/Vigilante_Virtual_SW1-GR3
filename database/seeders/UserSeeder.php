@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
@@ -16,6 +15,8 @@ class UserSeeder extends Seeder
             'name' => 'MABO',
             'email' => 'ballivian02@gmail.com',
             'password' => Hash::make('123456789'),
+
+            'carnet_identidad' => '6312127',
         ]);
         $user->assignRole('Master');
 
@@ -24,6 +25,8 @@ class UserSeeder extends Seeder
             'name' => 'Ing. Papitas',
             'email' => 'papitas@gmail.com',
             'password' => Hash::make('1234'),
+
+            'carnet_identidad' => '12345',
         ]);
         $user->assignRole('Master');
 
@@ -32,6 +35,9 @@ class UserSeeder extends Seeder
             'name' => 'David',
             'email' => 'davidchalarq@gmail.com',
             'password' => Hash::make('123456789'),
+
+            'carnet_identidad' => '67890',
+
         ]);
         $user->assignRole('Estudiante');
 

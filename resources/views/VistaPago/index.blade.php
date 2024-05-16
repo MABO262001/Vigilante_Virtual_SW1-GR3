@@ -81,7 +81,7 @@
 
             var searchValue = document.getElementById('searchInput').value;
 
-            axios.get('{{ route('PagoServicio.comprobantes') }}', {
+            axios.get('{{ route('PagoServicio.index') }}', {
                     params: {
                         search: searchValue
                     }

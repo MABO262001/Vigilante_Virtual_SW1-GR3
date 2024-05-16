@@ -14,7 +14,7 @@ class ServicioComprobante extends Model
     protected $fillable = [
         'comprobante_id',
         'servicio_id',
-        'precio_s',
+        // 'precio_s',
         'usado'
     ];
 
