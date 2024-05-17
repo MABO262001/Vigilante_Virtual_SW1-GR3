@@ -28,4 +28,5 @@ class ServicioComprobante extends Model
         return $this->belongsTo(Servicio::class);
     }
 
+
 }

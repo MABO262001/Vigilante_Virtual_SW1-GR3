@@ -31,9 +31,8 @@ class Comprobante extends Model
 
     public function servicios()
     {
-        return $this->belongsToMany(Servicio::class, 'servicio_comprobantes', 'comprobante_id', 'servicio_id')->withTimestamps();
+        return $this->belongsToMany(Servicio::class, 'servicio_comprobantes', 'comprobante_id', 'servicio_id')->withTimestamps() ->withPivot('usado');;
     }
-
 
     public function grupo_materia_comprobante()
     {
@@ -48,6 +47,11 @@ class Comprobante extends Model
     public function userAdministrativo()
     {
         return $this->belongsTo(User::class, 'user_administrativo_id');
+    }
+
+    public function servicioComprobantes()
+    {
+        return $this->hasMany(ServicioComprobante::class);
     }
 
 

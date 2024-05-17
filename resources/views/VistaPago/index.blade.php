@@ -48,7 +48,7 @@
                 <div class="flex items-center border-b-2 border-teal-500 py-2">
                     <input type="text" id="searchInput" name="search" placeholder="Buscar Comprobante"
                         class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none">
-                    <input type="date" id="dateInput" name="date" placeholder="Fecha"
+                    <input type="date" id="fechaInput" name="fecha" placeholder="Fecha"
                         class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none">
                     <button type="submit" id="searchButton"
                         class="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded">Buscar</button>
@@ -80,10 +80,12 @@
             event.preventDefault();
 
             var searchValue = document.getElementById('searchInput').value;
+            var fechaValue = document.getElementById('fechaInput').value;
 
             axios.get('{{ route('PagoServicio.index') }}', {
                     params: {
-                        search: searchValue
+                        search: searchValue,
+                        fecha: fechaValue
                     }
                 })
                 .then(function(response) {
@@ -94,7 +96,6 @@
                     console.error(error);
                 });
         });
-
 
 
         document.getElementById('clearButton').addEventListener('click', function() {
