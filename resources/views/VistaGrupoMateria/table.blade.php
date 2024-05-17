@@ -18,7 +18,7 @@
             @endphp
             @if ($grupoMaterias->isEmpty())
                 <tr>
-                    <td colspan="7" class="text-center py-4 border border-gray-400">Sin Grupo-Materia</td>
+                    <td colspan="8" class="text-center py-4 border border-gray-400">Sin Grupo-Materia</td>
                 </tr>
             @else
                 @foreach ($grupoMaterias as $grupoMateria)

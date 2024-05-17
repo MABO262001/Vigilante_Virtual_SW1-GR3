@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             MateriaSeeder::class,
             GestionSeeder::class,
             ServicioSeeder::class,
+            GrupoMateriaSeeder::class,
             // mas seeders
         ]);
     }

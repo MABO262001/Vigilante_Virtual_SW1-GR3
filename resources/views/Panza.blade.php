@@ -83,6 +83,11 @@
                 </a> --}}
                 
                 <a class="flex items-center text-gray-900 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-600 to-blue-600 hover:text-white shadow-sm"
+                    href="{{ route('Inscripcion.index') }}">
+                    <i class="fas fa-edit text-lg mr-2"></i><span class="text-base">Inscripcion</span>
+                </a>
+
+                <a class="flex items-center text-gray-900 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-600 to-blue-600 hover:text-white shadow-sm"
                     href="{{ route('PagoServicio.index') }}">
                     <i class="fas fa-shopping-cart text-lg mr-2"></i><span class="text-base">Pagos</span>
                 </a>
