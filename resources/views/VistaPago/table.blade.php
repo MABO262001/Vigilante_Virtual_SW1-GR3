@@ -21,13 +21,16 @@
                 </tr>
             @else
                 @foreach ($comprobantes as $comprobante)
-                    <tr class="{{ $loop->even ? 'bg-gray-100' : 'bg-white' }} transition-colors duration-300 hover:bg-blue-400">
+                    <tr
+                        class="{{ $loop->even ? 'bg-gray-100' : 'bg-white' }} transition-colors duration-300 hover:bg-blue-400">
                         <td class="text-center py-2 border border-gray-400">{{ $counter++ }}</td>
-                        <td class="py-2 px-4 text-center border border-gray-400">{{ optional($comprobante->userEstudiante)->name }}</td>
-                        <td class="py-2 text-center px-4 border border-gray-400">{{ optional($comprobante->userAdministrativo)->name }}</td>
+                        <td class="py-2 px-4 text-center border border-gray-400">
+                            {{ optional($comprobante->userEstudiante)->name }}</td>
+                        <td class="py-2 text-center px-4 border border-gray-400">
+                            {{ optional($comprobante->userAdministrativo)->name }}</td>
                         <td class="py-2 text-center px-4 border border-gray-400">{{ $comprobante->monto_total }}</td>
                         <td class="text-center py-2 border border-gray-400">{{ $comprobante->hora }}</td>
-                        <td class="text-center py-2 border border-gray-400">{{ $comprobante->fecha}}</td>
+                        <td class="text-center py-2 border border-gray-400">{{ $comprobante->fecha }}</td>
                         <td class="py-2 px-4 text-center border border-gray-400">
                             <a href="{{ route('PagoServicio.edit', $comprobante->id) }}"
                                 class="text-blue-500 hover:text-blue-700 font-bold mr-3 transition duration-300 transform hover:scale-110">

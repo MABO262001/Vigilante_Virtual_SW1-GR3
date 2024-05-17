@@ -29,7 +29,8 @@
                 <label for="carnet_identidad" class="block text-gray-700 font-bold mb-2">Carnet de Identidad</label>
                 <input type="number" name="carnet_identidad" id="carnet_identidad" placeholder="Carnet de Identidad"
                     min="0" value="{{ $user->carnet_identidad }}"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" readonly>
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    readonly>
             </div>
             <div class="w-1/2 mr-2">
                 <label for="name" class="block text-gray-700 font-bold mb-2">Nombre Del Usuario</label>
@@ -102,14 +103,12 @@
         document.getElementById('searchForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
-            // Validación del carnet de identidad
             var carnetInput = document.getElementById('carnet_identidad');
             if (!carnetInput.value) {
                 alert('Por favor, introduce el carnet de identidad antes de registrar.');
                 return;
             }
 
-            // Validación del nombre
             var nameInput = document.getElementById('name');
             if (!nameInput.value) {
                 alert('No existe un usuario con este carnet de identidad.');

@@ -6,12 +6,12 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 items-stretch">
             <a href="{{ route('PagoServicio.index') }}" class="transform transition duration-300 ease-in-out hover:scale-105">
                 <div class="bg-blue-500 p-4 rounded-xl shadow-md text-center hover:bg-blue-600 hover:text-white">
-                    <h3 id="totalComprobantes" class="font-extrabold text-4xl sm:text-5xl lg:text-6xl">{{ $totalComprobantes }}</h3>
+                    <h3 id="totalComprobantes" class="font-extrabold text-4xl sm:text-5xl lg:text-6xl">
+                        {{ $totalComprobantes }}</h3>
                     <i class="fas fa-book text-2xl sm:text-3xl lg:text-4xl"></i>
                     <span class="mt-1 font-semibold text-lg sm:text-xl lg:text-2xl">Total De Transacciones</span>
                 </div>
             </a>
-            {{-- si le doy click que me lleve a todos los servicios puesto con el nombre del estudiante o docente que solicitó el servicio --}}
             <a href="{{ route('PagoServicio.index') }}"
                 class="transform transition duration-300 ease-in-out hover:scale-105">
                 <div class="bg-green-500 p-4 rounded-xl shadow-md text-center hover:bg-green-600 hover:text-white">
