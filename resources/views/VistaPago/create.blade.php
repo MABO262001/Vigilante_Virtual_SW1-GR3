@@ -98,20 +98,6 @@
         document.getElementById('searchForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
-            // Validación del carnet de identidad
-            var carnetInput = document.getElementById('carnet_identidad');
-            if (!carnetInput.value) {
-                alert('Por favor, introduce el carnet de identidad antes de registrar.');
-                return;
-            }
-
-            // Validación del nombre
-            var nameInput = document.getElementById('name');
-            if (!nameInput.value) {
-                alert('No existe un usuario con este carnet de identidad.');
-                return;
-            }
-
             var searchValue = document.getElementById('searchInput').value;
 
             axios.get('{{ route('PagoServicio.create') }}', {
