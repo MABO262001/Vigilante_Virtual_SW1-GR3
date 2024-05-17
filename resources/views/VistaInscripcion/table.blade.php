@@ -25,10 +25,11 @@
                         class="{{ $loop->even ? 'bg-gray-100' : 'bg-white' }} transition-colors duration-300 hover:bg-blue-400">
                         <td class="text-center py-2 border border-gray-400">{{ $counter++ }}</td>
                         <td class="py-2 px-4 text-center border border-gray-400">
-                            {{ optional($boleta_inscripcion->userEstudiante)->name }}</td>
+                            {{ ($boleta_inscripcion->user_estudiante)->name }}</td>
                         <td class="py-2 text-center px-4 border border-gray-400">
-                            {{ optional($boleta_inscripcion->userAdministrativo)->name }}</td>
-                        <td class="py-2 text-center px-4 border border-gray-400">{{ $boleta_inscripcion->grupo_materia_boleta_inscripcions_count }}</td>
+                            {{ ($boleta_inscripcion->user_administrativo)->name }}</td>
+                        <td class="py-2 text-center px-4 border border-gray-400">
+                            {{ $boleta_inscripcion->cantidad_materias_inscritas }}</td>
                         <td class="text-center py-2 border border-gray-400">{{ $boleta_inscripcion->hora }}</td>
                         <td class="text-center py-2 border border-gray-400">{{ $boleta_inscripcion->fecha }}</td>
                         <td class="py-2 px-4 text-center border border-gray-400">

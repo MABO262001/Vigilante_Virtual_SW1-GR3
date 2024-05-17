@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_administrativo_id');
             $table->time('hora');
             $table->date('fecha');
+            $table->integer('cantidad_materias_inscritas')->default(0);
             $table->timestamps();
 
             $table->foreign('user_estudiante_id')->references('id')->on('users')->onDelete('cascade');

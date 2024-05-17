@@ -14,6 +14,7 @@ class BoletaInscripcion extends Model
         'user_administrativo_id',
         'hora',
         'fecha',
+        'cantidad_materias_inscritas',
     ];
 
     public function user_estudiante()

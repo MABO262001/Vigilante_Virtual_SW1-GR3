@@ -25,11 +25,6 @@ class Comprobante extends Model
         return $this->belongsToMany(Servicio::class, 'servicio_comprobantes', 'comprobante_id', 'servicio_id')->withTimestamps() ->withPivot('usado');;
     }
 
-    public function grupo_materia_comprobante()
-    {
-        return $this->belongsToMany (GrupoMateriaComprobante::class, 'grupo_materia_comprobantes', 'comprobante_id', 'grupo_materia_id')->withTimestamps();
-    }
-
     public function userEstudiante()
     {
         return $this->belongsTo(User::class, 'user_estudiante_id');
@@ -44,7 +39,4 @@ class Comprobante extends Model
     // {
     //     return $this->hasMany(ServicioComprobante::class);
     // }
-
-
-
 }

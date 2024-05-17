@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Materia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,9 +21,9 @@ class Grupo extends Model
         return $this->belongsTomany(Materia::class, 'grupo_materias', 'grupo_id', 'materia_id')->withTimestamps();
     }
 
-    public function grupo_materia_comprobante()
+    public function grupo_materia_boleta_inscripcions()
     {
-        return $this->belongsToMany(GrupoMateriaComprobante::class, 'grupo_materia_comprobantes', 'comprobante_id', 'grupo_materia_id')->withTimestamps();
+        return $this->belongsToMany(GrupoMateriaBoletaInscripcion::class, 'grupo_materia_boleta_inscripcions', 'boleta_inscripcion_id', 'grupo_materia_id')->withTimestamps();
     }
 
 }
