@@ -72,7 +72,16 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
 
     });
 
-
+     // Rutas Inscripcion
+    Route::controller(InscripcionController::class)->group(function () {
+        Route::get('/inscripcion', 'index')->name('Inscripcion.index');
+        Route::post('/inscripcion/store', 'store')->name('Inscripcion.store');
+        Route::get('/inscripcion/create', 'create')->name('Inscripcion.create');
+        Route::get('/inscripcion/{id}', 'show')->name('Inscripcion.show');
+        Route::get('/inscripcion/{id}/edit', 'edit')->name('Inscripcion.edit');
+        Route::put('/inscripcion/{id}', 'update')->name('Inscripcion.update');
+        Route::delete('/inscripcion/{id}', 'destroy')->name('Inscripcion.destroy');
+    });
 
     //Rutas De Grupo-Materia
     Route::controller(GrupoMateriaController::class)->group(function () {
@@ -107,19 +116,6 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::put('/materia/{id}', 'update')->name('Materia.update');
         Route::delete('/materia/{id}', 'destroy')->name('Materia.destroy');
     });
-
-    // Rutas Inscripcion
-        // falta hacer
-    Route::controller(InscripcionController::class)->group(function () {
-        Route::get('/inscripcion', 'index')->name('Inscripcion.index');
-        Route::post('/inscripcion/store', 'store')->name('Inscripcion.store');
-        Route::get('/inscripcion/create', 'create')->name('Inscripcion.create');
-        Route::get('/inscripcion/{id}', 'show')->name('Inscripcion.show');
-        Route::get('/inscripcion/{id}/edit', 'edit')->name('Inscripcion.edit');
-        Route::put('/inscripcion/{id}', 'update')->name('Inscripcion.update');
-        Route::delete('/inscripcion/{id}', 'destroy')->name('Inscripcion.destroy');
-    });
-
 
     //Rutas de Estudiantes
     Route::controller(EstudianteController::class)->group(function () {
