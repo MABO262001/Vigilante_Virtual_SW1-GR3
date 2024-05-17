@@ -19,15 +19,6 @@ class Comprobante extends Model
         'monto_total',
     ];
 
-    public function user_estudiante()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function user_administrativo()
-    {
-        return $this->belongsTo(User::class);
-    }
 
     public function servicios()
     {
@@ -49,10 +40,10 @@ class Comprobante extends Model
         return $this->belongsTo(User::class, 'user_administrativo_id');
     }
 
-    public function servicioComprobantes()
-    {
-        return $this->hasMany(ServicioComprobante::class);
-    }
+    // public function servicioComprobantes()
+    // {
+    //     return $this->hasMany(ServicioComprobante::class);
+    // }
 
 
 

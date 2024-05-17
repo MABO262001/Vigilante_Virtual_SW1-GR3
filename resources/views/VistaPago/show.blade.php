@@ -2,7 +2,7 @@
 @section('Panza')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 class="font-extrabold text-blue-900 text-3xl mt-2 uppercase">Servicios del Usuario
-            {{ $comprobante->user_estudiante->name }}
+            {{ $comprobante->userEstudiante->name }}
         </h1>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 items-stretch">
             <a href="{{ route('PagoServicio.show', ['id' => $comprobante->id]) }}"

@@ -38,7 +38,7 @@
         <div class="mt-8 flex justify-center">
             <form id="searchForm" method="GET" action="{{ route('Inscripcion.index') }}" class="w-full max-w-lg">
                 <div class="flex items-center border-b-2 border-teal-500 py-2">
-                    <input type="text" id="searchInput" name="search" placeholder="Buscar Comprobante"
+                    <input type="text" id="searchInput" name="search" placeholder="Buscar Boleta Inscripcion"
                         class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none">
                     <input type="date" id="fechaInput" name="fecha" placeholder="Fecha"
                         class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none">
