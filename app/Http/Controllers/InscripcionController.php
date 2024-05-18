@@ -139,37 +139,66 @@ class InscripcionController extends Controller
         return redirect()->route('Inscripcion.index')->with('success', 'Inscripción realizada con éxito');
     }
 
+
     public function show(string $id)
     {
+        $boletaInscripcion = BoletaInscripcion::find($id);
+        if (!$boletaInscripcion) {
+            return redirect()->back()->with('error', 'Boleta de inscripción no encontrada');
+        }
 
+        $materias_inscritas = [];
+        $grupoMateriaBoletaInscripcions = $boletaInscripcion->grupo_materia_boleta_inscripcion ?? [];
+        foreach ($grupoMateriaBoletaInscripcions as $gmbi) {
+            $materias_inscritas[] = [
+                'nombre_materia' => $gmbi->grupo_materia->materia->nombre,
+                'nombre_grupo' => $gmbi->grupo_materia->grupo->nombre,
+            ];
+        }
+        $totalMateriasInscritas = $boletaInscripcion->cantidad_materias_inscritas;
+
+        return view('VistaInscripcion.show', compact('materias_inscritas', 'boletaInscripcion', 'totalMateriasInscritas'));
     }
 
-    public function edit(string $id,Request $request )
+    public function edit(string $id, Request $request)
     {
-        $boleta_inscripcion = BoletaInscripcion::find($id);
-        $user_estudiante = User::find($boleta_inscripcion->user_estudiante_id);
-        $total_materias_inscritas = GrupoMateriaBoletaInscripcion::where('boleta_inscripcion_id', $id)->count();
 
+        $boleta_inscripcion = BoletaInscripcion::find($id);
+        if (!$boleta_inscripcion) {
+            return redirect()->back()->with('error', 'Boleta de inscripción no encontrada');
+        }
+
+        $user_estudiante = User::find($boleta_inscripcion->user_estudiante_id);
+        if (!$user_estudiante) {
+            return redirect()->back()->with('error', 'Usuario estudiante no encontrado');
+        }
+        $total_materias_inscritas = GrupoMateriaBoletaInscripcion::where('boleta_inscripcion_id', $id)->count();
 
         $search = $request->get('search');
 
-        $grupomaterias = GrupoMateria::query()
-            ->whereHas('materia', function ($query) use ($search) {
-                $query->where('nombre', 'LIKE', "%{$search}%");
-            })
-            ->orWhereHas('grupo', function ($query) use ($search) {
-                $query->where('nombre', 'LIKE', "%{$search}%");
-            })
-            ->get();
-
-        if ($grupomaterias->isEmpty()) {
-            return redirect()->back()->with('error', 'No se encontraron resultados');
+        if ($search) {
+            $grupomaterias = GrupoMateria::query()
+                ->whereHas('materia', function ($query) use ($search) {
+                    $query->where('nombre', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('grupo', function ($query) use ($search) {
+                    $query->where('nombre', 'LIKE', "%{$search}%");
+                })
+                ->get();
+        } else {
+            $grupomaterias = GrupoMateria::all();
         }
+
+        $inscribedGrupoMaterias = $boleta_inscripcion->grupo_materia_boleta_inscripcion->pluck('grupo_materia_id')->toArray();
 
         if ($request->ajax()) {
-            return view('VistaInscripcion.tablacreate', compact('grupomaterias'));
+            return response()->json([
+                'view' => view('VistaInscripcion.tablacreate', compact('grupomaterias', 'inscribedGrupoMaterias'))->render(),
+                'total' => $total_materias_inscritas,
+            ]);
         }
-        return view('VistaInscripcion.edit', compact('grupomaterias', 'boleta_inscripcion', 'user_estudiante', 'total_materias_inscritas'));
+
+        return view('VistaInscripcion.edit', compact('grupomaterias', 'boleta_inscripcion', 'user_estudiante', 'total_materias_inscritas', 'inscribedGrupoMaterias'));
     }
 
     public function update(Request $request, $id)
@@ -206,6 +235,23 @@ class InscripcionController extends Controller
             return redirect()->back()->with('error', 'Boleta de inscripción no encontrada');
         }
 
+        $currentMaterias = $boleta_inscripcion->grupo_materia_boleta_inscripcion->pluck('grupo_materia_id')->toArray();
+
+        $materiasToRemove = array_diff($currentMaterias, $grupomaterias);
+
+        $materiasToAdd = array_diff($grupomaterias, $currentMaterias);
+
+        foreach ($materiasToRemove as $materiaId) {
+            $boleta_inscripcion->grupo_materia_boleta_inscripcion()->where('grupo_materia_id', $materiaId)->delete();
+        }
+
+        foreach ($materiasToAdd as $materiaId) {
+            $boleta_inscripcion->grupo_materia_boleta_inscripcion()->create([
+                'boleta_inscripcion_id' => $boleta_inscripcion->id,
+                'grupo_materia_id' => $materiaId,
+            ]);
+        }
+
         $boleta_inscripcion->update([
             'user_estudiante_id' => $estudiante->id,
             'user_administrativo_id' => auth()->user()->id,
@@ -213,15 +259,6 @@ class InscripcionController extends Controller
             'fecha' => now()->timezone('America/La_Paz')->format('Y-m-d'),
             'cantidad_materias_inscritas' => count($grupomaterias),
         ]);
-
-        foreach ($grupomaterias as $grupomateria) {
-            $grupo_materia = GrupoMateria::find($grupomateria);
-
-            $boleta_inscripcion->grupo_materia_boleta_inscripcion()->updateOrCreate([
-                'boleta_inscripcion_id' => $boleta_inscripcion->id,
-                'grupo_materia_id' => $grupo_materia->id,
-            ]);
-        }
 
         return redirect()->route('Inscripcion.index')->with('success', 'Inscripción actualizada con éxito');
     }

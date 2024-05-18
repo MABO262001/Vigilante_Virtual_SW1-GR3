@@ -10,10 +10,10 @@
         @foreach ($grupomaterias as $grupomateria)
             <tr>
                 <td class="border px-0 py-2 text-center">{{ $loop->iteration }}</td>
-                <td class="border px-4 py-2">{{ $grupomateria->materia->nombre }} - {{ $grupomateria->grupo->nombre }}
-                </td>
+                <td class="border px-4 py-2">{{ $grupomateria->materia->nombre }} - {{ $grupomateria->grupo->nombre }}</td>
                 <td class="border px-4 py-2 text-center">
-                    <input type="checkbox" name="grupomaterias[]" value="{{ $grupomateria->id }}">
+                    <input type="checkbox" name="grupomaterias[]" value="{{ $grupomateria->id }}"
+                        {{ in_array($grupomateria->id, $inscribedGrupoMaterias) ? 'checked' : '' }}>
                 </td>
             </tr>
         @endforeach
