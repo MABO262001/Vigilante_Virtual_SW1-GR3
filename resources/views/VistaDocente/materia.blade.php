@@ -13,93 +13,37 @@
             transacciones y seguridad.
           </p>
           <p>
-            <span class="font-medium">Profesor:</span> Dr. Juan Pérez
-          </p>
-          <p>
-            <span class="font-medium">Créditos:</span> 4
-          </p>
-          <p>
-            <span class="font-medium">Horario:</span> Lunes y Miércoles, 10:00 - 11:30
+            <span class="font-medium">Profesor:</span> {{ Auth::user()->name }}
           </p>
         </div>
       </div>
       <div>
-        <h2 class="text-xl font-semibold mb-2">Estudiantes inscritos</h2>
+        <h2 class="text-xl font-semibold mb-2">Estudiantes inscritos</h2> 
         <div class="border rounded-lg overflow-hidden">
-          <table class="w-full table-auto">
-            <thead class="bg-gray-100 dark:bg-gray-800">
-              <tr>
-                <th class="px-4 py-2 text-left">Nombre</th>
-                <th class="px-4 py-2 text-left">Correo</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="border-b px-4 py-2">María Gómez</td>
-                <td class="border-b px-4 py-2">maria.gomez@example.com</td>
-              </tr>
-              <tr>
-                <td class="border-b px-4 py-2">Juan Rodríguez</td>
-                <td class="border-b px-4 py-2">juan.rodriguez@example.com</td>
-              </tr>
-              <tr>
-                <td class="border-b px-4 py-2">Ana Fernández</td>
-                <td class="border-b px-4 py-2">ana.fernandez@example.com</td>
-              </tr>
-              <tr>
-                <td class="border-b px-4 py-2">Carlos Sánchez</td>
-                <td class="border-b px-4 py-2">carlos.sanchez@example.com</td>
-              </tr>
-              <tr>
-                <td class="px-4 py-2">Sofía Martínez</td>
-                <td class="px-4 py-2">sofia.martinez@example.com</td>
-              </tr>
-            </tbody>
-          </table>
+            <table class="w-full table-auto">
+                <thead class="bg-gray-100 dark:bg-gray-800">
+                    <tr>
+                        <th class="px-4 py-2 text-left">Nombre</th>
+                        <th class="px-4 py-2 text-left">Apellido Paterno</th>
+                        <th class="px-4 py-2 text-left">Apellido Materno</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($estudiantes as $estudiante)
+                        <tr>
+                            <td class="border-b px-4 py-2">{{ $estudiante->nombre }}</td>
+                            <td class="border-b px-4 py-2">{{ $estudiante->apellido_paterno }}</td>
+                            <td class="border-b px-4 py-2">{{ $estudiante->apellido_materno }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
+    </div>
+    
       </div>
     </div>
-    <div class="mt-8">
-      <h2 class="text-xl font-semibold mb-2">Actividades</h2>
-      <div class="border rounded-lg overflow-hidden">
-        <table class="w-full table-auto">
-          <thead class="bg-gray-100 dark:bg-gray-800">
-            <tr>
-              <th class="px-4 py-2 text-left">Actividad</th>
-              <th class="px-4 py-2 text-left">Fecha</th>
-              <th class="px-4 py-2 text-left">Hora</th>
-              <th class="px-4 py-2 text-left">Descripción</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="border-b px-4 py-2">Examen parcial</td>
-              <td class="border-b px-4 py-2">15 de mayo</td>
-              <td class="border-b px-4 py-2">10:00 - 12:00</td>
-              <td class="border-b px-4 py-2">Examen sobre los temas vistos hasta la fecha</td>
-            </tr>
-            <tr>
-              <td class="border-b px-4 py-2">Taller de SQL</td>
-              <td class="border-b px-4 py-2">22 de mayo</td>
-              <td class="border-b px-4 py-2">14:00 - 16:00</td>
-              <td class="border-b px-4 py-2">Taller práctico sobre consultas SQL</td>
-            </tr>
-            <tr>
-              <td class="border-b px-4 py-2">Proyecto final</td>
-              <td class="border-b px-4 py-2">5 de junio</td>
-              <td class="border-b px-4 py-2">09:00 - 17:00</td>
-              <td class="border-b px-4 py-2">Desarrollo de un sistema de gestión de base de datos</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-2">Examen final</td>
-              <td class="px-4 py-2">12 de junio</td>
-              <td class="px-4 py-2">10:00 - 12:00</td>
-              <td class="px-4 py-2">Examen comprensivo sobre todos los temas vistos</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+
   </main>
 
 @endsection

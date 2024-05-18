@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BoletaInscripcion;
+use App\Models\GrupoMateriaBoletaInscripcion;
 use App\Models\User;
 use App\Models\Grupo;
 use App\Models\Materia;
@@ -11,7 +13,18 @@ class EstudianteController extends Controller
 {
     public function index()
     {
-        $materias = Materia::all();
+        $detalleboletas = [];
+        $user = Auth::user();
+        $boletas = BoletaInscripcion::where('user_estudiante_id',$user->id)->get();
+        foreach ($boletas as $boleta){
+            $detalleboleta = $boleta->grupo_materia_boleta_inscripcion();
+            $detalleboletas[] = $detalleboleta;
+        }
+        $materias = [];
+        foreach ($detalleboletas as $detalle){
+            $materia = $detalle->grupo_materia()->materia();
+            $materias[] = $materia;
+        }
         return view('VistaEstudiante.index', compact('materias'));
     }
 

@@ -149,34 +149,50 @@ class UsuarioController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
+        // Obtener el usuario autenticado
+        $authUser = Auth::user();
+    
+        // Determinar los campos permitidos según el rol
+        $allowedFields = ['name', 'email'];
+        if (!$authUser->hasRole('Estudiante')) {
+            $allowedFields = array_merge($allowedFields, ['password', 'role', 'profile_photo_path']);
+        }
+    
+        // Validar los datos de acuerdo a los campos permitidos
+        $validatedData = $request->validate(array_intersect_key([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $id,
             'password' => 'nullable|string|min:8',
             'role' => 'required|string|max:255',
             'profile_photo_path' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-
+        ], array_flip($allowedFields)));
+    
+        // Encontrar al usuario a actualizar
         $user = User::findOrFail($id);
+    
+        // Actualizar solo los campos permitidos
         $user->name = $request->name;
         $user->email = $request->email;
-
-        if ($request->password) {
-            $user->password = Hash::make($request->password);
+    
+        if (!$authUser->hasRole('Estudiante')) {
+            if ($request->password) {
+                $user->password = Hash::make($request->password);
+            }
+    
+            if ($request->hasFile('profile_photo_path')) {
+                $imageName = $request->name . '.' . $request->profile_photo_path->extension();
+                $request->profile_photo_path->move(public_path('images/user'), $imageName);
+                $user->profile_photo_path = '/images/user/' . $imageName;
+            }
+    
+            $user->syncRoles($request->role);
         }
-
-        if ($request->hasFile('profile_photo_path')) {
-            $imageName = $request->name . '.' . $request->profile_photo_path->extension();
-            $request->profile_photo_path->move(public_path('images/user'), $imageName);
-            $user->profile_photo_path = '/images/user/' . $imageName;
-        }
-
+    
         $user->save();
-
-        $user->syncRoles($request->role);
+    
         return redirect()->route('Usuario.index')->with('success', 'Usuario actualizado exitosamente.');
     }
-
+    
 
     public function destroy(string $id)
     {

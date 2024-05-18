@@ -16,6 +16,7 @@
                         <p class="text-black"><strong>Correo:</strong> {{ Auth::user()->email }}</p>
                         <p class="text-black"><strong>Telefono:</strong> {{ Auth::user()->telefono }}</p>
                     </div>
+                    
                 </div>
             </div>
         </div>
@@ -38,16 +39,7 @@
         @endforeach
 
         <!--Probando solo la vista-->
-        <div class="bg-white overflow-hidden shadow-lg rounded-lg border-t-4 border-blue-900">
-            <div class="px-6 py-4">
-                <div class="font-bold text-xl text-gray-800 mb-2">Curso Prueba</div>
-                <div class="text-sm text-gray-600 mb-2">Docente: Nombre</div>
-                <p class="text-gray-700 text-base">Descripción del curso...</p>
-            </div>
-            <div class="px-6 py-4 bg-gray-100">
-                <a href="{{ route('Estudiante.examenes') }}" class="text-blue-600 hover:underline">Ver detalles</a>
-            </div>
-        </div>
+
 
 
     </div>

@@ -16,6 +16,8 @@
                         <p class="text-black"><strong>Correo:</strong> {{ Auth::user()->email }}</p>
                         <p class="text-black"><strong>Telefono:</strong> {{ Auth::user()->telefono }}</p>
                     </div>
+                    <a href="{{ route('Usuario.edit', ['id' => Auth::user()->id]) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md">Editar</a>
+
                 </div>
             </div>
         </div>
