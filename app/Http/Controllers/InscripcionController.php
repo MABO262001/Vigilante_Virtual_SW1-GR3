@@ -152,8 +152,8 @@ class InscripcionController extends Controller
         }
 
         // Marcar el servicio de Matricula como usado
-        $servicioNoUsado->usado = true;
-        $servicioNoUsado->save();
+        // $servicioNoUsado->usado = true;
+        // $servicioNoUsado->save();
 
         return redirect()->route('Inscripcion.index')->with('success', 'Inscripción realizada con éxito');
     }
