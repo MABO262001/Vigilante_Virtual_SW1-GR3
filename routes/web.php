@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/planes', function () {
+    return view('VistaWelcome.planes');
+})->name('planes');
 
 Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('Dashboard');
