@@ -64,10 +64,17 @@
                     <label for="contrasena" class="text-sm font-semibold block text-gray-700 translate-x-2">Contraseña</label>
                     <input type="text" name="contrasena" id="contrasena" class="rounded-xl w-full">
                 </div>
+
+                
                 <div class="flex mt-4">
                     <button id="randomPassword" class="mt-auto justify-start">
                         <i class="fa-solid fa-dice text-2xl mb-2 text-blue-600 hover:text-blue-500"></i>
                     </button>
+                </div>
+
+                <div class="mt-4">
+                    <input type="checkbox" name="navegacion" id="navegacion" class="rounded">
+                    <label for="navegacion">Permitir navegacion?</label>
                 </div>
             </div>
         </div>

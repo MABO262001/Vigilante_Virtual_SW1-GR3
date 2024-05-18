@@ -34,10 +34,16 @@ class Pregunta extends Model
         return $this->hasMany(Respuesta::class);
     }
 
-    public static function getAllRespuestas($id){
-        $query = DB::table('preguntas')
-        ->select('respuestas.*')
-        ->leftJoin('respuestas', 'respuestas.pregunta_id','=','preguntas.id')
+    public static function getAllRespuestas($id, $min){
+        $query = DB::table('preguntas');
+
+        if($min == 1){
+            $query->select('respuestas.id','respuestas.descripcion', 'respuestas.pregunta_id');
+        }else{
+            $query->select('respuestas.*');
+        }
+
+        $query->leftJoin('respuestas', 'respuestas.pregunta_id','=','preguntas.id')
         ->where('preguntas.id', $id);
         return $query->get();
     }

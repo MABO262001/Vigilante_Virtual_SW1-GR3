@@ -6,7 +6,9 @@ use App\Models\Calificacion;
 use App\Models\Ejecucion;
 use App\Models\Examen;
 use App\Models\Pregunta;
+use App\Models\PreguntaSeleccionada;
 use App\Models\Respuesta;
+use App\Models\RespuestaCalificacion;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -69,6 +71,8 @@ class ExamenController extends Controller
     {
         $user = Auth::user();
 
+        echo ($request);
+
         //Colocar filtro de profesor
         if ($user) {
 
@@ -115,7 +119,8 @@ class ExamenController extends Controller
                     'contrasena'            =>  $request->contrasena,
                     'nro_preguntas'         =>  $request->nro_preguntas,
                     'examen_id'             =>  $examen->id,
-                    'estado_ejecucion_id'   =>  3
+                    'estado_ejecucion_id'   =>  3,
+                    'navegacion'             =>  $request->navegacion == 'on'? '1': '0',
                 ]);
 
                 toastr('Ejecucion de examen programada correctamete', 'success', 'Ejecucion de examen');
@@ -197,6 +202,11 @@ class ExamenController extends Controller
 
     public function running($id)
     {
+        $user = Auth::user();
+
+        if($user){
+            $user = User::find($user->id);
+        }
 
         $ejecucion = Ejecucion::findOrFail($id);
         if ($ejecucion->estado_ejecucion_id == 1) {
@@ -204,30 +214,75 @@ class ExamenController extends Controller
             $examen = $ejecucion->examen()->first();
             $preguntas = $examen->preguntas()->get();
 
-            if (count($preguntas) > $ejecucion->nro_preguntas) {
+            // echo($preguntas);
+            // dd($preguntas);
 
-                $total_ponderacion = 0;
+            $calificacion = Calificacion::where('user_id', $user->id)
+                            ->where('ejecucion_id', $ejecucion->id)
+                            ->first();
 
-                while ($total_ponderacion != 100) {
-                    $preguntas = $examen->preguntas()->inRandomOrder()->limit($ejecucion->nro_preguntas)->get();
-                    $preguntas_seleccionadas = [];
+            $inicial = 0;
 
-                    $total_ponderacion = $preguntas->sum('ponderacion');
-                    //echo $total_ponderacion;
-
-                    if ($total_ponderacion == 100) {
-                        $preguntas_seleccionadas = $preguntas->toArray();
-                        break;
-                    }
-                }
+            if(!$calificacion){
+                $newCalificacion = new Calificacion();
+                $newCalificacion->ejecucion_id = $ejecucion->id;
+                $newCalificacion->user_id = $user->id;
+                $newCalificacion->save();
                 
-            } else {
-                $preguntas_seleccionadas = $preguntas;
+                //dd($calificacion);
+
+                if (count($preguntas) > $ejecucion->nro_preguntas) {
+
+                    $total_ponderacion = 0;
+    
+                    while ($total_ponderacion != 100) {
+                        $preguntas = $examen->preguntas()->inRandomOrder()->limit($ejecucion->nro_preguntas)->get();
+                        $preguntas_seleccionadas = [];
+    
+                        $total_ponderacion = $preguntas->sum('ponderacion');
+                        //echo $total_ponderacion;
+    
+                        if ($total_ponderacion == 100) {
+                            $preguntas_seleccionadas = $preguntas->toArray();
+                            break;
+                        }
+                    }
+                    
+                } else {
+                    $preguntas_seleccionadas = $preguntas;
+                }
+
+
+                foreach($preguntas_seleccionadas as $pregunta){
+                    $preguntaSeleccionada = new PreguntaSeleccionada();
+                    $preguntaSeleccionada->pregunta_id = $pregunta['id'];
+                    $preguntaSeleccionada->calificacion_id = $newCalificacion->id;
+                    $preguntaSeleccionada->save();
+                    //echo($preguntaSeleccionada);
+                }
+                //dd($preguntas_seleccionadas);
+
+            }else{
+                
+                $preguntas_previas = PreguntaSeleccionada::where('calificacion_id', $calificacion->id)->get();
+                $preguntas_seleccionadas = [];
+
+                foreach($preguntas_previas as $pregunta){
+                    $preguntas_seleccionadas[] = Pregunta::find($pregunta->pregunta_id)->toArray();
+                }
+
+                $respuestasMarcadas = count(RespuestaCalificacion::where('calificacion_id', $calificacion->id)->orderBy('id', 'ASC')->get());
+                
+                $inicial = $respuestasMarcadas;
+
             }
 
-            foreach($preguntas_seleccionadas as $pregunta){
-                $pregunta['respuestas'] = Pregunta::getAllRespuestas($pregunta['id']);
+
+            for ($i=0; $i < count($preguntas_seleccionadas); $i++) { 
+                $preguntas_seleccionadas[$i]['respuestas'] = Pregunta::getAllRespuestas($preguntas_seleccionadas[$i]['id'], 1);
             }
+            //dd($preguntas_seleccionadas);
+
 
             $fecha = Carbon::parse($ejecucion->fecha);
             $now = Carbon::now();
@@ -238,13 +293,144 @@ class ExamenController extends Controller
                 'preguntas_seleccionadas',
                 'tiempo_restante',
                 'examen',
-                'ejecucion'
+                'ejecucion',
+                'inicial'
             );
 
-            //dd($preguntas_seleccionadas);
+            //dd($examen);
+
 
             return view('VistaExamen.running', $data);
         }
         
+    }
+
+    public function guardarRespuesta(Request $request)
+    {
+        try {
+
+            $data = [
+                'ejecucion_id' => $request->ejecucion_id,
+                'respuestas' => $request->respuestas_array,
+                'pregunta_id' => $request->pregunta_id,
+            ];
+
+            $this->storeAnswer($data);
+            return ['msg' =>'ok'];
+        } catch (\Exception $e) {
+            return ['error' => '!ok', 'msg' => $e];
+        }
+    }
+
+    private function storeAnswer($data){
+        $user = User::find(Auth::user()->id);
+        $calificacion = Calificacion::where('user_id', $user->id)
+                        ->where('ejecucion_id', $data['ejecucion_id'])->first();
+        $pregunta_id = $data['pregunta_id'];
+
+        $this->verificarRespuesta($pregunta_id, $calificacion->id);
+
+        foreach($data['respuestas'] as $respuesta){
+            
+                $respuestaCalificacion=RespuestaCalificacion::create([
+                    'calificacion_id'=>$calificacion->id,
+                    'respuesta_id'=>$respuesta,
+                    'pregunta_id'=>$pregunta_id
+                ]);
+            
+            
+        }
+    }
+
+    private function verificarRespuesta($pregunta_id, $calificacion_id){
+        $preguntaYaRespondida = RespuestaCalificacion::where('pregunta_id', $pregunta_id)
+        ->where('calificacion_id', $calificacion_id)->get();
+
+        foreach($preguntaYaRespondida as $respuesta){
+            $respuesta->delete();
+        }
+    }
+
+
+    public function enviar($ejecucion_id)
+    {
+        $user = Auth::user();
+
+        $calificacion = Calificacion::where('user_id', $user->id)
+            ->where('ejecucion_id', $ejecucion_id)->first();
+
+        if ($calificacion) {
+
+            $respuestasCalificacion = RespuestaCalificacion::where('calificacion_id', $calificacion->id)->get();
+
+            $preguntas_seleccionadas = PreguntaSeleccionada::where('calificacion_id', $calificacion->id)->get();
+
+            foreach($preguntas_seleccionadas as $pregunta_sel){
+                
+                foreach($respuestasCalificacion as $respuesta){
+                    $respuestaEncontrada = Respuesta::find($respuesta->respuesta_id);
+
+                    if($respuestaEncontrada->pregunta_id == $pregunta_sel->pregunta_id){
+                        $pregunta_sel->hecha = '1';
+                    }
+                }
+
+                if(!$pregunta_sel->hecha){
+                    $pregunta_sel->hecha = '0';
+                }
+            }
+
+            $ejecucion = Ejecucion::find($ejecucion_id);
+            $examen = Examen::find($ejecucion->examen_id); 
+
+            $data = compact(
+                'preguntas_seleccionadas',
+                'ejecucion',
+                'examen'
+            );
+
+            //dd($preguntas_seleccionadas);
+            return view('VistaExamen.enviar', $data);
+
+        }else{
+            return redirect()->route('Examen.start', $ejecucion_id);
+        }
+    }
+
+    public function verificarNavegabilidad(Request $request){
+
+        $ejecucion_id = $request->ejecucion_id;
+        $user = Auth::user();
+
+        $calificacion = Calificacion::where('ejecucion_id', $ejecucion_id)
+                        ->where('user_id',$user->id)->first();
+
+        if($calificacion){
+
+            $respuestasCalificacion = RespuestaCalificacion::where('calificacion_id', $calificacion->id)->get();
+
+            $preguntas_seleccionadas = PreguntaSeleccionada::where('calificacion_id', $calificacion->id)->get();
+
+            foreach($preguntas_seleccionadas as $pregunta_sel){
+                
+                foreach($respuestasCalificacion as $respuesta){
+                    $respuestaEncontrada = Respuesta::find($respuesta->respuesta_id);
+
+                    if($respuestaEncontrada->pregunta_id == $pregunta_sel->pregunta_id){
+                        $pregunta_sel->hecha = '1';
+                    }
+                }
+
+                if(!$pregunta_sel->hecha){
+                    $pregunta_sel->hecha = '0';
+                }
+            }
+
+            return ['msg' => 'ok',
+            'preguntas' => $preguntas_seleccionadas];
+
+            
+        }
+        return ['msg' => '!ok'];
     }
 }

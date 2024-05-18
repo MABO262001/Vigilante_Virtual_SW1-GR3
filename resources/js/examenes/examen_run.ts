@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
     actualContainer.classList.remove('hidden');
 
     let nextBtn = document.getElementById('next-' + count_questions) as HTMLButtonElement;
+
+    let respuestas = '{{$preguntas_seleccionadas}}';
+    console.log(respuestas);
     
     nextBtn.addEventListener('click', (event) => {
         let dataxValue: string | null = (event.target as HTMLButtonElement).getAttribute('datax');

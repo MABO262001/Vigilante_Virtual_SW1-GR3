@@ -7,16 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 
-class Calificacion extends Pivot
+class Calificacion extends Model
 {
     use HasFactory;
     protected $table = 'calificacions';
 
-    protected $fillable = [
-        'user_id',
-        'ejecucion_id',
-        'comentario',
-    ];
+    // protected $fillable = [
+    //     'user_id',
+    //     'ejecucion_id',
+    //     'comentario',
+    // ];
 
     public function preguntas(){
         return $this->belongsToMany(Pregunta::class, 'respueta_calificacions', 'calificacion_id', 'respuesta_id')->withTimestamps();
