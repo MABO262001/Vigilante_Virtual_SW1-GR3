@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\BoletaInscripcion;
 use App\Models\GrupoMateria;
+use App\Models\GrupoMateriaBoletaInscripcion;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -90,8 +91,6 @@ class InscripcionController extends Controller
         return view('VistaInscripcion.create', compact('grupomaterias'));
     }
 
-
-
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -140,19 +139,140 @@ class InscripcionController extends Controller
         return redirect()->route('Inscripcion.index')->with('success', 'Inscripción realizada con éxito');
     }
 
+
     public function show(string $id)
     {
+        $boletaInscripcion = BoletaInscripcion::find($id);
+        if (!$boletaInscripcion) {
+            return redirect()->back()->with('error', 'Boleta de inscripción no encontrada');
+        }
+
+        $materias_inscritas = [];
+        $grupoMateriaBoletaInscripcions = $boletaInscripcion->grupo_materia_boleta_inscripcion ?? [];
+        foreach ($grupoMateriaBoletaInscripcions as $gmbi) {
+            $materias_inscritas[] = [
+                'nombre_materia' => $gmbi->grupo_materia->materia->nombre,
+                'nombre_grupo' => $gmbi->grupo_materia->grupo->nombre,
+            ];
+        }
+        $totalMateriasInscritas = $boletaInscripcion->cantidad_materias_inscritas;
+
+        return view('VistaInscripcion.show', compact('materias_inscritas', 'boletaInscripcion', 'totalMateriasInscritas'));
     }
 
-    public function edit(string $id)
+    public function edit(string $id, Request $request)
     {
+
+        $boleta_inscripcion = BoletaInscripcion::find($id);
+        if (!$boleta_inscripcion) {
+            return redirect()->back()->with('error', 'Boleta de inscripción no encontrada');
+        }
+
+        $user_estudiante = User::find($boleta_inscripcion->user_estudiante_id);
+        if (!$user_estudiante) {
+            return redirect()->back()->with('error', 'Usuario estudiante no encontrado');
+        }
+        $total_materias_inscritas = GrupoMateriaBoletaInscripcion::where('boleta_inscripcion_id', $id)->count();
+
+        $search = $request->get('search');
+
+        if ($search) {
+            $grupomaterias = GrupoMateria::query()
+                ->whereHas('materia', function ($query) use ($search) {
+                    $query->where('nombre', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('grupo', function ($query) use ($search) {
+                    $query->where('nombre', 'LIKE', "%{$search}%");
+                })
+                ->get();
+        } else {
+            $grupomaterias = GrupoMateria::all();
+        }
+
+        $inscribedGrupoMaterias = $boleta_inscripcion->grupo_materia_boleta_inscripcion->pluck('grupo_materia_id')->toArray();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'view' => view('VistaInscripcion.tablacreate', compact('grupomaterias', 'inscribedGrupoMaterias'))->render(),
+                'total' => $total_materias_inscritas,
+            ]);
+        }
+
+        return view('VistaInscripcion.edit', compact('grupomaterias', 'boleta_inscripcion', 'user_estudiante', 'total_materias_inscritas', 'inscribedGrupoMaterias'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'carnet_identidad' => 'required',
+            'grupomaterias' => 'required|array',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            $error = '';
+
+            if ($errors->has('carnet_identidad')) {
+                $error = 'Carnet no encontrado';
+            }
+
+            return redirect()->back()->withErrors($error)->withInput();
+        }
+
+        $carnet_identidad = $request->carnet_identidad;
+
+        $estudiante = User::where('carnet_identidad', $request->carnet_identidad)->first();
+
+        if (!$estudiante) {
+            return redirect()->back()->with('error', 'Estudiante no encontrado');
+        }
+
+        $grupomaterias = $request->grupomaterias;
+
+        $boleta_inscripcion = BoletaInscripcion::find($id);
+
+        if (!$boleta_inscripcion) {
+            return redirect()->back()->with('error', 'Boleta de inscripción no encontrada');
+        }
+
+        $currentMaterias = $boleta_inscripcion->grupo_materia_boleta_inscripcion->pluck('grupo_materia_id')->toArray();
+
+        $materiasToRemove = array_diff($currentMaterias, $grupomaterias);
+
+        $materiasToAdd = array_diff($grupomaterias, $currentMaterias);
+
+        foreach ($materiasToRemove as $materiaId) {
+            $boleta_inscripcion->grupo_materia_boleta_inscripcion()->where('grupo_materia_id', $materiaId)->delete();
+        }
+
+        foreach ($materiasToAdd as $materiaId) {
+            $boleta_inscripcion->grupo_materia_boleta_inscripcion()->create([
+                'boleta_inscripcion_id' => $boleta_inscripcion->id,
+                'grupo_materia_id' => $materiaId,
+            ]);
+        }
+
+        $boleta_inscripcion->update([
+            'user_estudiante_id' => $estudiante->id,
+            'user_administrativo_id' => auth()->user()->id,
+            'hora' => now()->timezone('America/La_Paz')->format('H:i:s'),
+            'fecha' => now()->timezone('America/La_Paz')->format('Y-m-d'),
+            'cantidad_materias_inscritas' => count($grupomaterias),
+        ]);
+
+        return redirect()->route('Inscripcion.index')->with('success', 'Inscripción actualizada con éxito');
     }
 
     public function destroy(string $id)
     {
+        $inscripcion = BoletaInscripcion::find($id);
+
+        if (!$inscripcion) {
+            return redirect()->back()->with('error', 'Inscripción no encontrada');
+        }
+
+        $inscripcion->delete();
+
+        return redirect()->route('Inscripcion.index')->with('success', 'Inscripción eliminada con éxito');
     }
 }

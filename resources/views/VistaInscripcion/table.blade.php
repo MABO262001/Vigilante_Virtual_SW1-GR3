@@ -33,11 +33,11 @@
                         <td class="text-center py-2 border border-gray-400">{{ $boleta_inscripcion->hora }}</td>
                         <td class="text-center py-2 border border-gray-400">{{ $boleta_inscripcion->fecha }}</td>
                         <td class="py-2 px-4 text-center border border-gray-400">
-                            <a href="{{ route('PagoServicio.edit', $boleta_inscripcion->id) }}"
+                            <a href="{{ route('Inscripcion.edit', $boleta_inscripcion->id) }}"
                                 class="text-blue-500 hover:text-blue-700 font-bold mr-3 transition duration-300 transform hover:scale-110">
                                 <i class="fas fa-edit fa-lg"></i>
                             </a>
-                            <form action="{{ route('PagoServicio.destroy', $boleta_inscripcion->id) }}" method="POST"
+                            <form action="{{ route('Inscripcion.destroy', $boleta_inscripcion->id) }}" method="POST"
                                 class="inline">
                                 @csrf
                                 @method('DELETE')
@@ -46,7 +46,7 @@
                                     <i class="fas fa-trash fa-lg"></i>
                                 </button>
                             </form>
-                            <a href="{{ route('PagoServicio.show', $boleta_inscripcion->id) }}"
+                            <a href="{{ route('Inscripcion.show', $boleta_inscripcion->id) }}"
                                 class="text-gray-500 hover:text-blue-500 font-bold transition duration-300 transform hover:scale-110">
                                 <i class="fas fa-eye fa-lg"></i>
                             </a>

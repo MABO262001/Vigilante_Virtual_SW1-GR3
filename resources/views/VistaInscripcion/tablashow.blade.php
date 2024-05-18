@@ -2,20 +2,20 @@
     <thead>
         <tr>
             <th class="px-0 py-2 text-center" style="width: 1%">Nro</th>
-            <th class="px-4 py-2">Servicio</th>
-            <th class="px-4 py-2">Descripción</th>
-            <th class="px-2 py-2">Precio</th>
-            <th class="px-2 py-2">Estado</th>
+            <th class="px-4 py-2">Materia</th>
+            <th class="px-4 py-2">Grupo</th>
         </tr>
     </thead>
     <tbody>
-        {{-- @foreach ($servicios as $servicio)
+        @php
+            $materias_inscritas = $materias_inscritas ?? [];
+        @endphp
+        @foreach ($materias_inscritas as $index => $materia)
             <tr>
-                <td class="border px-0 py-2 text-center">{{ $loop->iteration }}</td>
-                <td class="border px-4 py-2">{{ $servicio->nombre }}</td>
-                <td class="border px-4 py-2">{{ $servicio->descripcion }}</td>
-                <td class="border px-4 py-2">{{ $servicio->precio }}</td>
-                <td class="border px-4 py-2">{{ $servicio->pivot->usado ? 'Usado' : 'No usado' }}</td>
-        @endforeach --}}
+                <td class="border px-0 py-2 text-center">{{ $index + 1 }}</td>
+                <td class="border px-4 py-2">{{ $materia['nombre_materia'] }}</td>
+                <td class="border px-4 py-2">{{ $materia['nombre_grupo'] }}</td>
+            </tr>
+        @endforeach
     </tbody>
 </table>

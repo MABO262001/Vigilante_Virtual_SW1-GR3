@@ -107,8 +107,4 @@ class User extends Authenticatable
         return $this->hasMany(GrupoMateria::class, 'user_docente_id');
     }
 
-    
-
-
-
 }

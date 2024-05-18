@@ -31,4 +31,6 @@ class BoletaInscripcion extends Model
     {
         return $this->hasMany(GrupoMateriaBoletaInscripcion::class, 'boleta_inscripcion_id');
     }
+
+    
 }
