@@ -99,14 +99,19 @@
                     fetch('/verificar-matricula/' + this.value)
                         .then(response => response.json())
                         .then(data => {
-                            if (data.habilitado) {
-                                document.getElementById('habilitado').innerText =
-                                    'Habilitado Para Inscribir';
+                            if (data && data.habilitado !== undefined) {
+                                if (data.habilitado) {
+                                    document.getElementById('habilitado').innerText =
+                                        'Habilitado Para Inscribir';
+                                } else {
+                                    document.getElementById('habilitado').innerText =
+                                        'No Habilitado Para Inscribir';
+                                }
                             } else {
-                                document.getElementById('habilitado').innerText =
-                                    'No Habilitado Para Inscribir';
+                                console.error('Respuesta inesperada del servidor:', data);
                             }
-                        });
+                        })
+                        .catch(error => console.error('Error al verificar la matrícula:', error));
                 });
         });
 

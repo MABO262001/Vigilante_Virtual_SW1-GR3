@@ -120,17 +120,33 @@ class InscripcionController extends Controller
             return redirect()->back()->with('error', 'Estudiante no encontrado');
         }
 
-        // // Buscar el servicio de Matricula no utilizado
-        // $servicioMatricula = Servicio::where('nombre', 'Matricula')->first();
-        // $comprobante = Comprobante::where('user_estudiante_id', $estudiante->id)->first();
-        // $servicioNoUsado = ServicioComprobante::where('comprobante_id', $comprobante->id)
-        //     ->where('servicio_id', $servicioMatricula->id)
-        //     ->where('usado', false)
-        //     ->first();
+        $servicioMatricula = Servicio::where('nombre', 'Matricula')->first();
+        if (!$servicioMatricula) {
+            return redirect()->back()->with('error', 'Servicio Matricula no encontrado');
+        }
 
-        // if (!$servicioNoUsado) {
-        //     return redirect()->back()->with('error', 'No se encontró un servicio de Matricula no utilizado');
-        // }
+        $comprobante = Comprobante::where('user_estudiante_id', $estudiante->id)->orderBy('created_at', 'desc')->first();
+        if (!$comprobante) {
+            return redirect()->back()->with('error', 'Comprobante no encontrado');
+        }
+
+        $servicioNoUsado = ServicioComprobante::where('comprobante_id', $comprobante->id)
+            ->where('servicio_id', $servicioMatricula->id)
+            ->where('usado', false)
+            ->first();
+
+        if (!$servicioNoUsado) {
+            $servicioNoUsado = ServicioComprobante::whereHas('comprobante', function ($query) use ($estudiante) {
+                $query->where('user_estudiante_id', $estudiante->id);
+            })
+                ->where('servicio_id', $servicioMatricula->id)
+                ->where('usado', false)
+                ->first();
+
+            if (!$servicioNoUsado) {
+                return redirect()->back()->with('error', 'No Tiene Matricula Disponible');
+            }
+        }
 
         $grupomaterias = $request->grupomaterias;
 
@@ -145,19 +161,24 @@ class InscripcionController extends Controller
         foreach ($grupomaterias as $grupomateria) {
             $grupo_materia = GrupoMateria::find($grupomateria);
 
+            if ($grupo_materia->cantidad_estudiantes_inscritos >= $grupo_materia->cantidad_estudiantes) {
+                return redirect()->back()->with('error', 'El grupo de materia seleccionado ya no tiene cupo');
+            }
+
             $boleta_inscripcion->grupo_materia_boleta_inscripcion()->create([
                 'boleta_inscripcion_id' => $boleta_inscripcion->id,
                 'grupo_materia_id' => $grupo_materia->id,
             ]);
+
+            $grupo_materia->cantidad_estudiantes_inscritos += 1;
+            $grupo_materia->save();
         }
 
-        // Marcar el servicio de Matricula como usado
-        // $servicioNoUsado->usado = true;
-        // $servicioNoUsado->save();
+        $servicioNoUsado->usado = true;
+        $servicioNoUsado->save();
 
         return redirect()->route('Inscripcion.index')->with('success', 'Inscripción realizada con éxito');
     }
-
 
     public function show(string $id)
     {
