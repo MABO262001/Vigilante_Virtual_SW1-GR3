@@ -1,6 +1,6 @@
 @extends('Panza')
 @section('Panza')
-    <div class="mt-8 flex justify-center">
+    {{-- <div class="mt-8 flex justify-center">
         <form id="searchForm" method="GET" action="{{ route('Inscripcion.edit', $boleta_inscripcion->id) }}"
             class="w-full max-w-lg">
             <div class="flex items-center border-b-2 border-teal-500 py-2">
@@ -13,7 +13,7 @@
                     style="display: none;">Eliminar filtro</button>
             </div>
         </form>
-    </div>
+    </div> --}}
 
     @if (session('error'))
         <div id="flash-message"
@@ -71,7 +71,7 @@
         </div>
 
         <div class="mt-8 overflow-x-auto" id="tableContainer">
-            @include('VistaInscripcion.tablacreate', [
+            @include('VistaInscripcion.tablaedit', [
                 'grupomaterias' => $grupomaterias,
                 'inscribedGrupoMaterias' => $inscribedGrupoMaterias,
             ])
@@ -95,7 +95,12 @@
                     }, 500);
                 }, 3000);
             }
-            addCheckboxListeners();
+            fetch('/obtener-grupo-materias/' + '{{ $boleta_inscripcion->id }}')
+                .then(response => response.json())
+                .then(data => {
+                    window.grupoMaterias = data;
+                    addCheckboxListeners();
+                });
         });
 
         document.getElementById('carnet_identidad').addEventListener('change', function() {
@@ -150,12 +155,22 @@
                         checkbox.value)));
                 });
 
-                if (savedCheckboxes.includes(checkbox.value)) {
+                if (window.grupoMaterias.includes(checkbox.value) || savedCheckboxes.includes(checkbox.value)) {
                     checkbox.checked = true;
                 }
             });
         }
 
         document.addEventListener('DOMContentLoaded', addCheckboxListeners);
+
+        document.getElementById('clearButton').addEventListener('click', function() {
+            document.getElementById('searchInput').value = '';
+            this.style.display = 'none';
+            document.getElementById('searchForm').dispatchEvent(new Event('submit'));
+
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            var checkedMaterias = Array.from(checkboxes).filter(checkbox => checkbox.checked);
+            localStorage.setItem('checkboxes', JSON.stringify(checkedMaterias.map(checkbox => checkbox.value)));
+        });
     </script>
 @endsection
