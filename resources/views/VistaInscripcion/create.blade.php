@@ -58,6 +58,7 @@
             </div>
         </div>
 
+        <div id="habilitado" class="text-center font-bold mb-4">Habilitado Para:</div>
         <div id="total" class="text-center font-bold mb-4">Total De Materias A Inscribir: 0</div>
 
         <div class="mt-8 overflow-x-auto" id="tableContainer">
@@ -93,6 +94,19 @@
                     document.getElementById('nombre').value = data.nombre;
                     document.getElementById('apellido_paterno').value = data.apellido_paterno;
                     document.getElementById('apellido_materno').value = data.apellido_materno;
+
+                    // Verificar si el estudiante está habilitado para inscribirse
+                    fetch('/verificar-matricula/' + this.value)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.habilitado) {
+                                document.getElementById('habilitado').innerText =
+                                    'Habilitado Para Inscribir';
+                            } else {
+                                document.getElementById('habilitado').innerText =
+                                    'No Habilitado Para Inscribir';
+                            }
+                        });
                 });
         });
 

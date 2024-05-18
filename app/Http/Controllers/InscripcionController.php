@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\BoletaInscripcion;
+use App\Models\Comprobante;
 use App\Models\GrupoMateria;
 use App\Models\GrupoMateriaBoletaInscripcion;
+use App\Models\Servicio;
+use App\Models\ServicioComprobante;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -117,6 +120,18 @@ class InscripcionController extends Controller
             return redirect()->back()->with('error', 'Estudiante no encontrado');
         }
 
+        // Buscar el servicio de Matricula no utilizado
+        $servicioMatricula = Servicio::where('nombre', 'Matricula')->first();
+        $comprobante = Comprobante::where('user_estudiante_id', $estudiante->id)->first();
+        $servicioNoUsado = ServicioComprobante::where('comprobante_id', $comprobante->id)
+            ->where('servicio_id', $servicioMatricula->id)
+            ->where('usado', false)
+            ->first();
+
+        if (!$servicioNoUsado) {
+            return redirect()->back()->with('error', 'No se encontró un servicio de Matricula no utilizado');
+        }
+
         $grupomaterias = $request->grupomaterias;
 
         $boleta_inscripcion = BoletaInscripcion::create([
@@ -136,6 +151,10 @@ class InscripcionController extends Controller
             ]);
         }
 
+        // Marcar el servicio de Matricula como usado
+        $servicioNoUsado->usado = true;
+        $servicioNoUsado->save();
+
         return redirect()->route('Inscripcion.index')->with('success', 'Inscripción realizada con éxito');
     }
 
@@ -147,6 +166,9 @@ class InscripcionController extends Controller
             return redirect()->back()->with('error', 'Boleta de inscripción no encontrada');
         }
 
+        $nombreEstudiante = $boletaInscripcion->user_estudiante ? $boletaInscripcion->user_estudiante->name : 'No asignado';
+        $nombreAdministrativo = $boletaInscripcion->user_administrativo ? $boletaInscripcion->user_administrativo->name : 'No asignado';
+
         $materias_inscritas = [];
         $grupoMateriaBoletaInscripcions = $boletaInscripcion->grupo_materia_boleta_inscripcion ?? [];
         foreach ($grupoMateriaBoletaInscripcions as $gmbi) {
@@ -157,7 +179,7 @@ class InscripcionController extends Controller
         }
         $totalMateriasInscritas = $boletaInscripcion->cantidad_materias_inscritas;
 
-        return view('VistaInscripcion.show', compact('materias_inscritas', 'boletaInscripcion', 'totalMateriasInscritas'));
+        return view('VistaInscripcion.show', compact('materias_inscritas', 'boletaInscripcion', 'totalMateriasInscritas', 'nombreEstudiante', 'nombreAdministrativo'));
     }
 
     public function edit(string $id, Request $request)
@@ -193,7 +215,7 @@ class InscripcionController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'view' => view('VistaInscripcion.tablacreate', compact('grupomaterias', 'inscribedGrupoMaterias'))->render(),
+                'view' => view('VistaInscripcion.tablaedit', compact('grupomaterias', 'inscribedGrupoMaterias'))->render(),
                 'total' => $total_materias_inscritas,
             ]);
         }

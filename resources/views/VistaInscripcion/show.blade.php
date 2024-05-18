@@ -2,8 +2,7 @@
 @section('Panza')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 class="font-extrabold text-blue-900 text-3xl mt-2 uppercase">Boleta De Inscripcion del Usuario
-            {{ $boletaInscripcion->userEstudiante ? $boletaInscripcion->userEstudiante->name : 'No asignado' }}
-        </h1>
+            {{ $nombreEstudiante }}</h1>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 items-stretch">
             <div class="transform transition duration-300 ease-in-out hover:scale-105">
                 <div class="bg-blue-500 p-4 rounded-xl shadow-md text-center hover:bg-blue-600 hover:text-white">
