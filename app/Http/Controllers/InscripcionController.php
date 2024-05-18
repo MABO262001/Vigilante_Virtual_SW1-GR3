@@ -120,17 +120,17 @@ class InscripcionController extends Controller
             return redirect()->back()->with('error', 'Estudiante no encontrado');
         }
 
-        // Buscar el servicio de Matricula no utilizado
-        $servicioMatricula = Servicio::where('nombre', 'Matricula')->first();
-        $comprobante = Comprobante::where('user_estudiante_id', $estudiante->id)->first();
-        $servicioNoUsado = ServicioComprobante::where('comprobante_id', $comprobante->id)
-            ->where('servicio_id', $servicioMatricula->id)
-            ->where('usado', false)
-            ->first();
+        // // Buscar el servicio de Matricula no utilizado
+        // $servicioMatricula = Servicio::where('nombre', 'Matricula')->first();
+        // $comprobante = Comprobante::where('user_estudiante_id', $estudiante->id)->first();
+        // $servicioNoUsado = ServicioComprobante::where('comprobante_id', $comprobante->id)
+        //     ->where('servicio_id', $servicioMatricula->id)
+        //     ->where('usado', false)
+        //     ->first();
 
-        if (!$servicioNoUsado) {
-            return redirect()->back()->with('error', 'No se encontró un servicio de Matricula no utilizado');
-        }
+        // if (!$servicioNoUsado) {
+        //     return redirect()->back()->with('error', 'No se encontró un servicio de Matricula no utilizado');
+        // }
 
         $grupomaterias = $request->grupomaterias;
 
