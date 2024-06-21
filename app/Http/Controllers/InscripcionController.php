@@ -74,6 +74,7 @@ class InscripcionController extends Controller
     public function create(Request $request)
     {
         $search = $request->get('search');
+        $carnet_identidad = $request->get('carnet_identidad'); // Obtén el carnet_identidad del estudiante
 
         $grupomaterias = GrupoMateria::query()
             ->whereHas('materia', function ($query) use ($search) {
@@ -82,6 +83,12 @@ class InscripcionController extends Controller
             ->orWhereHas('grupo', function ($query) use ($search) {
                 $query->where('nombre', 'LIKE', "%{$search}%");
             })
+            //arreglar esta parte
+            // ->whereDoesntHave('inscripciones', function ($query) use ($carnet_identidad) {
+            //     $query->whereHas('estudiante', function ($query) use ($carnet_identidad) {
+            //         $query->where('carnet_identidad', $carnet_identidad); // Excluye los grupomaterias en los que el estudiante ya está inscrito
+            //     });
+            // })
             ->get();
 
         if ($grupomaterias->isEmpty()) {

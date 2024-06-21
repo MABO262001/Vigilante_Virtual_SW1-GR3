@@ -84,7 +84,24 @@
                 }, 3000);
             }
             addCheckboxListeners();
+            verificarGrupoMateria();
         };
+
+        function verificarGrupoMateria() {
+            var carnet = document.getElementById('carnet_identidad').value;
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(function(checkbox) {
+                fetch('/verificar-grupo-materia/' + carnet + '/' + checkbox.value)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.yaRegistrado) {
+                            checkbox.parentElement.parentElement.style.display = 'none';
+                        }
+                    })
+                    .catch(error => console.error('Error al verificar el grupo_materia:', error));
+            });
+        }
+
         document.getElementById('carnet_identidad').addEventListener('change', function() {
             fetch('/obtener-carnet/' + this.value)
                 .then(response => response.json())
@@ -112,6 +129,7 @@
                             }
                         })
                         .catch(error => console.error('Error al verificar la matrícula:', error));
+                    verificarGrupoMateria();
                 });
         });
 
