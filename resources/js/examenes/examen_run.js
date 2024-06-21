@@ -1,4 +1,4 @@
-"use strict";
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('ts');
     let count_questions = 0;
@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
     var csrfToken = document.getElementById('container-0');
     actualContainer.classList.remove('hidden');
     let nextBtn = document.getElementById('next-' + count_questions);
+
+    let respuestas = @json($preguntas_seleccionadas);
+    console.log(respuestas);
+    
     nextBtn.addEventListener('click', (event) => {
         let dataxValue = event.target.getAttribute('datax');
         if (dataxValue !== null) {

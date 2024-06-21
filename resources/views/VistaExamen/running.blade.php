@@ -1,47 +1,291 @@
 @extends('Panza_min')
 @section('Panza')
-<div class="flex justify-center h-full items-center">
-    <div class="container max-w-6xl">
-        @php
-            $x = 0;
-        @endphp
-        @foreach($preguntas_seleccionadas as $pregunta)
+<div class="flex justify-center ">
+    <div class="container">
+        <div class="flex gap-4 flex-wrap md:flex-nowrap">
+            <div class="border p-8 mt-8 w-full mb-auto">
 
-        <div id="container-{{$x}}" class="hidden">
-            <div class="bg-gray-200 rounded-xl">
-                <div class="bg-blue-600 shadow-lg rounded-xl p-6 text-white font-bold text-xl">
-                    <h1 class="uppercase">{{$pregunta['descripcion']}}</h1>
-                </div>
 
-                <div class="p-6 pt-5">
-                    <h2>{{$pregunta['comentario']}}</h2>
-                </div>
+                <h1 class="text-4xl font-semibold text-gray-500">{{$examen->tema}}</h1>
+                <h2 class="text-gray-500">{{$examen->descripcion}}</h2>
+
             </div>
-
-            <div class="rounded-xl p-6 bg-gray-200 mt-8 shadow-inner shadow-gray-400">
-                @if($pregunta['tipo_pregunta_id'] == 1)
-                    @foreach ($pregunta['respuestas'] as $respuesta)
-                    <div class="">
-                        <input name="{{$preguntas_seleccionadas[0]}}" type="radio" datax="{{$respuesta->id}}"></input>
-                        <label for="">{{$respuesta->descripcion}}</label>
-                    </div>
-                    @endforeach
-                @endif
-            </div>
-
-            <div class="w-full flex justify-end mt-12">
-                <button class="bg-blue-600 text-white p-4 font-bold rounded-xl" id="next-{{$x}}" datax="{{$pregunta['id']}}">Siguiente</button>
+            <div class="mt-8 border w-[500px] flex ites-center justify-center items-center h-[200px]">
+                <h2>Camara de mabito >:(</h2>
             </div>
         </div>
-        @php
-            $x++;
-        @endphp
-        @endforeach
+
+
+        <div class="grid md:grid-cols-4 mt-8 gap-8">
+            <div class="md:col-span-3 ml-auto container flex items-center">
+                @php
+                $x = 0;
+                @endphp
+                @foreach($preguntas_seleccionadas as $pregunta)
+
+                <div id="container-{{$x}}" class="hidden w-full">
+                    <div class="flex flex-wrap md:flex-nowrap gap-8">
+
+                        <div class="rounded p-4 bg-blue-500 w-full md:w-auto">
+                            <h3 class="text-white font-bold text-xl">Pregunta {{$x + 1}}</h3>
+                            <span class="mt-2 text-white block">Punta como: {{$pregunta['ponderacion']}} pts.</span>
+                        </div>
+
+                        <div class="w-full">
+                            <div class="bg-gray-200 rounded-xl">
+                                <div class="bg-blue-600 shadow-lg rounded-xl p-6 text-white font-bold text-xl">
+                                    <h1 class="uppercase">{{$pregunta['descripcion']}}</h1>
+                                </div>
+
+                                <div class="p-6 pt-5">
+                                    <h2>{{$pregunta['comentario']}}</h2>
+                                </div>
+                            </div>
+
+                            <div class="rounded-xl p-6 bg-gray-200 mt-8 shadow-inner shadow-gray-400">
+                                @switch($pregunta['tipo_pregunta_id'])
+                                @case(1)
+                                <!-- VERDADERO FALSO -->
+                                @foreach ($pregunta['respuestas'] as $respuesta)
+                                <div class="">
+                                    <input class="respuesta_{{$pregunta['id']}}" id="{{$respuesta->id}}" name="{{$pregunta['id']}}" value="{{$respuesta->id}}" type="radio"></input>
+                                    <label for="">{{$respuesta->descripcion}}</label>
+                                </div>
+                                @endforeach
+                                @break
+
+                                @case(2)
+                                @foreach ($pregunta['respuestas'] as $respuesta)
+                                <div class="mb-1">
+                                    <input class="respuesta_{{$pregunta['id']}}
+                            -translate-y-0.5" id="{{$respuesta->id}}" name="{{$pregunta['id']}}" value="{{$respuesta->id}}" type="checkbox"></input>
+                                    <label for="">{{$respuesta->descripcion}}</label>
+                                </div>
+                                @endforeach
+                                @break
+
+                                @case(3)
+                                <div class="mb-1">
+                                    <textarea id="{{$respuesta->id}}" name="{{$pregunta['id']}}" class="w-full max-h-80 respuesta_{{$pregunta['id']}}" checked id=""></textarea>
+                                </div>
+
+                                @break
+
+                                @default
+
+                                @endswitch
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <input type="hidden" name="tipo_pregunta" id="tipo_pregunta-{{$x}}" class="form-control" value="{{$pregunta['tipo_pregunta_id']}}">
+                    <input type="hidden" id="pregunta_id-{{$x}}" class="form-control" value="{{$pregunta['id']}}">
+
+
+
+                    @if($ejecucion->navegacion == '1')
+                    <div class="flex w-full justify-between  mt-12">
+                        <button class="border border-blue-500 rounded-xl text-blue-500 font-bold p-4 {{$x == '0' ? 'hidden' : ''}}" onclick="previousQuestion('{{$x}}')" id="previous-{{$x}}"><i class="fa-solid fa-arrow-left"></i> Pregunta anterior</button>
+                        <div class="{{$x == '0' ? 'inline' : 'hidden'}}"></div>
+                        <button class="bg-blue-600 text-white p-4 font-bold rounded-xl" id="next-{{$x}}" onclick="nextQuestion('{{$x}}')" datax="{{$pregunta['id']}}">@if($x != count($preguntas_seleccionadas) - 1)
+                        Siguiente <i class="fa-solid fa-arrow-right"></i>
+                        @else
+                        Terminar intento
+                        @endif
+                    </button>
+
+                    </div>
+                    @else
+
+                    <div class="w-full flex justify-end mt-12">
+                        <button class="bg-blue-600 text-white p-4 font-bold rounded-xl " id="next-{{$x}}" onclick="nextQuestion('{{$x}}')" datax="{{$pregunta['id']}}">@if($x != count($preguntas_seleccionadas) - 1)
+                        Siguiente <i class="fa-solid fa-arrow-right">
+                        @else
+                        Terminar intento
+                        @endif
+
+                        </i></button>
+
+                    </div>
+                    @endif
+
+                </div>
+                @php
+                $x++;
+                @endphp
+                @endforeach
+            </div>
+            <div class=" ml-auto w-full">
+                <div class="rounded p-4 bg-gray-200">
+                    <h3>Navegacion del examen</h3>
+                    <div class=" flex flex-wrap gap-2 mt-2" id="navegabilidadContainer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
 </div>
 
-<input type="hidden" value="{{ csrf_token() }}" id="csrfToken">
-<input type="hidden" value="{{ $ejecucion->id }}" id="ejecucion_id">
 
-<script src="{{asset('js/examen_run.js')}}"></script>
+
+<script>
+    console.log('ts');
+    
+    let count_questions = "{{$ejecucion->navegacion == '1'? '0' : $inicial}}";
+    var actualContainer = document.getElementById('container-' + count_questions);
+    let nextBtn = document.getElementById('next-' + count_questions);
+    actualContainer.classList.remove('hidden');
+
+    verificarNavegabilidad();
+
+    if(count_questions >= '{{count($preguntas_seleccionadas)}}'){
+        window.location.href = "{{route('Examen.enviar', $ejecucion->id )}}"
+    }
+
+
+    function previousQuestion(x) {
+        let buttonNext = document.getElementById('next-' + x)
+        let pregunta_id = buttonNext.getAttribute('datax');
+
+        actualContainer.classList.add('hidden');
+
+        count_questions--;
+
+        actualContainer.classList.add('hidden');
+        actualContainer = document.getElementById('container-' + count_questions);
+
+
+        actualContainer.classList.remove('hidden');
+
+        verificarNavegabilidad();
+
+        console.log(responseData);
+
+    }
+
+
+
+    function nextQuestion(x) {
+
+        let buttonNext = document.getElementById('next-' + x)
+        let pregunta_id = buttonNext.getAttribute('datax');
+
+        const respuestasSel = document.querySelectorAll('.respuesta_' + pregunta_id + ':checked');
+
+        let respuestasArray = [];
+        respuestasSel.forEach(respuesta => {
+            respuestasArray.push(respuesta.value);
+        });
+
+        console.log(respuestasArray);
+
+        actualContainer.classList.add('hidden');
+
+        let data = {
+            'respuestas_array': respuestasArray,
+            'ejecucion_id': '{{$ejecucion->id}}',
+            'pregunta_id' : pregunta_id,
+        };
+
+        console.log(data);
+
+        fetch('/examenes/respuesta/store', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al enviar los datos');
+                }
+                return response.json();
+            })
+            .then(responseData => {
+                if (responseData['msg'] == 'ok') {
+                    count_questions++;
+
+                    actualContainer.classList.add('hidden');
+                    actualContainer = document.getElementById('container-' + count_questions);
+
+                    if (!actualContainer) {
+                        window.location.href = "{{route('Examen.enviar', $ejecucion->id )}}"
+                    } else {
+
+                        nextBtn = document.getElementById('next-' + count_questions);
+                        actualContainer.classList.remove('hidden');
+                        console.log(nextBtn);
+
+                    }
+                    verificarNavegabilidad();
+                } else {
+
+                }
+                console.log(responseData);
+            });
+
+    };
+
+
+    function verificarNavegabilidad() {
+        const data = {
+            ejecucion_id: '{{$ejecucion->id}}'
+        };
+
+        fetch('/examenes/verificar-navegabilidad', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al enviar los datos');
+                }
+                return response.json();
+            })
+            .then(responseData => {
+                if (responseData['msg'] == 'ok') {
+                    console.log(responseData['preguntas']);
+                    const navegabilidadContainer = document.getElementById('navegabilidadContainer');
+                    navegabilidadContainer.innerHTML = '';
+                    let cont = 1;
+                    responseData['preguntas'].forEach(pregunta => {
+
+                        const div = document.createElement('div');
+                        div.className = 'rounded overflow-hidden border-2 border-blue-500';
+
+                        const divNroPregunta = document.createElement('div');
+                        divNroPregunta.className = 'px-2 py-1 bg-white text-blue-500 text-center';
+                        divNroPregunta.textContent = cont;
+
+                        const divEstado = document.createElement('div');
+                        divEstado.className = 'px-4 py-1 h-4';
+
+                        if (pregunta['hecha'] == '0') {
+                            divEstado.classList.add('bg-gray-400');
+                        } else {
+                            divEstado.classList.add('bg-green-400');
+                        }
+
+                        div.appendChild(divNroPregunta);
+                        div.appendChild(divEstado);
+
+                        navegabilidadContainer.appendChild(div);
+                        cont++;
+                    });
+                } else {
+
+                }
+                //console.log(responseData);
+            });
+    }
+</script>
 @endsection

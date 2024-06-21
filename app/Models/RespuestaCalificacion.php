@@ -10,9 +10,12 @@ class RespuestaCalificacion extends Pivot
 {
     use HasFactory;
 
+    protected $table = 'respuesta_calificacions';
+
     protected $fillable = [
         'respuesta_id',
-        'calificacion_id'
+        'calificacion_id',
+        'pregunta_id'
     ];
 
     

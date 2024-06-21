@@ -102,6 +102,7 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
+
     public function grupo_materia_docente()
     {
         return $this->hasMany(GrupoMateria::class, 'user_docente_id');

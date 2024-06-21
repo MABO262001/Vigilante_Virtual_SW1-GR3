@@ -285,6 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const horaInicioString = '12:00';
     const horaFinalString = '13:00';
     const csrfToken = document.getElementById('csrf_token').value;
+    const navegacion = document.getElementById('navegacion');
 
     
     fecha.value = fechaString;
@@ -302,16 +303,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         var data = {
-            'preguntas':    preguntas,
-            'tema':         tema.value,
-            'descripcion':  descripcion.value,
-            'ejecucion':    ejecucion.checked,
-            'fecha':        fecha.value,
-            'hora_inicio':  hora_inicio.value,
-            'hora_final':   hora_final.value,
-            'ponderacion':  ponderacion.value,
-            'contrasena':   contrasena.value,
-            'nro_preguntas':   nro_preguntas.value
+            'preguntas':        preguntas,
+            'tema':             tema.value,
+            'descripcion':      descripcion.value,
+            'ejecucion':        ejecucion.checked,
+            'fecha':            fecha.value,
+            'hora_inicio':      hora_inicio.value,
+            'hora_final':       hora_final.value,
+            'ponderacion':      ponderacion.value,
+            'contrasena':       contrasena.value,
+            'nro_preguntas':    nro_preguntas.value,
+            'navegacion':       navegacion.value
         }
         fetch('/examenes/store', {
             method: 'POST',

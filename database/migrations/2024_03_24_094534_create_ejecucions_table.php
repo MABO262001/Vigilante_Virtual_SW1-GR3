@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('ponderacion');
             $table->integer('nro_preguntas');
             $table->string('contrasena');
+            $table->char('navegacion')->nullable();
             $table->unsignedBigInteger('examen_id');
             $table->unsignedBigInteger('estado_ejecucion_id');
             $table->timestamps();
