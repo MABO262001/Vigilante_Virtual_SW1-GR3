@@ -127,6 +127,8 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('/historial-examenes', 'examenes')->name('Estudiante.examenes');
         Route::get('/lista-estudiantes', 'listaEstudiantes')->name('ListaEstudiantes.show');
         Route::get('/calificaciones', 'calificaciones')->name('Estudiante.calificaciones');
+        Route::get('/perfil-estudiante/{id}', [EstudianteController::class, 'perfil'])->name('Estudiante.perfil');
+        Route::get('/estudiante-materia/{id}', [EstudianteController::class, 'materia'])->name('Estudiante.materia');
     });
 
 
