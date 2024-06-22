@@ -9,6 +9,8 @@ use App\Models\Grupo;
 use App\Models\Materia;
 use Illuminate\Support\Facades\Auth;
 use App\Models\GrupoMateria;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 class EstudianteController extends Controller
 {
     public function index()
@@ -95,6 +97,34 @@ class EstudianteController extends Controller
             $estudiantes[] = $alumno;
         }
         return view('VistaEstudiante.materia', compact('materia','gp','estudiantes','grupo','docente'));
+    }
+
+    public function editar($id){
+        $usuario = User::find($id);
+        return view('VistaEstudiante.editar', compact('usuario'));
+    }
+    public function update(Request $request, $id)
+    {
+        
+
+        $usuario = User::findOrFail($id);
+
+        if ($request->hasFile('profile_photo_path')) {
+            $imageName = $request->nombre . '.' . $request->profile_photo_path->extension();
+            $request->profile_photo_path->move(public_path('images/user'), $imageName);
+            $usuario->profile_photo_path = '/images/user/' . $imageName;
+        }
+
+        $usuario->carnet_identidad = $request->carnet_identidad;
+        $usuario->nombre = $request->nombre;
+        $usuario->apellido_paterno = $request->apellido_paterno;
+        $usuario->apellido_materno = $request->apellido_materno;
+        $usuario->telefono = $request->telefono;
+        $usuario->fecha_nacimiento = $request->fecha_nacimiento;
+
+        $usuario->save();
+
+        return redirect()->route('Estudiante.index')->with('success', 'Usuario actualizado correctamente');
     }
 
 }

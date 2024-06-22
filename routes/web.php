@@ -136,6 +136,8 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('/calificaciones', 'calificaciones')->name('Estudiante.calificaciones');
         Route::get('/perfil-estudiante/{id}', [EstudianteController::class, 'perfil'])->name('Estudiante.perfil');
         Route::get('/estudiante-materia/{id}', [EstudianteController::class, 'materia'])->name('Estudiante.materia');
+        Route::get('/estudiante-edit/{id}', [EstudianteController::class, 'editar'])->name('Estudiante.editar');
+        Route::post('/estudiante/{id}/edit', [EstudianteController::class, 'update'])->name('Estudiante.update');
     });
 
 
