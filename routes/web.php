@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\EstudianteController;
+use App\Http\Controllers\ExamenController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\GrupoMateriaController;
 use App\Http\Controllers\InscripcionController;
@@ -138,6 +139,5 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('/docente', 'index')->name('Docente.index');
         Route::get('/docente-materia/{id}', [DocenteController::class, 'materia'])->name('Docente.materia');
     });
-
 
 });
