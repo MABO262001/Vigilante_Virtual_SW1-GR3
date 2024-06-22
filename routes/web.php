@@ -35,7 +35,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::post('/usuarios/store', 'store')->name('Usuario.store');
         Route::post('/usuarios/update', 'update')->name('Usuario.update');
         Route::get('/usuarios/show', 'show')->name('Usuario.show'); // sin ocupar (que se visualice el perfil desde aqui)
-        Route::get('/usuarios/destroy', 'destroy')->name('Usuario.destroy');
+        Route::delete('usuarios/{id}', [UsuarioController::class, 'destroy'])->name('Usuario.destroy');
         Route::get('/usuarios/buscar', 'buscar')->name('Usuario.buscar'); // arreglar
 
         Route::get('/obtener-carnet/{carnet_identidad}', 'obtenerCarnet');

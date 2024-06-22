@@ -99,7 +99,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded shadow-md">Eliminar</button>
-                                </form>
+                                </form>                                                               
                                 <a href="{{ route('Usuario.show', $usuario->id) }}" class="inline-block">
                                     <i class="fas fa-user fa-2x"></i>
                                 </a>

@@ -194,7 +194,7 @@ class UsuarioController extends Controller
     }
     
 
-    public function destroy(string $id)
+    public function destroy($id)
     {
         User::destroy($id);
         return redirect()->route('Usuario.index')->with('success', 'Usuario eliminado con éxito');
