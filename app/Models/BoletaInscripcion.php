@@ -32,5 +32,8 @@ class BoletaInscripcion extends Model
         return $this->hasMany(GrupoMateriaBoletaInscripcion::class, 'boleta_inscripcion_id');
     }
 
-    
+    public function userEstudiante()
+{
+    return $this->belongsTo(User::class, 'user_estudiante_id');
+}
 }

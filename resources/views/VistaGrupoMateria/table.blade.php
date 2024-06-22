@@ -1,57 +1,54 @@
-<div class="overflow-x-auto">
-    <table class="w-full border-collapse table-fixed">
-        <thead>
-            <tr class="bg-blue-300">
-                <th class="w-1/12 py-3 border border-black">No.</th>
-                <th class="w-1/12 py-3 border border-black">Grupo</th>
-                <th class="w-2/12 py-3 border border-black">Materia</th>
-                <th class="w-2/12 py-3 border border-black">Docente</th>
-                <th class="w-2/12 py-3 border border-black">Contraseña</th>
-                <th class="w-2/12 py-3 border border-black">Cantidad de Estudiantes</th>
-                <th class="w-2/12 py-3 border border-black">Estudiantes Inscritos</th>
-                <th class="w-3/12 py-3 border border-black">Acciones</th>
+<div class="mt-8 overflow-x-auto">
+    <table class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
+        <thead class="bg-gradient-to-r from-blue-500 to-teal-500 text-white uppercase text-sm leading-normal">
+            <tr>
+                <th class="py-3 px-6 text-left">No.</th>
+                <th class="py-3 px-6 text-left">Grupo</th>
+                <th class="py-3 px-6 text-center">Materia</th>
+                <th class="py-3 px-6 text-center">Docente</th>
+                <th class="py-3 px-6 text-center">Contraseña</th>
+                <th class="py-3 px-6 text-center">Cantidad de Estudiantes</th>
+                <th class="py-3 px-6 text-center">Estudiantes Inscritos</th>
+                <th class="py-3 px-6 text-center">Acciones</th>
             </tr>
         </thead>
-        <tbody>
-            @php
-                $counter = 1;
-            @endphp
-            @if ($grupoMaterias->isEmpty())
-                <tr>
-                    <td colspan="8" class="text-center py-4 border border-gray-400">Sin Grupo-Materia</td>
-                </tr>
-            @else
-                @foreach ($grupoMaterias as $grupoMateria)
-                    <tr class="{{ $loop->even ? 'bg-gray-100' : 'bg-white' }} transition-colors duration-300 hover:bg-blue-400">
-                        <td class="text-center py-2 border border-gray-400">{{ $counter++ }}</td>
-                        <td class="py-2 px-4 text-center border border-gray-400">{{ $grupoMateria->grupo->nombre }}</td>
-                        <td class="py-2 text-center px-4 border border-gray-400">{{ $grupoMateria->materia->nombre }}</td>
-                        <td class="py-2 text-center px-4 border border-gray-400">{{ optional($grupoMateria->userDocente)->name }}</td>
-                        <td class="py-2 text-center px-4 border border-gray-400">{{ $grupoMateria->contraseña }}</td>
-                        <td class="text-center py-2 border border-gray-400">{{ $grupoMateria->cantidad_estudiantes }}</td>
-                        <td class="text-center py-2 border border-gray-400">{{ $grupoMateria->cantidad_estudiantes_inscritos }}</td>
-                        <td class="py-2 px-4 text-center border border-gray-400">
+        <tbody class="text-gray-700 text-sm font-light">
+            @forelse ($grupoMaterias as $index => $grupoMateria)
+                <tr class="border-b border-gray-200 hover:bg-gray-50 transition duration-200 ease-in-out">
+                    <td class="py-3 px-6 text-left">{{ $index + 1 }}</td>
+                    <td class="py-3 px-6 text-left">{{ $grupoMateria->grupo->nombre }}</td>
+                    <td class="py-3 px-6 text-center">{{ $grupoMateria->materia->nombre }}</td>
+                    <td class="py-3 px-6 text-center">{{ optional($grupoMateria->userDocente)->name }}</td>
+                    <td class="py-3 px-6 text-center">{{ $grupoMateria->contraseña }}</td>
+                    <td class="py-3 px-6 text-center">{{ $grupoMateria->cantidad_estudiantes }}</td>
+                    <td class="py-3 px-6 text-center">{{ $grupoMateria->cantidad_estudiantes_inscritos }}</td>
+                    <td class="py-3 px-6 text-center">
+                        <div class="flex item-center justify-center">
                             <a href="{{ route('GrupoMateria.edit', $grupoMateria->id) }}"
-                                class="text-blue-500 hover:text-blue-700 font-bold mr-3 transition duration-300 transform hover:scale-110">
-                                <i class="fas fa-edit fa-lg"></i>
+                                class="w-4 mr-2 transform hover:text-purple-500 hover:scale-125 transition duration-200 ease-in-out">
+                                <i class="fas fa-edit"></i>
                             </a>
                             <form action="{{ route('GrupoMateria.destroy', $grupoMateria->id) }}" method="POST"
                                 class="inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"
-                                    class="text-red-500 hover:text-red-700 font-bold mr-3 transition duration-300 transform hover:scale-110">
-                                    <i class="fas fa-trash fa-lg"></i>
+                                    class="w-4 mr-2 transform hover:text-red-500 hover:scale-125 transition duration-200 ease-in-out">
+                                    <i class="fas fa-trash"></i>
                                 </button>
                             </form>
-                            <a href="{{ route('ListaEstudiantes.show', $grupoMateria->id) }}"
-                                class="text-gray-500 hover:text-blue-500 font-bold transition duration-300 transform hover:scale-110">
-                                <i class="fas fa-eye fa-lg"></i>
+                            <a href="{{ route('GrupoMateria.show', $grupoMateria->id) }}"
+                                class="w-4 mr-2 transform hover:text-green-500 hover:scale-125 transition duration-200 ease-in-out">
+                                <i class="fas fa-eye"></i>
                             </a>
-                        </td>
-                    </tr>
-                @endforeach
-            @endif
+                        </div>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="8" class="text-center py-4">Sin Grupo-Materia</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 </div>

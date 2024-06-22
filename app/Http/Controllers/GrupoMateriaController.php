@@ -75,10 +75,10 @@ class GrupoMateriaController extends Controller
 
     public function show($id)
     {
-        $grupoMateria = GrupoMateria::findOrFail($id);
-
+        $grupoMateria = GrupoMateria::with('boletaInscripcion.userEstudiante')->findOrFail($id);
         return view('VistaGrupoMateria.show', compact('grupoMateria'));
     }
+
 
     public function edit($id)
     {
