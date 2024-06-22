@@ -16,7 +16,6 @@ use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -58,6 +57,8 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified','c
     Route::controller(ReconocimientoFacialController::class)->group(function () {
         Route::get('/reconocimiento-facial', 'index')->name('Reconocimiento-Facial.index');
         Route::post('/reconocimiento-facial/guardar_anomalia', 'guardarAnomalia')->name('guardar_anomalia');// sin ocupar
+        Route::post('/guardar_foto_anomalia', [ReconocimientoFacialController::class, 'guardarFotoAnomalia'])->name('guardar_foto_anomalia');
+
     });
 
     // Rutas De Servicios

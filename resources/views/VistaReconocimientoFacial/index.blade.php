@@ -8,7 +8,7 @@
         <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.1/face_mesh.js" crossorigin="anonymous"></script>
 
         <!-- WEBCAM INPUT -->
-        <video class="input_video2" hidden></video>
+        <video class="input_video2" autoplay></video>
 
         <!-- MEDIAPIPE OUTPUT -->
         <canvas class="output2" width="512" height="512"></canvas>
@@ -23,111 +23,133 @@
             const out2 = document.getElementsByClassName('output2')[0];
             const controlsElement2 = document.getElementsByClassName('control2')[0];
             const canvasCtx = out2.getContext('2d');
-            let intervalId = null;
             let isChecking = true;
+            let detectionPaused = false;
 
             const fpsControl = new FPS();
             const spinner = document.querySelector('.loading');
             spinner.ontransitionend = () => {
-            spinner.style.display = 'none';
+                spinner.style.display = 'none';
             };
 
             function onResultsFaceMesh(results) {
-            document.body.classList.add('loaded');
-            fpsControl.tick();
+                if (detectionPaused) return;
 
-            canvasCtx.save();
-            canvasCtx.clearRect(0, 0, out2.width, out2.height);
-            canvasCtx.drawImage(
-                results.image, 0, 0, out2.width, out2.height);
-            if (results.multiFaceLandmarks) {
-                checkForMultipleFaces(results);
-                for (const landmarks of results.multiFaceLandmarks) {
-                // drawConnectors(
-                //     canvasCtx, landmarks, FACEMESH_TESSELATION,
-                //     { color: '#C0C0C070', lineWidth: 1 });
-                // drawConnectors(
-                //     canvasCtx, landmarks, FACEMESH_RIGHT_EYE,
-                //     { color: '#E0E0E0', lineWidth: 1 });
-                // drawConnectors(
-                //     canvasCtx, landmarks, FACEMESH_RIGHT_EYEBROW,
-                //     { color: '#E0E0E0', lineWidth: 1 });
-                // drawConnectors(
-                //     canvasCtx, landmarks, FACEMESH_LEFT_EYE,
-                //     { color: '#E0E0E0', lineWidth: 1 });
-                // drawConnectors(
-                //     canvasCtx, landmarks, FACEMESH_LEFT_EYEBROW,
-                //     { color: '#E0E0E0', lineWidth: 1 });
-                // drawConnectors(
-                //     canvasCtx, landmarks, FACEMESH_FACE_OVAL,
-                //     { color: '#E0E0E0', lineWidth: 1 });
-                // drawConnectors(
-                //     canvasCtx, landmarks, FACEMESH_LIPS,
-                //     { color: '#E0E0E0', lineWidth: 1 });
+                document.body.classList.add('loaded');
+                fpsControl.tick();
+
+                canvasCtx.save();
+                canvasCtx.clearRect(0, 0, out2.width, out2.height);
+                canvasCtx.drawImage(
+                    results.image, 0, 0, out2.width, out2.height);
+                if (results.multiFaceLandmarks) {
+                    checkForMultipleFaces(results);
+                    for (const landmarks of results.multiFaceLandmarks) {
+                        // drawConnectors(
+                        //     canvasCtx, landmarks, FACEMESH_TESSELATION,
+                        //     { color: '#C0C0C070', lineWidth: 1 });
+                        // drawConnectors(
+                        //     canvasCtx, landmarks, FACEMESH_RIGHT_EYE,
+                        //     { color: '#E0E0E0', lineWidth: 1 });
+                        // drawConnectors(
+                        //     canvasCtx, landmarks, FACEMESH_RIGHT_EYEBROW,
+                        //     { color: '#E0E0E0', lineWidth: 1 });
+                        // drawConnectors(
+                        //     canvasCtx, landmarks, FACEMESH_LEFT_EYE,
+                        //     { color: '#E0E0E0', lineWidth: 1 });
+                        // drawConnectors(
+                        //     canvasCtx, landmarks, FACEMESH_LEFT_EYEBROW,
+                        //     { color: '#E0E0E0', lineWidth: 1 });
+                        // drawConnectors(
+                        //     canvasCtx, landmarks, FACEMESH_FACE_OVAL,
+                        //     { color: '#E0E0E0', lineWidth: 1 });
+                        // drawConnectors(
+                        //     canvasCtx, landmarks, FACEMESH_LIPS,
+                        //     { color: '#E0E0E0', lineWidth: 1 });
+                    }
+                } else {
+                    checkForNoFaces();
                 }
-            }
-            canvasCtx.restore();
+                canvasCtx.restore();
             }
 
             function checkForMultipleFaces(results) {
-            if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 1) {
-                if (isChecking) {
-                console.log("ANOMALÍA DETECTADA: Hay más de 1 rostro en la cámara del usuario");
-                captureAndSaveScreenshot();
-                stopFaceCheck();
-                isChecking = false;
-                }
-            } else {
-                if (!isChecking) {
-                startFaceCheck();
+                if (results.multiFaceLandmarks.length > 1) {
+                    if (isChecking) {
+                        console.log("ANOMALÍA DETECTADA: Hay más de 1 rostro en la cámara del usuario");
+                        captureAndSendScreenshot(1); // Tipo de anomalia 1: Más de una persona detectada
+                        isChecking = false;
+                    }
+                } else {
+                    if (!isChecking) {
+                        startFaceCheck();
+                    }
                 }
             }
+
+            function checkForNoFaces() {
+                if (isChecking) {
+                    console.log("ANOMALÍA DETECTADA: No se detecta ningún rostro en la cámara del usuario");
+                    captureAndSendScreenshot(2); // Tipo de anomalia 2: No se detecta ningún rostro
+                    isChecking = false;
+                }
             }
 
             function startFaceCheck() {
-            isChecking = true;
-            intervalId = setInterval(() => {
-                faceMesh.send({ image: video2 });
-            }, 1500);
+                isChecking = true;
             }
 
-            function stopFaceCheck() {
-            clearInterval(intervalId);
+            function pauseDetection() {
+                detectionPaused = true;
+                setTimeout(() => {
+                    detectionPaused = false;
+                    startFaceCheck();
+                }, 30000); // Pausa la detección por 30 segundos
             }
 
-            function captureAndSaveScreenshot() {
-            // Captura la imagen del canvas
-            const imageData = out2.toDataURL('image/jpeg');
-            // Crea un elemento de enlace para descargar la imagen
-            const link = document.createElement('a');
-            link.href = imageData;
-            // Genera un nombre de archivo único basado en la fecha y hora actual
-            const fileName = `screenshot_${Date.now()}.jpg`;
-            link.download = fileName;
-            // Simula un clic en el enlace para iniciar la descarga
-            link.click();
+            function captureAndSendScreenshot(tipoAnomalia) {
+                // Captura la imagen del canvas
+                const imageData = out2.toDataURL('image/jpeg');
+                // Envía la imagen al servidor usando fetch
+                fetch('{{ route("guardar_foto_anomalia") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        image: imageData,
+                        tipo_anomalia_id: tipoAnomalia
+                    })
+                }).then(response => response.json())
+                  .then(data => {
+                      console.log('Success:', data);
+                      pauseDetection();
+                  }).catch((error) => {
+                      console.error('Error:', error);
+                  });
             }
 
             const faceMesh = new FaceMesh({
-            locateFile: (file) => {
-                return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.1/${file}`;
-            }
+                locateFile: (file) => {
+                    return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.1/${file}`;
+                }
             });
             faceMesh.onResults(onResultsFaceMesh);
 
             const camera = new Camera(video2, {
-            onFrame: async () => {
-                await faceMesh.send({ image: video2 });
-            },
-            width: 512,
-            height: 512
+                onFrame: async () => {
+                    await faceMesh.send({ image: video2 });
+                },
+                width: 512,
+                height: 512
             });
             camera.start();
 
             new ControlPanel(controlsElement2, {
-            maxNumFaces: 5,
-            minDetectionConfidence: 0.5,
-            minTrackingConfidence: 0.5
+                maxNumFaces: 5,
+                minDetectionConfidence: 0.5,
+                minTrackingConfidence: 0.5
             })
             .add([
                 fpsControl
