@@ -6,7 +6,7 @@
     @method('PUT')
     <div class="mb-4">
         <label for="nombre" class="block text-gray-700 font-bold mb-2">Nombre</label>
-        <input type="text" name="nombre" id="nombre" placeholder="Nombre" value="{{ $servicio->nombre }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <input type="text" name="nombre" id="nombre" placeholder="Nombre" value="{{ $servicio->nombre }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" {{ $servicio->nombre == 'Matricula' ? 'readonly' : '' }}>
     </div>
     <div class="mb-4">
         <label for="descripcion" class="block text-gray-700 font-bold mb-2">Descripción</label>
