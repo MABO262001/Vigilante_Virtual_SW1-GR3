@@ -1,4 +1,5 @@
 @extends('Panza')
+
 @section('Panza')
     <div class="mt-8 flex justify-center">
         <form id="searchForm" method="GET" action="{{ route('PagoServicio.create') }}" class="w-full max-w-lg">
@@ -6,13 +7,14 @@
                 <input type="text" id="searchInput" name="search" placeholder="Buscar Comprobante"
                     class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none">
                 <button type="submit" id="searchButton"
-                    class="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded">Buscar</button>
+                    class="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded transition duration-300 transform hover:scale-105">Buscar</button>
                 <button type="button" id="clearButton"
-                    class="flex-shrink-0 bg-red-500 hover:bg-red-700 border-red-500 hover:border-red-700 text-sm border-4 text-white py-1 px-2 rounded ml-2"
+                    class="flex-shrink-0 bg-red-500 hover:bg-red-700 border-red-500 hover:border-red-700 text-sm border-4 text-white py-1 px-2 rounded ml-2 transition duration-300 transform hover:scale-105"
                     style="display: none;">Eliminar filtro</button>
             </div>
         </form>
     </div>
+
     @if (session('error'))
         <div id="flash-message"
             class="fixed top-0 left-1/2 transform -translate-x-1/2 mt-4 p-4 bg-red-500 text-white rounded-lg shadow-lg text-center text-lg transition-all duration-500 ease-in-out"
@@ -20,8 +22,9 @@
             {{ session('error') }}
         </div>
     @endif
+
     <form action="{{ route('PagoServicio.store') }}" method="POST"
-        class="w-full mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        class="w-full mx-auto bg-white shadow-xl rounded-lg px-8 pt-6 pb-8 mb-4">
         @csrf
         <div class="flex mb-4">
             <div class="w-1/2 mr-2">
@@ -58,7 +61,7 @@
             </div>
         </div>
 
-        <div id="total" class="text-center font-bold mb-4">Total: 0 Bs</div>
+        <div id="total" class="text-center font-bold mb-4 text-xl text-gray-800">Total: 0 Bs</div>
 
         <div class="mt-8 overflow-x-auto" id="tableContainer">
             @include('VistaPago.tablacreate')
@@ -83,6 +86,7 @@
                 }, 3000);
             }
         };
+
         document.getElementById('carnet_identidad').addEventListener('change', function() {
             fetch('/obtener-carnet/' + this.value)
                 .then(response => response.json())

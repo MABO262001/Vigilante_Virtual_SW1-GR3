@@ -389,11 +389,19 @@ class ExamenController extends Controller
             foreach($preguntas_seleccionadas as $pregunta_sel){
                 
                 foreach($respuestasCalificacion as $respuesta){
-                    $respuestaEncontrada = Respuesta::find($respuesta->respuesta_id);
 
-                    if($respuestaEncontrada->pregunta_id == $pregunta_sel->pregunta_id){
-                        $pregunta_sel->hecha = '1';
+                    if($respuesta->respuesta_id){
+                        $respuestaEncontrada = Respuesta::find($respuesta->respuesta_id);
+
+                        if($respuestaEncontrada->pregunta_id == $pregunta_sel->pregunta_id){
+                            $pregunta_sel->hecha = '1';
+                        }
+                    }else{
+                        if($respuesta->pregunta_id == $pregunta_sel->pregunta_id){
+                            $pregunta_sel->hecha = '1';
+                        }
                     }
+                    
                 }
 
                 if(!$pregunta_sel->hecha){
