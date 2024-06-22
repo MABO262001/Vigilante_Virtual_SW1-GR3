@@ -17,7 +17,7 @@ class RedirectIfAuthenticated
                 $user = Auth::guard($guard)->user();
 
                 if ($user->hasRole('Estudiante')) {
-                    return redirect('/my');
+                    return redirect('/');
                 } else {
                     return redirect('/dashboard');
                 }

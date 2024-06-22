@@ -1,5 +1,5 @@
-@extends('Panza')
-@section('Panza')
+<x-navbar />
+
 <div>
     <div class="container mx-auto mt-8">
         <div class="max-w-xl mx-auto bg-white rounded-lg overflow-hidden shadow-lg mt-8 border border-gray-200">
@@ -80,11 +80,7 @@
             @endforeach
     
             <!--Probando solo la vista-->
-    
-    
-    
         </div>
 </div>
 
-
-@endsection
+@include('components.footer')

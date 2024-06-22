@@ -76,12 +76,7 @@
                 <a class="flex items-center text-gray-900 py-2 px-4 my-2 rounded transition duration-100 hover:bg-gradient-to-r from-blue-600 to-blue-600 hover:text-white shadow-sm"
                     href="{{ route('Examen.index') }}">
                     <i class="fa-solid fa-file-lines text-lg mr-2"></i><span class="text-base">Examenes</span>
-                </a>
-                {{-- <a class="flex items-center text-gray-900 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-600 to-blue-600 hover:text-white shadow-sm"
-                    href="{{ route('Reconocimiento-Facial.index') }}">
-                    <i class="fa-solid fa-user text-lg mr-2"></i><span class="text-base">Reconocimiento Facial</span>
-                </a> --}}
-                
+                </a>                
                 <a class="flex items-center text-gray-900 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-600 to-blue-600 hover:text-white shadow-sm"
                     href="{{ route('Inscripcion.index') }}">
                     <i class="fas fa-edit text-lg mr-2"></i><span class="text-base">Inscripcion</span>
@@ -100,22 +95,14 @@
                     href="{{ route('GrupoMateria.index') }}">
                     <i class="fas fa-users text-lg mr-2"></i><span class="text-base">Grupos Y Materias</span>
                 </a>
-                {{-- @if (auth()->user()->hasRole('Estudiante')) --}}
                 <a class="flex items-center text-gray-900 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-600 to-blue-600 hover:text-white shadow-sm"
                     href="{{ route('Estudiante.index') }}">
                     <i class="fas fa-users text-lg mr-2"></i><span class="text-base">Perfil Estudiante</span>
                 </a>
-                {{-- @endif --}}
-                {{-- @if (auth()->user()->hasRole('Estudiante')) --}}
                 <a class="flex items-center text-gray-900 py-2 px-4 my-2 rounded transition duration-300 hover:bg-gradient-to-r from-blue-600 to-blue-600 hover:text-white shadow-sm"
                     href="{{ route('Docente.index') }}">
                     <i class="fas fa-users text-lg mr-2"></i><span class="text-base">Perfil Docente</span>
                 </a>
-                {{-- @endif --}}
-
-
-
-
             </nav>
             <form method="POST" action="{{ route('logout') }}" class="mt-auto p-4">
                 @csrf
