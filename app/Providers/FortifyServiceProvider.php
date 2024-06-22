@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Fortify\Contracts\LoginResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -41,6 +43,34 @@ class FortifyServiceProvider extends ServiceProvider
 
         RateLimiter::for('two-factor', function (Request $request) {
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
+        });
+
+        Fortify::authenticateUsing(function (Request $request) {
+            $user = Auth::attempt([
+                Fortify::username() => $request->input(Fortify::username()),
+                'password' => $request->input('password'),
+            ]);
+
+            if ($user) {
+                return Auth::user();
+            }
+
+            return null;
+        });
+
+        app()->singleton(LoginResponse::class, function () {
+            return new class implements LoginResponse {
+                public function toResponse($request)
+                {
+                    $user = Auth::user();
+
+                    if ($user->hasRole('Estudiante')) {
+                        return redirect()->intended('/my');
+                    } else {
+                        return redirect()->intended('/dashboard');
+                    }
+                }
+            };
         });
     }
 }
