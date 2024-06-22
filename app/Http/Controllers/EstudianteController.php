@@ -124,7 +124,14 @@ class EstudianteController extends Controller
 
         $usuario->save();
 
+        $authUser = Auth::user();
+        if ($authUser->hasRole('Estudiante')) {
         return redirect()->route('Estudiante.index')->with('success', 'Usuario actualizado correctamente');
+        }
+        if($authUser->hasRole('Docente')){
+            return redirect()->route('Docente.index')->with('success', 'Usuario actualizado correctamente');
+        }
+
     }
 
 }
