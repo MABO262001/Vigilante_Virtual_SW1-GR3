@@ -51,8 +51,5 @@ class GrupoMateria extends Model
         return $this->hasMany(BoletaInscripcion::class);
     }
 
-    public function boletaInscripcion()
-    {
-        return $this->hasMany(BoletaInscripcion::class, 'grupo_materia_id');
-    }
+
 }
