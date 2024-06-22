@@ -23,6 +23,12 @@ Route::get('/', function () {
 Route::get('/planes', function () {
     return view('VistaWelcome.planes');
 })->name('planes');
+Route::get('/acerca', function () {
+    return view('VistaWelcome.acerca');
+})->name('acerca');
+Route::get('/contacto', function () {
+    return view('VistaWelcome.contacto');
+})->name('contacto');
 
 Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('Dashboard');

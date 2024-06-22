@@ -67,9 +67,8 @@
           <div class="hidden md:block">
             <div class="ml-10 flex items-baseline space-x-4">
                 <a href="/" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Inicio</b></a>
-                <a href="#" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Clases</b></a>
-                <a href="#" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Acerca de</b></a>
-                <a href="#" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Contacto</b></a>
+                <a href="{{ route('acerca') }}" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Acerca de</b></a>
+                <a href="{{ route('contacto') }}" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Contacto</b></a>
             </div>
           </div>
         </div>
@@ -95,10 +94,9 @@
 
     <div class="mobile-menu md:hidden" id="mobile-menu">
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-        <a href="#" class="text-white hover:text-gray-300 block px-3 py-2 rounded-md text-base font-medium nav-link">Inicio</a>
-        <a href="#" class="text-white hover:text-gray-300 block px-3 py-2 rounded-md text-base font-medium nav-link">Clases</a>
-        <a href="#" class="text-white hover:text-gray-300 block px-3 py-2 rounded-md text-base font-medium nav-link">Acerca de</a>
-        <a href="#" class="text-white hover:text-gray-300 block px-3 py-2 rounded-md text-base font-medium nav-link">Contacto</a>
+        <a href="/" class="text-white hover:text-gray-300 block px-3 py-2 rounded-md text-base font-medium nav-link">Inicio</a>
+        <a href="{{ route('acerca') }}" class="text-white hover:text-gray-300 block px-3 py-2 rounded-md text-base font-medium nav-link">Acerca de</a>
+        <a href="{{ route('contacto') }}" class="text-white hover:text-gray-300 block px-3 py-2 rounded-md text-base font-medium nav-link">Contacto</a>
         <a href="{{ route('login') }}" class="btn-primary block text-center px-3 py-2 rounded-md text-base font-medium">Iniciar Sesión</a>
         <a href="{{ route('planes') }}" class="btn-secondary block text-center px-3 py-2 rounded-md text-base font-medium">Adquirir Plan</a>
       </div>

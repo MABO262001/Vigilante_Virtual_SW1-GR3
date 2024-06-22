@@ -59,7 +59,7 @@
 </head>
 <body class="bg-gray-100 text-gray-900">
 
-    <x-navbar />
+  <x-navbar />
 
   <header class="hero-bg">
     <div class="container mx-auto">
@@ -71,29 +71,29 @@
     </div>
   </header>
 
-  <main class="container mx-auto px-4 py-16">
-    <div class="text-center mb-16">
-      <h2 class="text-4xl font-bold text-blue-900">¿Por qué elegir nuestras clases?</h2>
-      <p class="mt-4 text-xl text-gray-600">Descubre las ventajas de nuestras clases virtuales y mejora tu aprendizaje.</p>
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-      <div class="bg-white shadow-lg rounded-lg p-8 feature-card">
-        <h3 class="text-2xl font-bold text-blue-900">Planes Asequibles</h3>
-        <p class="mt-4 text-gray-600">Elige entre una variedad de planes asequibles para satisfacer tus necesidades de aprendizaje.</p>
+    <main class="container mx-auto px-4 py-16">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-blue-900">¿Por qué elegir nuestras clases?</h2>
+        <p class="mt-4 text-xl text-gray-600">Descubre las ventajas de nuestras clases virtuales y mejora tu aprendizaje.</p>
       </div>
-      <div class="bg-white shadow-lg rounded-lg p-8 feature-card">
-        <h3 class="text-2xl font-bold text-blue-900">Detección de Rostro con IA</h3>
-        <p class="mt-4 text-gray-600">Nuestra tecnología avanzada detecta comportamientos sospechosos para garantizar la integridad académica.</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+        <div class="bg-white shadow-lg rounded-lg p-8 feature-card">
+          <h3 class="text-2xl font-bold text-blue-900">Planes Asequibles</h3>
+          <p class="mt-4 text-gray-600">Elige entre una variedad de planes asequibles para satisfacer tus necesidades de aprendizaje.</p>
+        </div>
+        <div class="bg-white shadow-lg rounded-lg p-8 feature-card">
+          <h3 class="text-2xl font-bold text-blue-900">Detección de Rostro con IA</h3>
+          <p class="mt-4 text-gray-600">Nuestra tecnología avanzada detecta comportamientos sospechosos para garantizar la integridad académica.</p>
+        </div>
+        <div class="bg-white shadow-lg rounded-lg p-8 feature-card">
+          <h3 class="text-2xl font-bold text-blue-900">Reportes en Tiempo Real</h3>
+          <p class="mt-4 text-gray-600">Los docentes reciben reportes en tiempo real sobre actividades sospechosas durante las clases.</p>
+        </div>
       </div>
-      <div class="bg-white shadow-lg rounded-lg p-8 feature-card">
-        <h3 class="text-2xl font-bold text-blue-900">Reportes en Tiempo Real</h3>
-        <p class="mt-4 text-gray-600">Los docentes reciben reportes en tiempo real sobre actividades sospechosas durante las clases.</p>
+      <div class="text-center mt-16">
+        <a href="#" class="cta-button">Comenzar Ahora</a>
       </div>
-    </div>
-    <div class="text-center mt-16">
-      <a href="#" class="cta-button">Comenzar Ahora</a>
-    </div>
-  </main>
+    </main>
 
   @include('components.footer')
 
