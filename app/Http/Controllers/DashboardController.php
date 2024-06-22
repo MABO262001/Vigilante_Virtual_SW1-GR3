@@ -45,7 +45,6 @@ class DashboardController extends Controller
                 $examen = Examen::where('id',$ejecucion->examen_id);
                 $fechaHoraI = $ejecucion->fecha . 'T' . $ejecucion->hora_inicio;
                 $fechaHoraF = $ejecucion->fecha . 'T' . $ejecucion->hora_final;
-                
                 $events[] = [
                     'title' => $examen->tema,
                     'start' => $fechaHoraI,
@@ -56,7 +55,6 @@ class DashboardController extends Controller
             return view('VistaDashboard.index',compact('events'));
         }
     }
-
     /**
      * Show the form for creating a new resource.
      */
