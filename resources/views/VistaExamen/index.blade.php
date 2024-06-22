@@ -25,7 +25,7 @@
 <div class="flex justify-center">
     <div class="container">
         <div class="w-full flex mt-8">
-            <a href="{{route('Examen.create')}}" class="ml-auto rounded-xl bg-blue-500 text-white p-3 font-bold shadow-md shadow-gray-400">Crear examen</a>
+            <a href="{{route('Examen.create', 1)}}" class="ml-auto rounded-xl bg-blue-500 text-white p-3 font-bold shadow-md shadow-gray-400">Crear examen</a>
         </div>
 
         <div class="flex">
