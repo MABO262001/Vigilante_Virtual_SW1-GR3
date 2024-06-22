@@ -53,7 +53,7 @@
                                 </div>
                                 @endforeach
                                 @break
-
+                                <!-- SEL MULTIPLE -->
                                 @case(2)
                                 @foreach ($pregunta['respuestas'] as $respuesta)
                                 <div class="mb-1">
@@ -88,24 +88,24 @@
                     <div class="flex w-full justify-between  mt-12">
                         <button class="border border-blue-500 rounded-xl text-blue-500 font-bold p-4 {{$x == '0' ? 'hidden' : ''}}" onclick="previousQuestion('{{$x}}')" id="previous-{{$x}}"><i class="fa-solid fa-arrow-left"></i> Pregunta anterior</button>
                         <div class="{{$x == '0' ? 'inline' : 'hidden'}}"></div>
-                        <button class="bg-blue-600 text-white p-4 font-bold rounded-xl" id="next-{{$x}}" onclick="nextQuestion('{{$x}}')" datax="{{$pregunta['id']}}">@if($x != count($preguntas_seleccionadas) - 1)
-                        Siguiente <i class="fa-solid fa-arrow-right"></i>
-                        @else
-                        Terminar intento
-                        @endif
-                    </button>
+                        <button class="bg-blue-600 text-white p-4 font-bold rounded-xl" id="next-{{$x}}" onclick="nextQuestion('{{$x}}')" datatype="{{$pregunta['tipo_pregunta_id']}}" datax="{{$pregunta['id']}}">@if($x != count($preguntas_seleccionadas) - 1)
+                            Siguiente <i class="fa-solid fa-arrow-right"></i>
+                            @else
+                            Terminar intento
+                            @endif
+                        </button>
 
                     </div>
                     @else
 
                     <div class="w-full flex justify-end mt-12">
-                        <button class="bg-blue-600 text-white p-4 font-bold rounded-xl " id="next-{{$x}}" onclick="nextQuestion('{{$x}}')" datax="{{$pregunta['id']}}">@if($x != count($preguntas_seleccionadas) - 1)
-                        Siguiente <i class="fa-solid fa-arrow-right">
-                        @else
-                        Terminar intento
-                        @endif
+                        <button class="bg-blue-600 text-white p-4 font-bold rounded-xl " id="next-{{$x}}" onclick="nextQuestion('{{$x}}')" datatype="{{$pregunta['tipo_pregunta_id']}}" datax="{{$pregunta['id']}}">@if($x != count($preguntas_seleccionadas) - 1)
+                            Siguiente <i class="fa-solid fa-arrow-right">
+                                @else
+                                Terminar intento
+                                @endif
 
-                        </i></button>
+                            </i></button>
 
                     </div>
                     @endif
@@ -123,6 +123,11 @@
 
                     </div>
                 </div>
+
+                <div class="mt-4 border-red-500 border p-4 font-bold flex justify-between">
+                    <span>Tiempo restante:</span>
+                    <span id="tiempo_restante"></span>
+                </div>
             </div>
         </div>
     </div>
@@ -133,7 +138,34 @@
 
 <script>
     console.log('ts');
-    
+
+    let hora_final = "{{$ejecucion->hora_final}}";
+
+    let fecha_actual = new Date();
+
+    let partes_hora = hora_final.split(":");
+    let fecha_final = new Date(fecha_actual.getFullYear(), fecha_actual.getMonth(), fecha_actual.getDate(), partes_hora[0], partes_hora[1], partes_hora[2]);
+
+    function actualizarContador() {
+        let ahora = new Date().getTime();
+        let tiempo_restante = fecha_final.getTime() - ahora;
+
+        let horas = Math.floor((tiempo_restante % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutos = Math.floor((tiempo_restante % (1000 * 60 * 60)) / (1000 * 60));
+        let segundos = Math.floor((tiempo_restante % (1000 * 60)) / 1000);
+
+        document.getElementById('tiempo_restante').textContent = `${horas}h ${minutos}m ${segundos}s`;
+
+        if (tiempo_restante < 0) {
+                (intervalo);
+            document.getElementById('tiempo_restante').textContent = "Tiempo finalizado";
+            alert('El tiempo ha terminado');
+        }
+    }
+
+    // Paso 4: Configurar un temporizador que actualice el contador cada segundo
+    let intervalo = setInterval(actualizarContador, 1000);
+
     let count_questions = "{{$ejecucion->navegacion == '1'? '0' : $inicial}}";
     var actualContainer = document.getElementById('container-' + count_questions);
     let nextBtn = document.getElementById('next-' + count_questions);
@@ -141,7 +173,7 @@
 
     verificarNavegabilidad();
 
-    if(count_questions >= '{{count($preguntas_seleccionadas)}}'){
+    if (count_questions >= '{{count($preguntas_seleccionadas)}}') {
         window.location.href = "{{route('Examen.enviar', $ejecucion->id )}}"
     }
 
@@ -172,13 +204,25 @@
 
         let buttonNext = document.getElementById('next-' + x)
         let pregunta_id = buttonNext.getAttribute('datax');
+        //console.log(pregunta_id);
+        let tipoPregunta = buttonNext.getAttribute('datatype');
 
-        const respuestasSel = document.querySelectorAll('.respuesta_' + pregunta_id + ':checked');
-
+        //Caso de que sea de opcion abierta (3)
         let respuestasArray = [];
-        respuestasSel.forEach(respuesta => {
-            respuestasArray.push(respuesta.value);
-        });
+        if (tipoPregunta != '3') {
+            const respuestasSel = document.querySelectorAll('.respuesta_' + pregunta_id + ':checked');
+
+            respuestasSel.forEach(respuesta => {
+                respuestasArray.push(respuesta.value);
+            });
+
+        } else {
+            const respuestasSel = document.querySelectorAll('.respuesta_' + pregunta_id)[0].value;
+            console.log(respuestasSel);
+            respuestasArray.push(respuestasSel);
+        }
+
+
 
         console.log(respuestasArray);
 
@@ -187,7 +231,8 @@
         let data = {
             'respuestas_array': respuestasArray,
             'ejecucion_id': '{{$ejecucion->id}}',
-            'pregunta_id' : pregunta_id,
+            'pregunta_id': pregunta_id,
+            'tipo_pregunta_id': tipoPregunta,
         };
 
         console.log(data);

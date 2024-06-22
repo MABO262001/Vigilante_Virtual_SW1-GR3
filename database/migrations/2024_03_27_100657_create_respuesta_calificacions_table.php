@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('respuesta_calificacions', function (Blueprint $table) {
             $table->id();
-            $table->string('contenido')->nullable();
+            $table->string('contenido', 500)->nullable();
             $table->unsignedBigInteger('respuesta_id')->nullable();
             $table->unsignedBigInteger('pregunta_id')->nullable();
             $table->unsignedBigInteger('calificacion_id');
