@@ -58,9 +58,13 @@
             </div>
         </div>
 
-        <div id="habilitado" class="text-center font-bold mb-4">Habilitado Para:</div>
-        <div id="total" class="text-center font-bold mb-4">Total De Materias A Inscribir: 0</div>
-
+        <div id="total" class="mt-4 text-center text-xl font-bold">Total De Materias A Inscribir: 0</div>
+        <div class="flex justify-center mt-4">
+            <button id="deselectAll" type="button"
+                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+                Deseleccionar Todos
+            </button>
+        </div>
         <div class="mt-8 overflow-x-auto" id="tableContainer">
             @include('VistaInscripcion.tablacreate')
         </div>
@@ -83,59 +87,59 @@
                     }, 500);
                 }, 3000);
             }
-            addCheckboxListeners();
             verificarGrupoMateria();
+            addCheckboxListeners();
+            updateTotal();
         };
 
         function verificarGrupoMateria() {
             var carnet = document.getElementById('carnet_identidad').value;
-            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            checkboxes.forEach(function(checkbox) {
-                fetch('/verificar-grupo-materia/' + carnet + '/' + checkbox.value)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data && data.yaRegistrado) {
+            if (!carnet) return;
+
+            fetch(`/verificar-grupo-materia/${carnet}`)
+                .then(response => response.json())
+                .then(data => {
+                    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                    checkboxes.forEach(function(checkbox) {
+                        if (data.includes(checkbox.value)) {
                             checkbox.parentElement.parentElement.style.display = 'none';
                         }
-                    })
-                    .catch(error => console.error('Error al verificar el grupo_materia:', error));
-            });
+                    });
+                })
+                .catch(error => console.error('Error al verificar el grupo_materia:', error));
         }
 
         document.getElementById('carnet_identidad').addEventListener('change', function() {
-            fetch('/obtener-carnet/' + this.value)
+            fetch(`/obtener-carnet/${this.value}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
                     document.getElementById('name').value = data.name;
                     document.getElementById('nombre').value = data.nombre;
                     document.getElementById('apellido_paterno').value = data.apellido_paterno;
                     document.getElementById('apellido_materno').value = data.apellido_materno;
 
                     // Verificar si el estudiante está habilitado para inscribirse
-                    fetch('/verificar-matricula/' + this.value)
+                    fetch(`/verificar-matricula/${this.value}`)
                         .then(response => response.json())
                         .then(data => {
                             if (data && data.habilitado !== undefined) {
-                                if (data.habilitado) {
-                                    document.getElementById('habilitado').innerText =
-                                        'Habilitado Para Inscribir';
-                                } else {
-                                    document.getElementById('habilitado').innerText =
-                                        'No Habilitado Para Inscribir';
-                                }
+                                document.getElementById('habilitado').innerText = data.habilitado ?
+                                    'Habilitado Para Inscribir' : 'No Habilitado Para Inscribir';
                             } else {
                                 console.error('Respuesta inesperada del servidor:', data);
                             }
                         })
                         .catch(error => console.error('Error al verificar la matrícula:', error));
+
                     verificarGrupoMateria();
-                });
+                    addCheckboxListeners();
+                    updateTotal();
+                })
+                .catch(error => console.error('Error al obtener el carnet:', error));
         });
 
         document.getElementById('searchForm').addEventListener('submit', function(event) {
             event.preventDefault();
-
             var searchValue = document.getElementById('searchInput').value;
 
             axios.get('{{ route('Inscripcion.create') }}', {
@@ -147,7 +151,9 @@
                     document.getElementById('tableContainer').innerHTML = response.data;
                     document.getElementById('clearButton').style.display = 'inline-flex';
 
+                    verificarGrupoMateria();
                     addCheckboxListeners();
+                    updateTotal();
                 })
                 .catch(function(error) {
                     console.error(error);
@@ -160,27 +166,25 @@
             document.getElementById('searchForm').dispatchEvent(new Event('submit'));
         });
 
+        document.getElementById('deselectAll').addEventListener('click', function() {
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = false;
+            });
+            localStorage.removeItem('checkedMaterias');
+            updateTotal();
+        });
+
         function addCheckboxListeners() {
             var checkboxes = document.querySelectorAll('input[type="checkbox"]');
             checkboxes.forEach(function(checkbox) {
-                checkbox.addEventListener('change', function() {
-                    var checkedMaterias = JSON.parse(localStorage.getItem('checkedMaterias')) || [];
-                    var materia = {
-                        value: this.value
-                    };
-                    if (this.checked) {
-                        checkedMaterias.push(materia);
-                    } else {
-                        var index = checkedMaterias.findIndex(function(m) {
-                            return m.value === materia.value;
-                        });
-                        if (index !== -1) {
-                            checkedMaterias.splice(index, 1);
-                        }
-                    }
-                    localStorage.setItem('checkedMaterias', JSON.stringify(checkedMaterias));
-                    updateTotal();
-                });
+                // Primero, elimina el event listener para evitar duplicados
+                checkbox.removeEventListener('change', handleCheckboxChange);
+
+                // Luego, agrega el event listener
+                checkbox.addEventListener('change', handleCheckboxChange);
+
+                // Marca el checkbox como checked si ya estaba seleccionado
                 var checkedMaterias = JSON.parse(localStorage.getItem('checkedMaterias')) || [];
                 checkbox.checked = checkedMaterias.some(function(materia) {
                     return materia.value === checkbox.value;
@@ -188,12 +192,36 @@
             });
         }
 
-        function updateTotal() {
-            var total = 0;
+        // Definir la función del event listener fuera para poder referenciarla
+        function handleCheckboxChange() {
             var checkedMaterias = JSON.parse(localStorage.getItem('checkedMaterias')) || [];
-            total = checkedMaterias.length;
+            var materia = {
+                value: this.value
+            };
+            if (this.checked) {
+                checkedMaterias.push(materia);
+            } else {
+                var index = checkedMaterias.findIndex(function(m) {
+                    return m.value === materia.value;
+                });
+                if (index !== -1) {
+                    checkedMaterias.splice(index, 1);
+                }
+            }
+            localStorage.setItem('checkedMaterias', JSON.stringify(checkedMaterias));
+            updateTotal();
+        }
+
+        function updateTotal() {
+            var checkedMaterias = JSON.parse(localStorage.getItem('checkedMaterias')) || [];
+            var total = checkedMaterias.length;
             document.getElementById('total').innerText = 'Total De Materias A Inscribir: ' + total;
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            addCheckboxListeners();
+            updateTotal();
+        });
 
         document.getElementById('registrar').addEventListener('click', function() {
             var checkboxes = document.querySelectorAll('input[type="checkbox"]');

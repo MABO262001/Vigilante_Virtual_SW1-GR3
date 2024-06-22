@@ -1,21 +1,24 @@
-<table class="w-full mt-4">
-    <thead>
-        <tr>
-            <th class="px-0 py-2 text-center" style="width: 1%">Nro</th>
-            <th class="px-4 py-2">Materia Y Grupo</th>
-            <th class="px-0 py-2 text-center" style="width: 1%">Seleccionar</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($grupomaterias as $grupomateria)
+<div class="mt-8 overflow-x-auto">
+    <table class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
+        <thead class="bg-gradient-to-r from-blue-500 to-teal-500 text-white uppercase text-sm leading-normal">
             <tr>
-                <td class="border px-0 py-2 text-center">{{ $loop->iteration }}</td>
-                <td class="border px-4 py-2">{{ $grupomateria->materia->nombre }} - {{ $grupomateria->grupo->nombre }}</td>
-                <td class="border px-4 py-2 text-center">
-                    <input type="checkbox" name="grupomaterias[]" value="{{ $grupomateria->id }}"
-                        {{ in_array($grupomateria->id, $inscribedGrupoMaterias) ? 'checked' : '' }}>
-                </td>
+                <th class="py-3 px-6 text-center">Nro</th>
+                <th class="py-3 px-6 text-left">Materia Y Grupo</th>
+                <th class="py-3 px-6 text-center">Seleccionar</th>
             </tr>
-        @endforeach
-    </tbody>
-</table>
+        </thead>
+        <tbody class="text-gray-700 text-sm font-light">
+            @foreach ($grupomaterias as $grupomateria)
+                <tr class="border-b border-gray-200 hover:bg-gray-50 transition duration-200 ease-in-out">
+                    <td class="py-3 px-6 text-center">{{ $loop->iteration }}</td>
+                    <td class="py-3 px-6 text-left">{{ $grupomateria->materia->nombre }} - {{ $grupomateria->grupo->nombre }}</td>
+                    <td class="py-3 px-6 text-center">
+                        <input type="checkbox" name="grupomaterias[]" value="{{ $grupomateria->id }}"
+                            class="form-checkbox h-5 w-5 text-blue-600"
+                            {{ in_array($grupomateria->id, $inscribedGrupoMaterias) ? 'checked' : '' }}>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>

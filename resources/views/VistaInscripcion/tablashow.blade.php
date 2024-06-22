@@ -1,21 +1,23 @@
-<table class="w-full mt-4">
-    <thead>
-        <tr>
-            <th class="px-0 py-2 text-center" style="width: 1%">Nro</th>
-            <th class="px-4 py-2">Materia</th>
-            <th class="px-4 py-2">Grupo</th>
-        </tr>
-    </thead>
-    <tbody>
-        @php
-            $materias_inscritas = $materias_inscritas ?? [];
-        @endphp
-        @foreach ($materias_inscritas as $index => $materia)
+<div class="mt-8 overflow-x-auto">
+    <table class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
+        <thead class="bg-gradient-to-r from-blue-500 to-teal-500 text-white uppercase text-sm leading-normal">
             <tr>
-                <td class="border px-0 py-2 text-center">{{ $index + 1 }}</td>
-                <td class="border px-4 py-2">{{ $materia['nombre_materia'] }}</td>
-                <td class="border px-4 py-2">{{ $materia['nombre_grupo'] }}</td>
+                <th class="py-3 px-6 text-center">Nro</th>
+                <th class="py-3 px-6 text-left">Materia</th>
+                <th class="py-3 px-6 text-left">Grupo</th>
             </tr>
-        @endforeach
-    </tbody>
-</table>
+        </thead>
+        <tbody class="text-gray-700 text-sm font-light">
+            @php
+                $materias_inscritas = $materias_inscritas ?? [];
+            @endphp
+            @foreach ($materias_inscritas as $materia)
+                <tr class="border-b border-gray-200 hover:bg-gray-50 transition duration-200 ease-in-out">
+                    <td class="py-3 px-6 text-center">{{ $loop->iteration }}</td>
+                    <td class="py-3 px-6 text-left">{{ $materia['nombre_materia'] }}</td>
+                    <td class="py-3 px-6 text-left">{{ $materia['nombre_grupo'] }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
