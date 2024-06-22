@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             'apellido_paterno' => 'Ballivian',
             'apellido_materno' => 'Ocampo',
             'carnet_identidad' => '6312127',
-            'profile_photo_path' => 'public/images/user/MABINHO.jpg'
+            'profile_photo_path' => 'images/user/MABINHO.jpg'
         ]);
         $user->assignRole('Master');
 
@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
             'nombre' => 'Elio Andres',
             'apellido_paterno' => 'Osinaga',
             'apellido_materno' => 'Vargas',
-            'profile_photo_path' => 'public/images/user/papita.jpeg'
+            'profile_photo_path' => 'images/user/papita.jpeg'
 
         ]);
         $user->assignRole('Master');
@@ -46,7 +46,7 @@ class UserSeeder extends Seeder
             'nombre' => 'David Arturo',
             'apellido_paterno' => 'Chalar',
             'apellido_materno' => 'Quiroz',
-            'profile_photo_path' => 'public/images/user/david.jpg'
+            'profile_photo_path' => 'images/user/david.jpg'
         ]);
         $user->assignRole('Estudiante');
 
@@ -58,7 +58,7 @@ class UserSeeder extends Seeder
             'nombre' => 'Rene Eduardo',
             'apellido_paterno' => 'Chungara',
             'apellido_materno' => 'Martinez',
-            'profile_photo_path' => 'public/images/user/rene.jpeg'
+            'profile_photo_path' => 'images/user/rene.jpeg'
         ]);
         $user->assignRole('Docente');
 
@@ -71,7 +71,7 @@ class UserSeeder extends Seeder
             'nombre' => 'Julio Alejandro',
             'apellido_paterno' => 'Gutierrez',
             'apellido_materno' => 'Velasco',
-            'profile_photo_path' => 'public/images/user/juli.png'
+            'profile_photo_path' => 'images/user/juli.png'
         ]);
         $user->assignRole('Master');
 
@@ -85,7 +85,7 @@ class UserSeeder extends Seeder
             'nombre' => 'Micaela Olga',
             'apellido_paterno' => 'Roca',
             'apellido_materno' => 'Garnica',
-            'profile_photo_path' => 'public/images/user/Micakes.jpg'
+            'profile_photo_path' => 'images/user/Micakes.jpg'
 
         ]);
         $user->assignRole('Estudiante');
