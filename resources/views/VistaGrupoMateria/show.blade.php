@@ -1,7 +1,7 @@
 @extends('Panza')
 @section('Panza')
 <div class="mt-8 overflow-x-auto">
-    <table class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
+    {{-- <table class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
         <thead class="bg-gradient-to-r from-blue-500 to-teal-500 text-white uppercase text-sm leading-normal">
             <tr>
                 <th class="py-3 px-6 text-left">No.</th>
@@ -11,12 +11,12 @@
             </tr>
         </thead>
         <tbody class="text-gray-700 text-sm font-light">
-            @forelse ($grupoMateria->boletaInscripcion as $index => $inscripcion)
+            @forelse ($grupoMateria->boletaInscripcion as $index)
                 <tr class="border-b border-gray-200 hover:bg-gray-50 transition duration-200 ease-in-out">
                     <td class="py-3 px-6 text-left">{{ $index + 1 }}</td>
-                    <td class="py-3 px-6 text-left">{{ $inscripcion->userEstudiante->name }}</td>
-                    <td class="py-3 px-6 text-center">{{ $inscripcion->userEstudiante->carnet_identidad }}</td>
-                    <td class="py-3 px-6 text-center">{{ $inscripcion->userEstudiante->email }}</td>
+                    <td class="py-3 px-6 text-left">{{ $grupoMateria->userEstudiante->name }}</td>
+                    <td class="py-3 px-6 text-center">{{ $grupoMateria->userEstudiante->carnet_identidad }}</td>
+                    <td class="py-3 px-6 text-center">{{ $grupoMateria->userEstudiante->email }}</td>
                 </tr>
             @empty
                 <tr>
@@ -24,6 +24,6 @@
                 </tr>
             @endforelse
         </tbody>
-    </table>
+    </table> --}}
 </div>
 @endsection
