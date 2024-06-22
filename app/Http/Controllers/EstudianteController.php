@@ -74,13 +74,10 @@ class EstudianteController extends Controller
     }
 
 
-    public function perfil($id){
-        $usuario = User::find($id);
-
-
+    public function perfil(){
+        $usuario = Auth::user();
         return view('VistaEstudiante.perfil', compact('usuario'));
     }
-
 
     public function materia($id){
         $user = Auth::user();

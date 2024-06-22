@@ -1,20 +1,5 @@
 @extends('Panza')
 @section('Panza')
-    {{-- <div class="mt-8 flex justify-center">
-        <form id="searchForm" method="GET" action="{{ route('Inscripcion.edit', $boleta_inscripcion->id) }}"
-            class="w-full max-w-lg">
-            <div class="flex items-center border-b-2 border-teal-500 py-2">
-                <input type="text" id="searchInput" name="search" placeholder="Buscar Materia Y Grupo"
-                    class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none">
-                <button type="submit" id="searchButton"
-                    class="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded">Buscar</button>
-                <button type="button" id="clearButton"
-                    class="flex-shrink-0 bg-red-500 hover:bg-red-700 border-red-500 hover:border-red-700 text-sm border-4 text-white py-1 px-2 rounded ml-2"
-                    style="display: none;">Eliminar filtro</button>
-            </div>
-        </form>
-    </div> --}}
-
     @if (session('error'))
         <div id="flash-message"
             class="fixed top-0 left-1/2 transform -translate-x-1/2 mt-4 p-4 bg-red-500 text-white rounded-lg shadow-lg text-center text-lg transition-all duration-500 ease-in-out"
@@ -67,8 +52,7 @@
             </div>
         </div>
 
-        <div id="total" class="text-center font-bold mb-4">Total De Materias inscritas: {{ $total_materias_inscritas }}
-        </div>
+        <div id="total" class="text-center font-bold mb-4">Total De Materias inscritas: {{ $total_materias_inscritas }}</div>
 
         <div class="mt-8 overflow-x-auto" id="tableContainer">
             @include('VistaInscripcion.tablaedit', [
@@ -79,7 +63,7 @@
         <div class="flex justify-center mt-8">
             <button type="submit"
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-                Registrar
+                Actualizar
             </button>
         </div>
     </form>
@@ -100,6 +84,7 @@
                 .then(data => {
                     window.grupoMaterias = data;
                     addCheckboxListeners();
+                    updateTotal();
                 });
         });
 
@@ -129,6 +114,7 @@
                         `Total De Materias inscritas: ${response.data.total}`;
                     document.getElementById('clearButton').style.display = 'inline-flex';
                     addCheckboxListeners();
+                    updateTotal();
                 })
                 .catch(function(error) {
                     console.error(error);
@@ -139,6 +125,15 @@
             document.getElementById('searchInput').value = '';
             this.style.display = 'none';
             document.getElementById('searchForm').dispatchEvent(new Event('submit'));
+        });
+
+        document.getElementById('deselectAll').addEventListener('click', function() {
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = false;
+            });
+            localStorage.removeItem('checkedMaterias');
+            updateTotal();
         });
 
         function addCheckboxListeners() {
@@ -161,16 +156,25 @@
             });
         }
 
-        document.addEventListener('DOMContentLoaded', addCheckboxListeners);
-
-        document.getElementById('clearButton').addEventListener('click', function() {
-            document.getElementById('searchInput').value = '';
-            this.style.display = 'none';
-            document.getElementById('searchForm').dispatchEvent(new Event('submit'));
-
+        function updateTotal() {
             var checkboxes = document.querySelectorAll('input[type="checkbox"]');
             var checkedMaterias = Array.from(checkboxes).filter(checkbox => checkbox.checked);
-            localStorage.setItem('checkboxes', JSON.stringify(checkedMaterias.map(checkbox => checkbox.value)));
+            document.getElementById('total').innerText =
+                `Total De Materias inscritas: ${checkedMaterias.length}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            addCheckboxListeners();
+            updateTotal();
+        });
+
+        document.getElementById('registrar').addEventListener('click', function() {
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = false;
+            });
+            localStorage.removeItem('checkedMaterias');
+            updateTotal();
         });
     </script>
 @endsection

@@ -75,11 +75,8 @@ class InscripcionController extends Controller
     {
         $search = $request->get('search');
         $carnet_identidad = $request->get('carnet_identidad');
-
-        // Buscar al usuario por su carnet de identidad
         $usuario = User::where('carnet_identidad', $carnet_identidad)->first();
 
-        // Verificar si el usuario existe y tiene el rol de estudiante o docente
         if (!$usuario || (!$usuario->hasRole('Estudiante') && !$usuario->hasRole('Docente'))) {
             return redirect()->back()->with('error', 'Usuario no encontrado o no tiene el rol adecuado');
         }
@@ -89,13 +86,10 @@ class InscripcionController extends Controller
                 $query->whereHas('materia', function ($query) use ($search) {
                     $query->where('nombre', 'LIKE', "%{$search}%");
                 })
-                ->orWhereHas('grupo', function ($query) use ($search) {
-                    $query->where('nombre', 'LIKE', "%{$search}%");
-                });
+                    ->orWhereHas('grupo', function ($query) use ($search) {
+                        $query->where('nombre', 'LIKE', "%{$search}%");
+                    });
             })
-            // ->whereDoesntHave('ingreso', function ($query) use ($usuario) {
-            //     $query->where('user_id', $usuario->id);
-            // })
             ->get();
 
         if ($grupomaterias->isEmpty()) {

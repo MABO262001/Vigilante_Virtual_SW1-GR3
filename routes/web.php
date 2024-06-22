@@ -29,8 +29,8 @@ Route::get('/contacto', function () {
     return view('VistaWelcome.contacto');
 })->name('contacto');
 
-Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified','can:Ver Dashboard'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('Dashboard');
+Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('can: Ver Dashboard')->name('Dashboard');
 
     //Rutas pertenecientes a los usuarios
     Route::middleware('can:Ver Usuarios')->group(function () {
@@ -150,7 +150,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified','c
             Route::get('/historial-examenes', 'examenes')->name('Estudiante.examenes');
             Route::get('/lista-estudiantes', 'listaEstudiantes')->name('ListaEstudiantes.show');
             Route::get('/calificaciones', 'calificaciones')->name('Estudiante.calificaciones');
-            Route::get('/perfil-estudiante/{id}', [EstudianteController::class, 'perfil'])->name('Estudiante.perfil');
+            Route::get('/perfil-estudiante', [EstudianteController::class, 'perfil'])->name('Estudiante.perfil');
             Route::get('/estudiante-materia/{id}', [EstudianteController::class, 'materia'])->name('Estudiante.materia');
             Route::get('/estudiante-edit/{id}', [EstudianteController::class, 'editar'])->name('Estudiante.editar');
             Route::post('/estudiante/{id}/edit', [EstudianteController::class, 'update'])->name('Estudiante.update');

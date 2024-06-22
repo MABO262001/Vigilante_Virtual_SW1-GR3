@@ -1,4 +1,4 @@
-@extends('Panza')
+<x-navbar />
 @section('Panza')
 
 <main class="w-full max-w-4xl mx-auto px-4 py-8 md:px-6 md:py-12">
@@ -126,3 +126,4 @@
 </script>
 
 @endsection
+@include('components.footer')

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Navbar Mejorado</title>
+  <title>Vigilante virtual</title>
   @vite('resources/css/app.css')
   <style>
     body {
@@ -51,6 +51,21 @@
     .mobile-menu.active {
       display: block;
     }
+    .dropdown-button {
+        @apply ml-4 flex items-center md:ml-6 focus:outline-none;
+    }
+
+    .dropdown-menu {
+        @apply absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden z-10 hidden;
+    }
+
+    .dropdown-menu a {
+        @apply block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100;
+    }
+
+    .dropdown-menu button {
+        @apply block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100;
+    }
   </style>
   <!-- Import Inter Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -67,17 +82,45 @@
           <div class="hidden md:block">
             <div class="ml-10 flex items-baseline space-x-4">
                 <a href="/" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Inicio</b></a>
-                <a href="{{ route('acerca') }}" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Acerca de</b></a>
-                <a href="{{ route('contacto') }}" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Contacto</b></a>
+                @guest
+                    <a href="{{ route('acerca') }}" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Acerca de</b></a>
+                    <a href="{{ route('contacto') }}" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Contacto</b></a>
+                @else
+                  <a href="{{ route('Estudiante.index') }}" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Mis Materias</b></a>
+                  <a href="{{ route('Estudiante.calificaciones') }}" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Mis Notas</b></a>
+                @endguest
             </div>
           </div>
         </div>
-        <div class="hidden md:block">
-          <div class="ml-4 flex items-center md:ml-6">
-            <a href="{{ route('login') }}" class="bg-white px-3 py-2 rounded-md text-sm font-medium ml-2"><b>Iniciar Sesión</b></a>
-            <a href="{{ route('planes') }}" class="btn-secondary px-3 py-2 rounded-md text-sm font-medium ml-2"><b>Adquirir Plan</b></a>
+        <div class="hidden md:block relative">
+          <div>
+              <button id="userDropdown" class="ml-4 flex items-center md:ml-6 focus:outline-none">
+                  @auth
+                      <span class="mr-2 text-white text-sm font-medium">{{ auth()->user()->name }}</span>
+                      @if(auth()->user()->profile_photo_path)
+                        <img class="h-8 w-8 rounded-full" src="{{ asset('storage/' . auth()->user()->profile_photo_path) }}" alt="Foto de perfil">
+                      @else
+                          <span class="h-8 w-8 rounded-full bg-gray-300 inline-block"></span>
+                      @endif
+                  @else
+                      <a href="{{ route('login') }}" class="bg-white px-3 py-2 rounded-md text-sm font-medium ml-2"><b>Iniciar Sesión</b></a>
+                      <a href="{{ route('planes') }}" class="btn-secondary px-3 py-2 rounded-md text-sm font-medium ml-2"><b>Adquirir Plan</b></a>
+                  @endauth
+              </button>
           </div>
-        </div>
+          <!-- Menú desplegable -->
+          @auth
+              <div id="userDropdownMenu" class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden z-10 hidden">
+                  <a href="{{ route('Estudiante.perfil') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mi Perfil</a>
+                  <form method="POST" action="{{ route('logout') }}">
+                      @csrf
+                      <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cerrar Sesión</button>
+                  </form>
+              </div>
+          @endauth
+      </div>
+      
+      </div>
         <div class="flex md:hidden">
           <button type="button" class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md text-white hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-800 focus:ring-white" aria-controls="mobile-menu" aria-expanded="false" id="mobile-menu-button">
             <span class="sr-only">Abrir menú principal</span>
@@ -117,6 +160,28 @@
         menuIconOpen.classList.toggle('hidden');
         menuIconClose.classList.toggle('hidden');
       });
+    });
+
+
+    // JavaScript para mostrar y ocultar el menú desplegable
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdownButton = document.getElementById('userDropdown');
+        const dropdownMenu = document.getElementById('userDropdownMenu');
+
+        if (dropdownButton) {
+            dropdownButton.addEventListener('click', function() {
+                if (dropdownMenu) {
+                    dropdownMenu.classList.toggle('hidden');
+                }
+            });
+        }
+
+        // Ocultar el menú desplegable si se hace clic fuera de él
+        document.addEventListener('click', function(event) {
+            if (!dropdownButton.contains(event.target) && dropdownMenu && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.classList.add('hidden');
+            }
+        });
     });
   </script>
 

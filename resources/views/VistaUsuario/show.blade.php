@@ -34,7 +34,6 @@
     <h3 class="text-center text-lg font-semibold mb-4">Materias Activas</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
         <!-- Agregar aqui las materias del alumno con un foreach -->
-<<<<<<< HEAD
         <a href="{{ route('GrupoMateria.listaestudiantes') }}" class="block mt-4 mx-auto max-w-md">
             <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out border border-gray-200">
                 <div class="p-6">
@@ -73,7 +72,6 @@
                 </div>
             </div>
         </a>
-=======
         <div class="bg-white rounded-lg shadow p-4">
             <h4 class="font-semibold">TITULO</h4>
             <p>Descripcion</p> <!--agregar mas datos si es necesario-->
@@ -87,9 +85,7 @@
         <div class="bg-white rounded-lg shadow p-4">
             <h4 class="font-semibold">TITULO</h4>
             <p>Descripcion</p> <!--agregar mas datos si es necesario-->
-        </div>
->>>>>>> parent of 29c7352 (Revert "Merge branch 'main' of https://github.com/MABO262001/VigilanteVirtualPrueba")
-        
+        </div>        
     </div>
 </div>
 
