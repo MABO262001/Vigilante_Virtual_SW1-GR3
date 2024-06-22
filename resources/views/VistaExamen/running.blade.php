@@ -10,8 +10,9 @@
                 <h2 class="text-gray-500">{{$examen->descripcion}}</h2>
 
             </div>
-            <div class="mt-8 border w-[500px] flex ites-center justify-center items-center h-[200px]">
-                <h2>Camara de mabito >:(</h2>
+            <div class="mt-8 border w-[500px] h-[200px] flex items-center justify-center relative overflow-hidden">
+                @component('components.reconocimiento-facial', ['ejecucion_id' => $ejecucion->id])
+                @endcomponent
             </div>
         </div>
 

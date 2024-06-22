@@ -34,6 +34,7 @@ class ReconocimientoFacialController extends Controller
         $anomalia->fecha = Carbon::today()->format('Y-m-d');
         $anomalia->url_imagen = 'anomalias/' . $imageName;
         $anomalia->tipo_anomalia_id = $request->input('tipo_anomalia_id');
+        $anomalia->ejecucion_id = $request->input('ejecucion_id');
         $anomalia->save();
 
         return response()->json(['message' => 'Imagen y anomalia guardadas exitosamente']);

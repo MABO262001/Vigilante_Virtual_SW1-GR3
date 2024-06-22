@@ -17,7 +17,7 @@
         const canvasCtx = out2.getContext('2d');
         let isChecking = true;
         let detectionPaused = false;
-
+        const ejecucionId = {{ $ejecucion_id }};
         const fpsControl = new FPS();
         const spinner = document.querySelector('.loading');
         spinner.ontransitionend = () => {
@@ -25,8 +25,6 @@
         };
 
         function onResultsFaceMesh(results) {
-            if (detectionPaused) return;
-
             document.body.classList.add('loaded');
             fpsControl.tick();
 
@@ -35,34 +33,28 @@
             canvasCtx.drawImage(
                 results.image, 0, 0, out2.width, out2.height);
             if (results.multiFaceLandmarks) {
-                checkForMultipleFaces(results);
-                for (const landmarks of results.multiFaceLandmarks) {
-                    // drawConnectors(
-                    //     canvasCtx, landmarks, FACEMESH_TESSELATION,
-                    //     { color: '#C0C0C070', lineWidth: 1 });
-                    // drawConnectors(
-                    //     canvasCtx, landmarks, FACEMESH_RIGHT_EYE,
-                    //     { color: '#E0E0E0', lineWidth: 1 });
-                    // drawConnectors(
-                    //     canvasCtx, landmarks, FACEMESH_RIGHT_EYEBROW,
-                    //     { color: '#E0E0E0', lineWidth: 1 });
-                    // drawConnectors(
-                    //     canvasCtx, landmarks, FACEMESH_LEFT_EYE,
-                    //     { color: '#E0E0E0', lineWidth: 1 });
-                    // drawConnectors(
-                    //     canvasCtx, landmarks, FACEMESH_LEFT_EYEBROW,
-                    //     { color: '#E0E0E0', lineWidth: 1 });
-                    // drawConnectors(
-                    //     canvasCtx, landmarks, FACEMESH_FACE_OVAL,
-                    //     { color: '#E0E0E0', lineWidth: 1 });
-                    // drawConnectors(
-                    //     canvasCtx, landmarks, FACEMESH_LIPS,
-                    //     { color: '#E0E0E0', lineWidth: 1 });
+                drawFaceMesh(results);
+                if (!detectionPaused) {
+                    checkForMultipleFaces(results);
                 }
             } else {
-                checkForNoFaces();
+                if (!detectionPaused) {
+                    checkForNoFaces();
+                }
             }
             canvasCtx.restore();
+        }
+
+        function drawFaceMesh(results) {
+            for (const landmarks of results.multiFaceLandmarks) {
+                //drawConnectors(canvasCtx, landmarks, FACEMESH_TESSELATION, { color: '#C0C0C070', lineWidth: 1 });
+                //drawConnectors(canvasCtx, landmarks, FACEMESH_RIGHT_EYE, { color: '#E0E0E0', lineWidth: 1 });
+                //drawConnectors(canvasCtx, landmarks, FACEMESH_RIGHT_EYEBROW, { color: '#E0E0E0', lineWidth: 1 });
+                //drawConnectors(canvasCtx, landmarks, FACEMESH_LEFT_EYE, { color: '#E0E0E0', lineWidth: 1 });
+                //drawConnectors(canvasCtx, landmarks, FACEMESH_LEFT_EYEBROW, { color: '#E0E0E0', lineWidth: 1 });
+                //drawConnectors(canvasCtx, landmarks, FACEMESH_FACE_OVAL, { color: '#E0E0E0', lineWidth: 1 });
+                //drawConnectors(canvasCtx, landmarks, FACEMESH_LIPS, { color: '#E0E0E0', lineWidth: 1 });
+            }
         }
 
         function checkForMultipleFaces(results) {
@@ -111,7 +103,8 @@
                 },
                 body: JSON.stringify({
                     image: imageData,
-                    tipo_anomalia_id: tipoAnomalia
+                    tipo_anomalia_id: tipoAnomalia,
+                    ejecucion_id: ejecucionId
                 })
             }).then(response => response.json())
               .then(data => {
