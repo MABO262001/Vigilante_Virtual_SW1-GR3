@@ -19,12 +19,18 @@
                 <thead class="bg-gray-100 dark:bg-gray-800">
                     <tr>
                         <th class="px-4 py-2 text-left">Nombre</th>
+                        <th class="px-4 py-2 text-left">Ver Perfil</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($estudiantes as $estudiante)
                         <tr>
+                            @if($estudiante->nombre == null)
+                            <td class="border-b px-4 py-2">{{ $estudiante->name }}</td>
+                            @else
                             <td class="border-b px-4 py-2">{{ $estudiante->nombre }}</td>
+                            @endif
+                            <th class="border-b px-4 py-2"></th>
                         </tr>
                     @endforeach
                 </tbody>

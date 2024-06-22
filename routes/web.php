@@ -134,7 +134,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
 
     Route::controller(DocenteController::class)->group(function () {
         Route::get('/docente', 'index')->name('Docente.index');
-        Route::get('/docente-materia', 'materia')->name('Docente.materia');
+        Route::get('/docente-materia/{id}', [DocenteController::class, 'materia'])->name('Docente.materia');
     });
 
 

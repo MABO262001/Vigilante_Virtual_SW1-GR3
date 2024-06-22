@@ -34,17 +34,17 @@ class DocenteController extends Controller
     }
 
 
-    public function materia(Request $request){
+    public function materia($id){
         $user = Auth::user();
-
-        $gp = GrupoMateria::find($request->id);
+        $gp = GrupoMateria::find($id);
         $materia = Materia::find($gp->materia_id);
         $grupo = Grupo::find($gp->grupo_id);
         $estudiantes = [];
-        $detalles = GrupoMateriaBoletaInscripcion::where('grupo_materia_id',$request->id)->get();
+        $detalles = GrupoMateriaBoletaInscripcion::where('grupo_materia_id',$id)->get();
         foreach ($detalles as $detalle){
-            $boleta = BoletaInscripcion::where('id',$detalle->boleta_inscripcion_id);
-            $alumno = User::where('id',$boleta->user_estudiante_id);
+            
+            $boleta = BoletaInscripcion::where('id',$detalle->boleta_inscripcion_id)->first();
+            $alumno = User::where('id',$boleta->user_estudiante_id)->first();
             $estudiantes[] = $alumno;
         }
         return view('VistaDocente.materia', compact('materia','gp','estudiantes','grupo'));

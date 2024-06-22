@@ -34,7 +34,7 @@
                 </div>
                 <div class="px-4 py-2 bg-gray-100">
                     <a href="{{ route('Docente.materia', ['id' => $grupomateria['gp']->id]) }}" class="text-blue-600 hover:underline">Ver detalles</a>
-                </div>
+                </div>                
             </div>
         @endforeach
 
