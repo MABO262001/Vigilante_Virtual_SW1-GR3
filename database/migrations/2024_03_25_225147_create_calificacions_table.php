@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('calificacions', function (Blueprint $table) {
             $table->id();
             $table->string('comentario')->nullable();
+            $table->integer('nota')->nullable();
+            $table->boolean('finalizado')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('ejecucion_id');
             $table->timestamps();
