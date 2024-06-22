@@ -74,20 +74,27 @@ class InscripcionController extends Controller
     public function create(Request $request)
     {
         $search = $request->get('search');
-        $carnet_identidad = $request->get('carnet_identidad'); // Obtén el carnet_identidad del estudiante
+        $carnet_identidad = $request->get('carnet_identidad');
+
+        // Buscar al usuario por su carnet de identidad
+        $usuario = User::where('carnet_identidad', $carnet_identidad)->first();
+
+        // Verificar si el usuario existe y tiene el rol de estudiante o docente
+        if (!$usuario || (!$usuario->hasRole('Estudiante') && !$usuario->hasRole('Docente'))) {
+            return redirect()->back()->with('error', 'Usuario no encontrado o no tiene el rol adecuado');
+        }
 
         $grupomaterias = GrupoMateria::query()
-            ->whereHas('materia', function ($query) use ($search) {
-                $query->where('nombre', 'LIKE', "%{$search}%");
+            ->where(function ($query) use ($search) {
+                $query->whereHas('materia', function ($query) use ($search) {
+                    $query->where('nombre', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('grupo', function ($query) use ($search) {
+                    $query->where('nombre', 'LIKE', "%{$search}%");
+                });
             })
-            ->orWhereHas('grupo', function ($query) use ($search) {
-                $query->where('nombre', 'LIKE', "%{$search}%");
-            })
-            //arreglar esta parte
-            // ->whereDoesntHave('inscripciones', function ($query) use ($carnet_identidad) {
-            //     $query->whereHas('estudiante', function ($query) use ($carnet_identidad) {
-            //         $query->where('carnet_identidad', $carnet_identidad); // Excluye los grupomaterias en los que el estudiante ya está inscrito
-            //     });
+            // ->whereDoesntHave('ingreso', function ($query) use ($usuario) {
+            //     $query->where('user_id', $usuario->id);
             // })
             ->get();
 
@@ -98,8 +105,10 @@ class InscripcionController extends Controller
         if ($request->ajax()) {
             return view('VistaInscripcion.tablacreate', compact('grupomaterias'));
         }
+
         return view('VistaInscripcion.create', compact('grupomaterias'));
     }
+
 
     public function store(Request $request)
     {
