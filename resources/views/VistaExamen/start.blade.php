@@ -60,7 +60,7 @@
                 </div>
 
                 <div class="border-b border-gray-300 p-4">
-                    <strong>Estado de la entrega: </strong><span class="">{{$calificacion != 0?'Entregada':'No entregada'}}</span>
+                    <strong>Estado de la entrega: </strong><span class="">{{!$calificacion ?'No entregada':'Entregada'}}</span>
                 </div>
 
                 <div class="border-b border-gray-300 p-4">

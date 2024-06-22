@@ -19,7 +19,9 @@ class Ejecucion extends Model
         'contrasena',
         'examen_id',
         'nro_preguntas',
-        'estado_ejecucion_id'
+        'estado_ejecucion_id',
+        'navegacion',
+        'retroalimentacion'
     ];
 
     public function examen()

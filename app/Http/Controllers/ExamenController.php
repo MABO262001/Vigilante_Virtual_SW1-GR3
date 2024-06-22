@@ -61,7 +61,7 @@ class ExamenController extends Controller
      */
     public function create($id)
     {
-        dd($id);
+        //dd($id);
         return view('VistaExamen.create');
     }
 
@@ -72,7 +72,7 @@ class ExamenController extends Controller
     {
         $user = Auth::user();
 
-        echo ($request);
+        //echo ($request);
 
         //Colocar filtro de profesor
         if ($user) {
@@ -121,7 +121,8 @@ class ExamenController extends Controller
                     'nro_preguntas'         =>  $request->nro_preguntas,
                     'examen_id'             =>  $examen->id,
                     'estado_ejecucion_id'   =>  3,
-                    'navegacion'             =>  $request->navegacion == 'on'? '1': '0',
+                    'navegacion'            =>  $request->navegacion == 'on'? '1': '0',
+                    'retroalimentacion'     =>  $request->retroalimentacion == 'on'? '1': '0',
                 ]);
 
                 toastr('Ejecucion de examen programada correctamete', 'success', 'Ejecucion de examen');
@@ -173,11 +174,12 @@ class ExamenController extends Controller
         $user = User::findOrFail($user->id);
         $calificacion = $user->ejecuciones()->where('ejecucion_id', $ejecucion->id)->first();
 
-        if (!$calificacion) {
-            $calificacion = 0;
+        if($this->verificarEjecucion($ejecucion)){
+            $ejecucion->estado_ejecucion_id = '2';
+            $ejecucion->save();
         }
 
-        $now = Carbon::now(); // Obtiene la fecha y hora actual
+        $now = Carbon::now();
         $fecha = Carbon::parse($ejecucion->fecha);
 
         switch ($ejecucion->estado_ejecucion_id) {
@@ -199,6 +201,21 @@ class ExamenController extends Controller
             'restante'
         );
         return view('VistaExamen.start', $data);
+    }
+
+    private function verificarEjecucion(Ejecucion $ejecucion){
+        //dd($ejecucion);
+        $now = Carbon::now();
+        if($ejecucion->estado_ejecucion_id == '1'){
+            if($now->format('Y-m-d') > $ejecucion->fecha){
+           // dd($now->format('Y-m-d'));
+
+                return true;
+            }else if($now->format('Y-m-d') == $ejecucion->fecha && $now->format('h:m:s') >= $ejecucion->hora_final){
+                return true;
+            }
+        }
+        return false;
     }
 
     public function running($id)
@@ -314,6 +331,7 @@ class ExamenController extends Controller
                 'ejecucion_id' => $request->ejecucion_id,
                 'respuestas' => $request->respuestas_array,
                 'pregunta_id' => $request->pregunta_id,
+                'tipo_pregunta_id' => $request->tipo_pregunta_id,
             ];
 
             $this->storeAnswer($data);
@@ -328,6 +346,7 @@ class ExamenController extends Controller
         $calificacion = Calificacion::where('user_id', $user->id)
                         ->where('ejecucion_id', $data['ejecucion_id'])->first();
         $pregunta_id = $data['pregunta_id'];
+        $tipoPregunta = $data['tipo_pregunta_id'];
 
         $this->verificarRespuesta($pregunta_id, $calificacion->id);
 
@@ -335,8 +354,9 @@ class ExamenController extends Controller
             
                 $respuestaCalificacion=RespuestaCalificacion::create([
                     'calificacion_id'=>$calificacion->id,
-                    'respuesta_id'=>$respuesta,
-                    'pregunta_id'=>$pregunta_id
+                    'respuesta_id'=>$tipoPregunta != '3'? $respuesta: null,
+                    'pregunta_id'=>$pregunta_id,
+                    'contenido'=> $tipoPregunta == '3'? $respuesta : null,
                 ]);
             
             
@@ -415,10 +435,17 @@ class ExamenController extends Controller
             foreach($preguntas_seleccionadas as $pregunta_sel){
                 
                 foreach($respuestasCalificacion as $respuesta){
-                    $respuestaEncontrada = Respuesta::find($respuesta->respuesta_id);
 
-                    if($respuestaEncontrada->pregunta_id == $pregunta_sel->pregunta_id){
-                        $pregunta_sel->hecha = '1';
+                    if($respuesta->respuesta_id){
+                        $respuestaEncontrada = Respuesta::find($respuesta->respuesta_id);
+
+                        if($respuestaEncontrada->pregunta_id == $pregunta_sel->pregunta_id){
+                            $pregunta_sel->hecha = '1';
+                        }
+                    }else{
+                        if($respuesta->pregunta_id == $pregunta_sel->pregunta_id){
+                            $pregunta_sel->hecha = '1';
+                        }
                     }
                 }
 

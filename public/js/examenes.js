@@ -286,6 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const horaFinalString = '13:00';
     const csrfToken = document.getElementById('csrf_token').value;
     const navegacion = document.getElementById('navegacion');
+    const retroalimentacion = document.getElementById('retroalimentacion');
 
     
     fecha.value = fechaString;
@@ -313,8 +314,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'ponderacion':      ponderacion.value,
             'contrasena':       contrasena.value,
             'nro_preguntas':    nro_preguntas.value,
-            'navegacion':       navegacion.value
+            'navegacion':       navegacion.value,
+            'retroalimentacion':retroalimentacion.value,
         }
+        console.log(data);
         fetch('/examenes/store', {
             method: 'POST',
             headers: {
