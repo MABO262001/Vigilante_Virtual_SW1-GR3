@@ -1,5 +1,9 @@
 @extends('Panza')
+
 @section('Panza')
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h1 class="font-extrabold text-blue-900 text-3xl mt-2 uppercase">Editar Usuario</h1>
+
     <form id="userForm" action="{{ route('Usuario.update', $usuario->id) }}" method="POST" enctype="multipart/form-data"
         class="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         @csrf
@@ -35,20 +39,36 @@
         </div>
 
         <div class="mb-4">
-            <label for="role" class="block text-gray-700 font-bold mb-2">Rol</label>
-            <select name="role" id="role"
+            <label for="password_confirmation" class="block text-gray-700 font-bold mb-2">Confirmar Contraseña</label>
+            <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Confirmar Contraseña"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                @foreach ($roles as $role)
-                    <option value="{{ $role->name }}" {{ $usuario->roles->contains('name', $role->name) ? 'selected' : '' }}>{{ $role->name }}</option>
-                @endforeach
-            </select>
         </div>
 
-        <div id="cantidad_usuarios_container" class="mb-4 {{ in_array($usuario->roles->pluck('name')->first(), ['Administrativo', 'Administrativo Premium']) ? '' : 'hidden' }}">
-            <label for="cantidad_usuarios" class="block text-gray-700 font-bold mb-2">Cantidad de Usuarios</label>
-            <input type="number" name="cantidad_usuarios" id="cantidad_usuarios" value="{{ $usuario->usuarios_creables }}" placeholder="Cantidad de Usuarios"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-        </div>
+        @if (Auth::id() !== $usuario->id)
+            <div class="mb-4">
+                <label for="role" class="block text-gray-700 font-bold mb-2">Rol</label>
+                <select name="role" id="role"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    @if (Auth::user()->hasRole('Master'))
+                        @foreach ($roles as $role)
+                            <option value="{{ $role->name }}" {{ $usuario->roles->contains('name', $role->name) ? 'selected' : '' }}>{{ $role->name }}</option>
+                        @endforeach
+                    @elseif (Auth::user()->hasRole('Administrativo'))
+                        @foreach ($roles as $role)
+                            @if (in_array($role->name, ['Docente', 'Estudiante']))
+                                <option value="{{ $role->name }}" {{ $usuario->roles->contains('name', $role->name) ? 'selected' : '' }}>{{ $role->name }}</option>
+                            @endif
+                        @endforeach
+                    @endif
+                </select>
+            </div>
+
+            <div id="cantidad_usuarios_container" class="mb-4">
+                <label for="cantidad_usuarios" class="block text-gray-700 font-bold mb-2">Cantidad de Usuarios</label>
+                <input type="number" name="cantidad_usuarios" id="cantidad_usuarios" value="{{ $usuario->usuarios_creables }}" placeholder="Cantidad de Usuarios"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+        @endif
 
         <div class="flex items-center justify-between">
             <button type="submit" id="submitButton"
@@ -59,15 +79,19 @@
     <script>
         const roleSelect = document.getElementById('role');
         const cantidadUsuariosContainer = document.getElementById('cantidad_usuarios_container');
+        const usuarioId = {{ $usuario->id }};
+        const authUserId = {{ Auth::id() }};
 
         function showCantidadUsuarios() {
             const selectedRole = roleSelect.options[roleSelect.selectedIndex].value;
-            const show = selectedRole === 'Administrativo' || selectedRole === 'Administrativo Premium';
+            const show = (selectedRole === 'Administrativo' || selectedRole === 'Administrativo Premium') && authUserId !== usuarioId;
             cantidadUsuariosContainer.classList.toggle('hidden', !show);
         }
 
-        showCantidadUsuarios();
-        roleSelect.addEventListener('change', showCantidadUsuarios);
+        if (roleSelect) {
+            showCantidadUsuarios();
+            roleSelect.addEventListener('change', showCantidadUsuarios);
+        }
 
         function loadImage(event) {
             const output = document.getElementById('preview_image');
@@ -79,4 +103,5 @@
             }
         }
     </script>
+</div>
 @endsection

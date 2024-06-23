@@ -39,37 +39,6 @@
         </div>
     @endif
 
-    {{-- <div class="mt-8">
-        <form id="searchForm" action="{{ route('Usuario.index') }}" method="GET" class="w-full max-w-lg mx-auto">
-            <div class="flex items-center border-b-2 border-teal-500 py-2">
-                <div class="flex-grow mr-3">
-                    <input type="text" name="search" id="search" placeholder="Buscar..."
-                        class="w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                </div>
-                <div class="flex-grow mr-3">
-                    <select name="rol"
-                        class="w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                        <option value="{{ encrypt('') }}">Seleccionar</option>
-                        <option value="{{ encrypt('Docente') }}">Docente</option>
-                        <option value="{{ encrypt('Estudiante') }}">Estudiante</option>
-                        @if (auth()->check())
-                            @if (auth()->user()->hasRole('Master'))
-                                <option value="{{ encrypt('Todos') }}">Todos</option>
-                            @endif
-                            @if (auth()->check() && !auth()->user()->hasRole('Master'))
-                                <option value="{{ encrypt('TodosMenosMaster') }}">Todos</option>
-                            @endif
-                        @endif
-                    </select>
-                </div>
-                <button type="submit"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Buscar</button>
-                <button type="button" id="clearButton"
-                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2 hidden">Limpiar</button>
-            </div>
-        </form>
-    </div> --}}
-
     <div class="mt-8 overflow-x-auto" id="usuariosTableContainer">
         @include('VistaUsuario.table', ['usuarios' => $usuarios])
     </div>

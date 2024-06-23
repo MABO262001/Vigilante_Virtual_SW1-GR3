@@ -32,7 +32,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('can:Ver Dashboard')->name('Dashboard');
 
     //Rutas pertenecientes a los usuarios
-    Route::middleware('can:Ver Usuarios')->group(function () {
+    // Route::middleware('can:Ver Usuarios')->group(function () {
         Route::controller(UsuarioController::class)->group(function () {
             Route::get('/usuarios', 'index')->name('Usuario.index');
             Route::get('/usuarios/create', 'create')->name('Usuario.create');
@@ -41,10 +41,10 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
             Route::put('/usuarios/update/{id}', 'update')->name('Usuario.update');
             Route::get('/usuarios/{id}', 'show')->name('Usuario.show');
             Route::delete('/usuarios/{id}', 'destroy')->name('Usuario.destroy');
-            Route::get('/usuarios/buscar', 'buscar')->name('Usuario.buscar'); 
+            Route::get('/usuarios/buscar', 'buscar')->name('Usuario.buscar');
             Route::get('/obtener-carnet/{carnet_identidad}', 'obtenerCarnet');
         });
-    });
+    // });
 
     // Routes Permisos y Roles
     Route::middleware('can:Ver Roles y Permisos')->group(function () {

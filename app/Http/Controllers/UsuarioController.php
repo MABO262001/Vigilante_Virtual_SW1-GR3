@@ -16,9 +16,10 @@ class UsuarioController extends Controller
     {
         $search = $request->get('search');
         $rol = $request->input('rol') ? decrypt($request->input('rol')) : '';
+        $user = Auth::user();
 
-        $usuarios = User::with('roles')
-            ->where(function ($query) use ($search, $rol) {
+        $usuariosQuery = User::with('roles')
+            ->where(function ($query) use ($search, $rol, $user) {
                 if ($rol) {
                     if ($rol == 'TodosMenosMaster') {
                         $query->whereDoesntHave('roles', function ($query) {
@@ -34,8 +35,16 @@ class UsuarioController extends Controller
                     $query->where('name', 'LIKE', "%{$search}%")
                         ->orWhere('email', 'LIKE', "%{$search}%");
                 }
-            })
-            ->get();
+            });
+
+        if ($user->hasRole('Administrativo')) {
+            $usuariosQuery->where(function ($query) use ($user) {
+                $query->where('jefe_id', $user->id)
+                      ->orWhere('id', $user->id);
+            });
+        }
+
+        $usuarios = $usuariosQuery->get();
 
         $usuariosSinMaster = $usuarios->reject(function ($usuario) {
             return $usuario->roles->contains('name', 'Master');
@@ -51,8 +60,8 @@ class UsuarioController extends Controller
 
         $roles = Role::all();
         $usuarios_creables = null;
-        $user = Auth::user();
-        if ($user->hasRole('Administrativo') || $user->hasRole('Administrativo Premium')) {
+
+        if ($user->hasRole('Administrativo')) {
             $usuarios_creables = $user->usuarios_creables;
         }
 
@@ -89,31 +98,42 @@ class UsuarioController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'role' => 'required|exists:roles,name',
+            'profile_photo_path' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'cantidad_usuarios' => 'nullable|integer'
+        ]);
 
+        $userauth = Auth::user();
 
         $user = new User;
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
+        $user->jefe_id = $userauth->id;
 
         if ($request->hasFile('profile_photo_path')) {
-            $imageName = $request->name . '.' . $request->profile_photo_path->extension();
+            $imageName = $user->email . '.' . $request->profile_photo_path->extension();
             $request->profile_photo_path->move(public_path('images/user'), $imageName);
-            $user->profile_photo_path = '/images/user/' . $imageName;
+            $user->profile_photo_path = 'images/user/' . $imageName;
         }
+
         $user->usuarios_creables = $request->cantidad_usuarios;
         $user->save();
 
         $user->assignRole($request->role);
 
-        $userauth  = Auth::user();
         if ($userauth->hasRole('Administrativo') || $userauth->hasRole('Administrativo Premium')) {
-            $userauth->usuarios_creables = $userauth->usuarios_creables - 1;
+            $userauth->usuarios_creables -= 1;
             $userauth->save();
         }
 
         return redirect()->route('Usuario.index')->with('success', 'Usuario creado exitosamente.');
     }
+
 
     public function show($id)
     {
@@ -161,50 +181,35 @@ class UsuarioController extends Controller
 
     public function update(Request $request, $id)
     {
-        $authUser = Auth::user();
-
-        $allowedFields = ['name', 'email', 'cantidad_usuarios'];
-        if (!$authUser->hasRole('Estudiante')) {
-            $allowedFields = array_merge($allowedFields, ['password', 'role', 'profile_photo_path']);
-        }
-
-        $rules = array_intersect_key([
+        $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            'password' => 'nullable|string|min:8',
-            'role' => 'required|string|max:255',
+            'password' => 'nullable|string|min:8|confirmed',
+            'role' => 'required|exists:roles,name',
             'profile_photo_path' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'cantidad_usuarios' => 'nullable|integer',
-        ], array_flip($allowedFields));
-        $validatedData = $request->validate($rules);
+        ]);
 
         $user = User::findOrFail($id);
-        $user->name = $validatedData['name'];
-        $user->email = $validatedData['email'];
+        $userauth = Auth::user();
 
-        if (!$authUser->hasRole('Estudiante')) {
-            if (!empty($validatedData['password'])) {
-                $user->password = Hash::make($validatedData['password']);
-            }
+        $user->name = $request->name;
+        $user->email = $request->email;
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
 
-            if ($request->hasFile('profile_photo_path')) {
-                if ($user->profile_photo_path && file_exists(public_path($user->profile_photo_path))) {
-                    unlink(public_path($user->profile_photo_path));
-                }
+        if ($request->hasFile('profile_photo_path')) {
+            $imageName = $user->email . '.' . $request->profile_photo_path->extension();
+            $request->profile_photo_path->move(public_path('images/user'), $imageName);
+            $user->profile_photo_path = 'images/user/' . $imageName;
+        }
 
-                $imageName = $user->id . '_' . time() . '.' . $request->profile_photo_path->extension();
-                $request->profile_photo_path->move(public_path('images/user'), $imageName);
-                $user->profile_photo_path = 'images/user/' . $imageName;
-            }
-
-            $user->syncRoles($validatedData['role']);
-
-            if (isset($validatedData['cantidad_usuarios'])) {
-                $user->usuarios_creables = $validatedData['cantidad_usuarios'];
-            }
+        if ($userauth->id !== $user->id) {
+            $user->usuarios_creables = $request->cantidad_usuarios;
         }
 
         $user->save();
+        $user->syncRoles([$request->role]);
 
         return redirect()->route('Usuario.index')->with('success', 'Usuario actualizado exitosamente.');
     }
