@@ -39,7 +39,7 @@
         </div>
     @endif
 
-    <div class="mt-8">
+    {{-- <div class="mt-8">
         <form id="searchForm" action="{{ route('Usuario.index') }}" method="GET" class="w-full max-w-lg mx-auto">
             <div class="flex items-center border-b-2 border-teal-500 py-2">
                 <div class="flex-grow mr-3">
@@ -68,7 +68,7 @@
                     class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2 hidden">Limpiar</button>
             </div>
         </form>
-    </div>
+    </div> --}}
 
     <div class="mt-8 overflow-x-auto" id="usuariosTableContainer">
         @include('VistaUsuario.table', ['usuarios' => $usuarios])
