@@ -3,7 +3,6 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\EstudianteController;
-use App\Http\Controllers\ExamenController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\GrupoMateriaController;
 use App\Http\Controllers\InscripcionController;
@@ -42,7 +41,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
             Route::put('/usuarios/update/{id}', 'update')->name('Usuario.update');
             Route::get('/usuarios/{id}', 'show')->name('Usuario.show');
             Route::delete('/usuarios/{id}', 'destroy')->name('Usuario.destroy');
-            Route::get('/usuarios/buscar', 'buscar')->name('Usuario.buscar'); // arreglar
+            Route::get('/usuarios/buscar', 'buscar')->name('Usuario.buscar'); 
             Route::get('/obtener-carnet/{carnet_identidad}', 'obtenerCarnet');
         });
     });

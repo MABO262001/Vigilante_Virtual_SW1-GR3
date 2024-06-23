@@ -12,20 +12,39 @@ use Spatie\Permission\Models\Role;
 
 class UsuarioController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $usuarios = User::with('roles')->get();
+        $search = $request->get('search');
+        $rol = $request->input('rol') ? decrypt($request->input('rol')) : '';
+
+        $usuarios = User::with('roles')
+            ->where(function ($query) use ($search, $rol) {
+                if ($rol) {
+                    if ($rol == 'TodosMenosMaster') {
+                        $query->whereDoesntHave('roles', function ($query) {
+                            $query->where('name', 'Master');
+                        });
+                    } else {
+                        $query->whereHas('roles', function ($query) use ($rol) {
+                            $query->where('name', $rol);
+                        });
+                    }
+                }
+                if ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%")
+                        ->orWhere('email', 'LIKE', "%{$search}%");
+                }
+            })
+            ->get();
 
         $usuariosSinMaster = $usuarios->reject(function ($usuario) {
             return $usuario->roles->contains('name', 'Master');
         });
 
         $totalUsuarios = $usuariosSinMaster->count();
-
         $totalDocentes = $usuarios->filter(function ($usuario) {
             return $usuario->roles->contains('name', 'Docente');
         })->count();
-
         $totalEstudiantes = $usuarios->filter(function ($usuario) {
             return $usuario->roles->contains('name', 'Estudiante');
         })->count();
@@ -36,48 +55,12 @@ class UsuarioController extends Controller
         if ($user->hasRole('Administrativo') || $user->hasRole('Administrativo Premium')) {
             $usuarios_creables = $user->usuarios_creables;
         }
-        return view('VistaUsuario.index', compact('usuarios', 'totalUsuarios', 'totalDocentes', 'totalEstudiantes', 'usuarios_creables'));
-    }
 
-    public function buscar(Request $request)
-    {
-        $query = $request->input('query');
-
-        $usuarios = User::where('name', 'like', '%' . $query . '%')
-            ->orWhere('email', 'like', '%' . $query . '%')
-            ->with('roles')
-            ->get();
-
-        if ($request->has('rol') && $request->input('rol') != '') {
-            $rol = decrypt($request->input('rol'));
-            if ($rol == 'TodosMenosMaster') {
-                $usuarios = $usuarios->reject(function ($usuario) {
-                    return $usuario->roles->contains('name', 'Master');
-                });
-            } elseif ($rol != 'Todos') {
-                $usuarios = $usuarios->filter(function ($usuario) use ($rol) {
-                    return $usuario->roles->contains('name', $rol);
-                });
-            }
-        } elseif (auth()->check() && !auth()->user()->hasRole('Master')) {
-            $usuarios = $usuarios->reject(function ($usuario) {
-                return $usuario->roles->contains('name', 'Master');
-            });
+        if ($request->ajax()) {
+            return view('VistaUsuario.table', compact('usuarios'));
         }
 
-        $totalUsuarios = $usuarios->count();
-
-        $totalDocentes = $usuarios->filter(function ($usuario) {
-            return $usuario->roles->contains('name', 'Docente');
-        })->count();
-
-        $totalEstudiantes = $usuarios->filter(function ($usuario) {
-            return $usuario->roles->contains('name', 'Estudiante');
-        })->count();
-
-        $roles = Role::all();
-
-        return view('VistaUsuario.index', compact('usuarios', 'totalUsuarios', 'totalDocentes', 'totalEstudiantes', 'roles'));
+        return view('VistaUsuario.index', compact('usuarios', 'totalUsuarios', 'totalDocentes', 'totalEstudiantes', 'usuarios_creables', 'roles'));
     }
 
     public function create()
