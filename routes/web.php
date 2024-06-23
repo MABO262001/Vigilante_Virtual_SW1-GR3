@@ -30,7 +30,7 @@ Route::get('/contacto', function () {
 })->name('contacto');
 
 Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('can: Ver Dashboard')->name('Dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('can:Ver Dashboard')->name('Dashboard');
 
     //Rutas pertenecientes a los usuarios
     Route::middleware('can:Ver Usuarios')->group(function () {
@@ -39,9 +39,9 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
             Route::get('/usuarios/create', 'create')->name('Usuario.create');
             Route::get('/usuarios/edit/{id}', 'edit')->name('Usuario.edit');
             Route::post('/usuarios/store', 'store')->name('Usuario.store');
-            Route::post('/usuarios/update', 'update')->name('Usuario.update');
-            Route::get('/usuarios/show', 'show')->name('Usuario.show'); // sin ocupar (que se visualice el perfil desde aqui)
-            Route::delete('usuarios/{id}', [UsuarioController::class, 'destroy'])->name('Usuario.destroy');
+            Route::put('/usuarios/update/{id}', 'update')->name('Usuario.update');
+            Route::get('/usuarios/{id}', 'show')->name('Usuario.show');
+            Route::delete('/usuarios/{id}', 'destroy')->name('Usuario.destroy');
             Route::get('/usuarios/buscar', 'buscar')->name('Usuario.buscar'); // arreglar
             Route::get('/obtener-carnet/{carnet_identidad}', 'obtenerCarnet');
         });

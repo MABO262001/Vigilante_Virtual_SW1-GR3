@@ -31,6 +31,9 @@ class BoletaInscripcion extends Model
     {
         return $this->hasMany(GrupoMateriaBoletaInscripcion::class, 'boleta_inscripcion_id');
     }
+    public function grupo_materia_boleta_inscripcions()
+    {
+        return $this->hasMany(GrupoMateriaBoletaInscripcion::class, 'boleta_inscripcion_id');
+    }
 
-    
 }

@@ -45,10 +45,10 @@ class GrupoMateria extends Model
     {
         return $this->belongsToMany(User::class, 'ingresos', 'grupo_materia_id', 'estudiante_id')->withTimestamps();
     }
-
+    
     public function inscripciones()
     {
-        return $this->hasMany(BoletaInscripcion::class);
+        return $this->hasMany(GrupoMateriaBoletaInscripcion::class, 'grupo_materia_id');
     }
 
 
