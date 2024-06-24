@@ -131,23 +131,27 @@ class GrupoMateriaController extends Controller
 
     }
 
-
-    public function prueba($id){
+    public function prueba($id)
+    {
         $user = Auth::user();
         $gp = GrupoMateria::find($id);
         $materia = Materia::find($gp->materia_id);
         $grupo = Grupo::find($gp->grupo_id);
         $docente = $gp->userDocente;
         $estudiantes = [];
-        $detalles = GrupoMateriaBoletaInscripcion::where('grupo_materia_id',$id)->get();
-        foreach ($detalles as $detalle){
+        $detalles = GrupoMateriaBoletaInscripcion::where('grupo_materia_id', $id)->get();
 
-            $boleta = BoletaInscripcion::where('id',$detalle->boleta_inscripcion_id)->first();
-            $alumno = User::where('id',$boleta->user_estudiante_id)->first();
+        foreach ($detalles as $detalle) {
+            $boleta = BoletaInscripcion::where('id', $detalle->boleta_inscripcion_id)->first();
+            $alumno = User::where('id', $boleta->user_estudiante_id)->first();
             $estudiantes[] = $alumno;
         }
 
-        return view('VistaGrupoMateria.prueba', compact('materia','gp','estudiantes','grupo','docente','user'));
+        $usuarios = collect([$docente])->merge($estudiantes);
 
+        return view('VistaGrupoMateria.prueba', compact('materia', 'gp', 'usuarios', 'grupo', 'docente', 'user'));
     }
+
+
+
 }
