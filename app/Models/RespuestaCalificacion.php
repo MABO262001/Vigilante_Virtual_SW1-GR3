@@ -15,7 +15,8 @@ class RespuestaCalificacion extends Pivot
     protected $fillable = [
         'respuesta_id',
         'calificacion_id',
-        'pregunta_id'
+        'pregunta_id',
+        'contenido'
     ];
 
     

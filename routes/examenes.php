@@ -16,3 +16,5 @@ Route::get('/running/{examen}', [ExamenController::class, 'running'])->name('Exa
 Route::post('/respuesta/store', [ExamenController::class, 'guardarRespuesta'])->name('Examen.guardarRespuesta');
 Route::get('/enviar/{ejecucion}', [ExamenController::class, 'enviar'])->name('Examen.enviar');
 Route::post('/verificar-navegabilidad', [ExamenController::class, 'verificarNavegabilidad'])->name('Examen.verificarNavegabilidad');
+Route::post('/terminar-intento/{calificacion}', [ExamenController::class, 'terminarIntento'])->name('Examen.terminarIntento');
+Route::get('/ver-intento/{calificacion}', [ExamenController::class, 'verIntento'])->name('Examen.verIntento');
