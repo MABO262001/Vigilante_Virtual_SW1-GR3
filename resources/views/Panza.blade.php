@@ -31,11 +31,9 @@
         <div class="space-x-5 flex items-center">
             <a href="{{ route('Usuario.show', Auth::user()->id) }}" class="relative flex items-center">
                 @if (Auth::user()->profile_photo_path)
-                    <img src="{{ asset(Auth::user()->profile_photo_path) }}" alt="Avatar"
-                        class="w-8 h-8 rounded-full">
+                    <img src="{{ asset(Auth::user()->profile_photo_path) }}" alt="Avatar" class="w-8 h-8 rounded-full">
                 @else
-                    <span
-                        class="w-8 h-8 bg-blue-900 text-white flex justify-center items-center rounded-full">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
+                    <span class="w-8 h-8 bg-blue-900 text-white flex justify-center items-center rounded-full">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
                 @endif
                 <span class="text-blue-900 hidden md:inline ml-2">{{ Auth::user()->name }}</span>
             </a>
@@ -51,7 +49,7 @@
     <!-- Contenido Principal -->
     <div class="flex flex-1">
         <!-- Barra Lateral -->
-        <div class="bg-white w-64 min-h-screen p-4 flex flex-col shadow-lg hiddenPanel md:block" id="sideNav">
+        <div class="bg-white w-64 min-h-screen p-4 flex flex-col shadow-lg md:block" id="sideNav">
             <div class="space-y-6">
                 <a href="{{ route('Usuario.show', Auth::user()->id) }}" class="block text-center mb-6">
                     <div class="space-y-3 p-4 shadow-md rounded-lg bg-white">
@@ -59,12 +57,8 @@
                             alt="Avatar de {{ Auth::user()->name }}"
                             class="w-20 h-20 md:w-24 md:h-24 rounded-full mx-auto border-4 border-blue-500 shadow-md" />
                         <div>
-                            <h2 class="font-medium text-lg md:text-xl text-blue-900">
-                                {{ Auth::user()->name }}
-                            </h2>
-                            <p class="text-sm md:text-base text-gray-500">
-                                {{ Auth::user()->email }}
-                            </p>
+                            <h2 class="font-medium text-lg md:text-xl text-blue-900">{{ Auth::user()->name }}</h2>
+                            <p class="text-sm md:text-base text-gray-500">{{ Auth::user()->email }}</p>
                         </div>
                     </div>
                 </a>
@@ -118,12 +112,11 @@
                         </a>
                     @endif
                 </nav>
-
             </div>
         </div>
 
         <!-- Contenido Principal -->
-        <div class="flex-1 p-4 w-full" id="mainContent">
+        <div class="flex-1 p-4 w-full md:w-auto" id="mainContent">
             <div class="mt-1 min-h-full flex flex-wrap space-x-0 space-y-2 md:space-x-4 md:space-y-0">
                 <div class="flex-1 bg-white p-4 shadow rounded-lg w-full">
                     @yield('Panza')
@@ -153,8 +146,15 @@
 </script>
 
 <style>
+    /* La barra lateral está desplegada por defecto */
     .hiddenPanel {
-        display: none;
+        display: block;
+    }
+
+    @media (min-width: 768px) {
+        .hiddenPanel {
+            display: none;
+        }
     }
 </style>
 
