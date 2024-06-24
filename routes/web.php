@@ -33,7 +33,6 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
 
 
     //Rutas pertenecientes a los usuarios
-    // Route::middleware('can:Ver Usuarios')->group(function () {
         Route::controller(UsuarioController::class)->group(function () {
             Route::get('/usuarios', 'index')->name('Usuario.index');
             Route::get('/usuarios/create', 'create')->name('Usuario.create');
@@ -63,7 +62,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
     });
 
     // Rutas De Servicios
-    Route::middleware('can:Ver Servicios')->group(function () {
+    // Route::middleware('can:Ver Servicios')->group(function () {
         Route::controller(ServicioController::class)->group(function () {
             Route::get('/servicios', 'index')->name('Servicio.index');
             Route::post('/servicios/store', 'store')->name('Servicio.store');
@@ -73,10 +72,10 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
             Route::put('/servicios/{id}', 'update')->name('Servicio.update');
             Route::delete('/servicios/{id}', 'destroy')->name('Servicio.destroy');
         });
-    });
+    // });
 
     //Rutas De Pagos
-    Route::middleware('can:Ver Pagos')->group(function () {
+    // Route::middleware('can:Ver Pagos')->group(function () {
         Route::controller(PagoServicioController::class)->group(function () {
             Route::get('/pagos-servicios', 'index')->name('PagoServicio.index');
             Route::post('/pagos-servicios/store', 'store')->name('PagoServicio.store');
@@ -87,10 +86,10 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
             Route::delete('/pagos-servicios/{id}', 'destroy')->name('PagoServicio.destroy');
             Route::get('/pagos-servicios/comprobante', 'buscarComprobantes')->name('PagoServicio.comprobantes');
         });
-    });
+    // });
 
      // Rutas Inscripcion
-     Route::middleware('can:Ver Inscripciones')->group(function () {
+    //  Route::middleware('can:Ver Inscripciones')->group(function () {
         Route::controller(InscripcionController::class)->group(function () {
             Route::get('/inscripcion', 'index')->name('Inscripcion.index');
             Route::post('/inscripcion/store', 'store')->name('Inscripcion.store');
@@ -100,10 +99,10 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
             Route::put('/inscripcion/{id}', 'update')->name('Inscripcion.update');
             Route::delete('/inscripcion/{id}', 'destroy')->name('Inscripcion.destroy');
         });
-    });
+    // });
 
     //Rutas De Grupo-Materia
-    Route::middleware('can:Ver Grupos y Materias')->group(function () {
+    // Route::middleware('can:Ver Grupos y Materias')->group(function () {
         Route::controller(GrupoMateriaController::class)->group(function () {
             Route::get('/grupo-materia', 'index')->name('GrupoMateria.index');
             Route::post('/grupo-materia/store', 'store')->name('GrupoMateria.store');
@@ -115,10 +114,10 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
             Route::get('/grupo-materia/estudiantes', 'listaestudiantes')->name('GrupoMateria.listaestudiantes');
             Route::get('/grupo-materia/{id}/prueba', 'prueba')->name('GrupoMateria.prueba');
         });
-    });
+    // });
 
     // Rutas De Grupos
-    Route::middleware('can:Ver Grupos y Materias')->group(function () {
+    // Route::middleware('can:Ver Grupos y Materias')->group(function () {
         Route::controller(GrupoController::class)->group(function () {
             Route::get('/grupos', 'index')->name('Grupo.index');
             Route::post('/grupos/store', 'store')->name('Grupo.store');
@@ -128,10 +127,10 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
             Route::put('/grupos/{id}', 'update')->name('Grupo.update');
             Route::delete('/grupos/{id}', 'destroy')->name('Grupo.destroy');
         });
-    });
+    // });
 
     // Rutas de Materias
-    Route::middleware('can:Ver Grupos y Materias')->group(function () {
+    // Route::middleware('can:Ver Grupos y Materias')->group(function () {
         Route::controller(MateriaController::class)->group(function () {
             Route::get('/materia', 'index')->name('Materia.index');
             Route::post('/materia/store', 'store')->name('Materia.store');
@@ -141,31 +140,31 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
             Route::put('/materia/{id}', 'update')->name('Materia.update');
             Route::delete('/materia/{id}', 'destroy')->name('Materia.destroy');
         });
-    });
+    // });
 
     //Rutas de Estudiantes
-    Route::middleware('can:Ver Perfil Estudiante')->group(function () {
+    // Route::middleware('can:Ver Perfil Estudiante')->group(function () {
         Route::controller(EstudianteController::class)->group(function () {
             Route::get('/estudiante', 'index')->name('Estudiante.index');
             Route::get('/unirse-curso', 'unirseCurso')->name('Estudiante.unirse_curso');
             Route::get('/historial-examenes', 'examenes')->name('Estudiante.examenes');
             Route::get('/lista-estudiantes', 'listaEstudiantes')->name('ListaEstudiantes.show');
             Route::get('/calificaciones', 'calificaciones')->name('Estudiante.calificaciones');
-            Route::get('/perfil-estudiante', [EstudianteController::class, 'perfil'])->name('Estudiante.perfil');
-            Route::get('/estudiante-materia/{id}', [EstudianteController::class, 'materia'])->name('Estudiante.materia');
-            Route::get('/estudiante-edit/{id}', [EstudianteController::class, 'editar'])->name('Estudiante.editar');
-            Route::post('/estudiante/{id}/edit', [EstudianteController::class, 'update'])->name('Estudiante.update');
-            Route::get('/calendar', [EstudianteController::class, 'calendar'])->name('Estudiante.calendar');
+            Route::get('/perfil-estudiante', 'perfil')->name('Estudiante.perfil');
+            Route::get('/estudiante-materia/{id}', 'materia')->name('Estudiante.materia');
+            Route::get('/estudiante-edit/{id}', 'editar')->name('Estudiante.editar');
+            Route::post('/estudiante/{id}/edit', 'update')->name('Estudiante.update');
+            Route::get('/calendar', 'calendar')->name('Estudiante.calendar');
         });
-    });
+    // });
 
 
     //RUTAS docente
-    Route::middleware('can:Ver Perfil Docente')->group(function () {
+    // Route::middleware('can:Ver Perfil Docente')->group(function () {
         Route::controller(DocenteController::class)->group(function () {
             Route::get('/docente', 'index')->name('Docente.index');
             Route::get('/docente-materia/{id}', 'materia')->name('Docente.materia');
         });
-    });
+    // });
 
 });

@@ -108,4 +108,8 @@ class User extends Authenticatable
         return $this->hasMany(GrupoMateria::class, 'user_docente_id');
     }
 
+    public function comprobantes()
+    {
+        return $this->hasMany(Comprobante::class, 'user_estudiante_id');
+    }
 }

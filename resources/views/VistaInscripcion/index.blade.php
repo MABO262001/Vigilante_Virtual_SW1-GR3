@@ -16,13 +16,14 @@
             <a href="{{ route('Inscripcion.index') }}"
                 class="transform transition duration-300 ease-in-out hover:scale-105">
                 <div class="bg-cyan-500 p-4 rounded-xl shadow-md text-center hover:bg-cyan-600 hover:text-white">
-                    <h3 id="totalsAusentes" class="font-extrabold text-4xl sm:text-5xl lg:text-6xl">
-                        {{ $totalEstudiantesAusentes}}</h3>
+                    <h3 id="totalAusentes" class="font-extrabold text-4xl sm:text-5xl lg:text-6xl">
+                        {{ $totalMatriculasNoUsadas}}</h3>
                     <i class="fas fa-users-cog text-2xl sm:text-3xl lg:text-4xl"></i>
-                    <span class="mt-1 font-semibold text-lg sm:text-xl lg:text-2xl">Total De Estudiantes Ausentes</span>
+                    <span class="mt-1 font-semibold text-lg sm:text-xl lg:text-2xl">Total De Matriculas Ausentes</span>
                 </div>
             </a>
         </div>
+
 
 
         <div class="flex justify-center mt-8 space-x-4">

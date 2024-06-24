@@ -12,7 +12,6 @@ use App\Models\ServicioComprobante;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -30,10 +29,10 @@ class InscripcionController extends Controller
                     $query->where('name', 'LIKE', "%{$search}%")
                         ->orWhere('carnet_identidad', 'LIKE', "%{$search}%");
                 })
-                    ->orWhereHas('user_administrativo', function ($query) use ($search) {
-                        $query->where('name', 'LIKE', "%{$search}%")
-                            ->orWhere('carnet_identidad', 'LIKE', "%{$search}%");
-                    });
+                ->orWhereHas('user_administrativo', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', "%{$search}%")
+                        ->orWhere('carnet_identidad', 'LIKE', "%{$search}%");
+                });
             })
             ->where(function ($query) use ($fecha) {
                 if ($fecha) {
@@ -51,24 +50,29 @@ class InscripcionController extends Controller
             return view('VistaInscripcion.table', compact('boleta_inscripcion'));
         }
 
-        $estudiantes = User::role('Estudiante')->get();
+        $usuarios = User::all();
 
         $totalMatriculados = 0;
-        $totalEstudiantesAusentes = 0;
+        $totalMatriculasNoUsadas = 0;
 
-        foreach ($estudiantes as $estudiante) {
-            $matriculado = DB::table('grupo_materia_boleta_inscripcions')
-                ->where('boleta_inscripcion_id', $estudiante->id)
-                ->exists();
+        foreach ($usuarios as $usuario) {
+            $matriculaUsada = $usuario->comprobantes()->whereHas('servicios', function ($query) {
+                $query->where('usado', 1);
+            })->exists();
 
-            if ($matriculado) {
+            $matriculaNoUsada = $usuario->comprobantes()->whereHas('servicios', function ($query) {
+                $query->where('usado', 0);
+            })->exists();
+
+            if ($matriculaUsada) {
                 $totalMatriculados++;
-            } else {
-                $totalEstudiantesAusentes++;
+            }
+            if ($matriculaNoUsada) {
+                $totalMatriculasNoUsadas++;
             }
         }
 
-        return view('VistaInscripcion.index', compact('boleta_inscripcion', 'totalMatriculados', 'totalEstudiantesAusentes'));
+        return view('VistaInscripcion.index', compact('boleta_inscripcion', 'totalMatriculados', 'totalMatriculasNoUsadas'));
     }
 
     public function create(Request $request)
