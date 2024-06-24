@@ -88,7 +88,7 @@ class EstudianteController extends Controller
         $estudiantes = [];
         $detalles = GrupoMateriaBoletaInscripcion::where('grupo_materia_id',$id)->get();
         foreach ($detalles as $detalle){
-            
+
             $boleta = BoletaInscripcion::where('id',$detalle->boleta_inscripcion_id)->first();
             $alumno = User::where('id',$boleta->user_estudiante_id)->first();
             $estudiantes[] = $alumno;
@@ -102,10 +102,7 @@ class EstudianteController extends Controller
     }
     public function update(Request $request, $id)
     {
-        
-
         $usuario = User::findOrFail($id);
-
         if ($request->hasFile('profile_photo_path')) {
             $imageName = $request->nombre . '.' . $request->profile_photo_path->extension();
             $request->profile_photo_path->move(public_path('images/user'), $imageName);

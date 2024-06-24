@@ -40,7 +40,7 @@ class UsuarioController extends Controller
         if ($user->hasRole('Administrativo')) {
             $usuariosQuery->where(function ($query) use ($user) {
                 $query->where('jefe_id', $user->id)
-                      ->orWhere('id', $user->id);
+                    ->orWhere('id', $user->id);
             });
         }
 

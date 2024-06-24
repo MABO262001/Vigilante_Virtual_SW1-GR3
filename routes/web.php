@@ -161,7 +161,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
     Route::middleware('can:Ver Perfil Docente')->group(function () {
         Route::controller(DocenteController::class)->group(function () {
             Route::get('/docente', 'index')->name('Docente.index');
-            Route::get('/docente-materia', 'materia')->name('Docente.materia');
+            Route::get('/docente-materia/{id}', 'materia')->name('Docente.materia');
         });
     });
 
