@@ -15,6 +15,7 @@ use App\Models\Grupo;
 
 class UsuarioController extends Controller
 {
+
     public function index(Request $request)
     {
         $search = $request->get('search');
@@ -187,7 +188,7 @@ class UsuarioController extends Controller
             ];
             $materiasConGrupos[] = $infoGrupoMateria;
         }
-        
+
     }
 
         return view('VistaUsuario.show', compact('user', 'materiasConGrupos'));

@@ -10,9 +10,9 @@
                     class="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white shadow-md transition duration-500 transform hover:scale-110" />
                 <h2 class="font-semibold text-2xl mt-4">{{ $user->name }}</h2>
                 <p class="text-base">{{ $user->email }}</p>
-                <a href="{{ route('Usuario.edit', $user->id) }}"
+                {{-- <a href="{{ route('Usuario.edit', $user->id) }}"
                     class="mt-4 inline-block text-blue-900 bg-white py-1 px-3 rounded shadow hover:bg-gray-200 transition">Editar
-                    Perfil</a>
+                    Perfil</a> --}}
             </div>
 
             <!-- Profile Details -->

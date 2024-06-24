@@ -78,8 +78,13 @@ class GrupoMateriaController extends Controller
     public function show($id)
     {
         $grupoMateria = GrupoMateria::findOrFail($id);
-        return view('VistaGrupoMateria.show', compact('grupoMateria'));
+        $docente = $grupoMateria->userDocente;
+        $estudiantes = $grupoMateria->inscripciones()->with('boleta_inscripcion.user_estudiante')->get()->pluck('boleta_inscripcion.user_estudiante');
+        $usuarios = collect([$docente])->merge($estudiantes);
+
+        return view('VistaGrupoMateria.show', compact('grupoMateria', 'usuarios'));
     }
+
 
 
     public function edit($id)
@@ -136,7 +141,7 @@ class GrupoMateriaController extends Controller
         $estudiantes = [];
         $detalles = GrupoMateriaBoletaInscripcion::where('grupo_materia_id',$id)->get();
         foreach ($detalles as $detalle){
-            
+
             $boleta = BoletaInscripcion::where('id',$detalle->boleta_inscripcion_id)->first();
             $alumno = User::where('id',$boleta->user_estudiante_id)->first();
             $estudiantes[] = $alumno;
