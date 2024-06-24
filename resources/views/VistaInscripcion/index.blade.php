@@ -10,7 +10,7 @@
                 <div class="bg-green-500 p-4 rounded-xl shadow-md text-center hover:bg-green-600 hover:text-white">
                     <h3 id="creados" class="font-extrabold text-4xl sm:text-5xl lg:text-6xl">{{ $totalMatriculados }}</h3>
                     <i class="fas fa-users-cog text-2xl sm:text-3xl lg:text-4xl"></i>
-                    <span class="mt-1 font-semibold text-lg sm:text-xl lg:text-2xl">Total De Materias Con Grupos</span>
+                    <span class="mt-1 font-semibold text-lg sm:text-xl lg:text-2xl">Total Matriculados</span>
                 </div>
             </a>
             <a href="{{ route('Inscripcion.index') }}" class="transform transition duration-300 ease-in-out hover:scale-105">
