@@ -8,7 +8,8 @@
         cursor: not-allowed;
     }
 </style>
-<div class="flex justify-center h-full items-center">
+<form action="{{route('Examen.terminarIntento', $calificacion->id)}}" method="POST" class="flex justify-center h-full items-center">
+    @csrf
     <div class="container max-w-5xl   ">
 
 
@@ -37,12 +38,12 @@
         </div>
 
         <div class="mt-8 text-center">
-            <button 
+            <button type="submit"
             class="bg-gradient-to-t from-gray-200 to-gray-100 py-1 px-2
             rounded border-gray-300 border text-gray-700">
             Enviar todo y terminar <i class="fa-solid fa-check"></i></button>
         </div>
 
     </div>
-</div>
+</form>
 @endsection
