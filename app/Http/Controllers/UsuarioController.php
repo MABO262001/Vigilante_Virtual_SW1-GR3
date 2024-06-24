@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use App\Models\Materia;
+use App\Models\GrupoMateria;
+use App\Models\Grupo;
 
 class UsuarioController extends Controller
 {
@@ -138,7 +141,7 @@ class UsuarioController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-
+        if($user->hasRole('Estudiante')){
         $inscripciones = BoletaInscripcion::where('user_estudiante_id', $id)
             ->with([
                 'grupo_materia_boleta_inscripcions.grupo_materia.materia',
@@ -162,12 +165,30 @@ class UsuarioController extends Controller
                         'grupo' => $grupo ? $grupo->nombre : 'N/A',
                         'materia' => $materia ? $materia->nombre : 'N/A',
                         'docente' => $docente ? $docente->name : 'N/A',
+                        'gp' => $grupoMateria->id
                     ];
 
                     $materiasConGrupos[] = $infoGrupoMateria;
                 }
             }
         }
+    }else{
+        $materiasConGrupos = [];
+        $gmaterias = GrupoMateria::where('user_docente_id',$user->id)->get();
+        $grupomaterias = [];
+        foreach ($gmaterias as $gmateria) {
+            $materia = Materia::find($gmateria->materia_id);
+            $grupo = Grupo::find($gmateria->grupo_id);
+            $infoGrupoMateria = [
+                'grupo' => $grupo ? $grupo->nombre : 'N/A',
+                'materia' => $materia ? $materia->nombre : 'N/A',
+                'docente' => $user ? $user->name : 'N/A',
+                'gp' => $gmateria->id
+            ];
+            $materiasConGrupos[] = $infoGrupoMateria;
+        }
+        
+    }
 
         return view('VistaUsuario.show', compact('user', 'materiasConGrupos'));
     }

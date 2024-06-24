@@ -54,23 +54,44 @@
         <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @if (empty($materiasConGrupos))
                 <div class="bg-white shadow-lg rounded-lg p-6">
+                    @if($user->hasRole('Estudiante'))
                     <p class="text-gray-600">No tiene ninguna materia inscrita.</p>
+                    @else
+                    <p class="text-gray-600">No tiene ninguna materia asignada.</p>
+                    @endif
                 </div>
             @else
-                @foreach ($materiasConGrupos as $infoGrupoMateria)
-                    <div class="relative bg-gradient-to-r from-blue-500 to-black shadow-xl rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
-                        <div class="absolute inset-0 bg-gradient-to-r from-black to-blue-500 opacity-70"></div>
-                        <div class="relative p-6 z-10">
-                            <h4 class="text-2xl font-semibold text-white mb-2">{{ $infoGrupoMateria['materia'] }}</h4>
-                            <p class="text-lg text-white mb-2">Grupo: {{ $infoGrupoMateria['grupo'] }}</p>
-                            <p class="text-lg text-white">Docente: {{ $infoGrupoMateria['docente'] }}</p>
-                        </div>
-                        <div class="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-r from-blue-500 to-black opacity-30"></div>
+            @foreach ($materiasConGrupos as $infoGrupoMateria)
+                <div class="redirectBtn relative bg-gradient-to-r from-blue-500 to-black shadow-xl rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer" data-gp="{{ $infoGrupoMateria['gp'] }}">
+                    <div class="absolute inset-0 bg-gradient-to-r from-black to-blue-500 opacity-70"></div>
+                    <div class="relative p-6 z-10">
+                        <h4 class="text-2xl font-semibold text-white mb-2">{{ $infoGrupoMateria['materia'] }}</h4>
+                        <p class="text-lg text-white mb-2">Grupo: {{ $infoGrupoMateria['grupo'] }}</p>
+                        @if($user->hasRole('Estudiante'))
+                        <p class="text-lg text-white">Docente: {{ $infoGrupoMateria['docente'] }}</p>
+                        @endif
                     </div>
-                @endforeach
+                    <div class="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-r from-blue-500 to-black opacity-30"></div>
+                </div>
+            @endforeach
+        
             @endif
         </div>
 
 
     </div>
+
+    <script>
+        document.querySelectorAll('.redirectBtn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                var gpId = this.getAttribute('data-gp');
+                var url = "{{ route('GrupoMateria.prueba', ['id' => ':id']) }}";
+                url = url.replace(':id', gpId);
+                window.location.href = url;
+            });
+        });
+        </script>
+        
+        
+
 @endsection

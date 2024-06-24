@@ -8,7 +8,9 @@ use App\Models\Materia;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-
+use App\Models\GrupoMateriaBoletaInscripcion;
+use App\Models\BoletaInscripcion;
+use Illuminate\Support\Facades\Auth;
 class GrupoMateriaController extends Controller
 {
     public function index(Request $request)
@@ -121,6 +123,26 @@ class GrupoMateriaController extends Controller
     public function listaestudiantes()
     {
         return view('VistaGrupoMateria.listadoestudiantes');
+
+    }
+
+
+    public function prueba($id){
+        $user = Auth::user();
+        $gp = GrupoMateria::find($id);
+        $materia = Materia::find($gp->materia_id);
+        $grupo = Grupo::find($gp->grupo_id);
+        $docente = $gp->userDocente;
+        $estudiantes = [];
+        $detalles = GrupoMateriaBoletaInscripcion::where('grupo_materia_id',$id)->get();
+        foreach ($detalles as $detalle){
+            
+            $boleta = BoletaInscripcion::where('id',$detalle->boleta_inscripcion_id)->first();
+            $alumno = User::where('id',$boleta->user_estudiante_id)->first();
+            $estudiantes[] = $alumno;
+        }
+
+        return view('VistaGrupoMateria.prueba', compact('materia','gp','estudiantes','grupo','docente','user'));
 
     }
 }
