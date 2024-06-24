@@ -117,7 +117,6 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
         });
     });
 
-
     // Rutas De Grupos
     Route::middleware('can:Ver Grupos y Materias')->group(function () {
         Route::controller(GrupoController::class)->group(function () {
@@ -156,6 +155,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
             Route::get('/estudiante-materia/{id}', [EstudianteController::class, 'materia'])->name('Estudiante.materia');
             Route::get('/estudiante-edit/{id}', [EstudianteController::class, 'editar'])->name('Estudiante.editar');
             Route::post('/estudiante/{id}/edit', [EstudianteController::class, 'update'])->name('Estudiante.update');
+            Route::get('/calendar', [EstudianteController::class, 'calendar'])->name('Estudiante.calendar');
         });
     });
 

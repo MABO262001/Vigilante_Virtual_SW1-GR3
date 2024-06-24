@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BoletaInscripcion;
-use App\Models\GrupoMateriaBoletaInscripcion;
 use App\Models\User;
 use App\Models\Grupo;
+use App\Models\Examen;
 use App\Models\Materia;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Ejecucion;
 use App\Models\GrupoMateria;
 use Illuminate\Http\Request;
+use App\Models\BoletaInscripcion;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\GrupoMateriaBoletaInscripcion;
+
 class EstudianteController extends Controller
 {
     public function index()
@@ -70,7 +73,8 @@ class EstudianteController extends Controller
     }
 
     public function calificaciones(){
-        return view('VistaEstudiante.calificaciones');
+        $usuario = Auth::user();
+        return view('VistaEstudiante.calificaciones', compact('usuario'));
     }
 
 
@@ -128,4 +132,43 @@ class EstudianteController extends Controller
 
     }
 
+    public function calendar()
+    {
+        if (auth()->user()->hasRole('Estudiante')) {
+        $events = [];
+        
+        $usuarioAutenticado = Auth::user();
+        $examenes = Examen::where('user_id', $usuarioAutenticado->id)->get();
+        foreach ($examenes as $examen){
+            $ejecucion = Ejecucion::where('examen_id', $examen->id)->get()->first();
+            $fechaHoraI = $ejecucion->fecha . 'T' . $ejecucion->hora_inicio;
+            $fechaHoraF = $ejecucion->fecha . 'T' . $ejecucion->hora_final;
+            
+            $events[] = [
+                'title' => $examen->tema,
+                'start' => $fechaHoraI,
+                'end' => $fechaHoraF,
+            ];
+        }
+
+        return view('VistaWelcome.calendar',compact('events'));
+        }
+        else{
+            $usuarioAutenticado = Auth::user();
+            $ejecuciones = $usuarioAutenticado->ejecuciones;
+            $events = [];
+            foreach ($ejecuciones as $ejecucion){
+                $examen = Examen::where('id',$ejecucion->examen_id);
+                $fechaHoraI = $ejecucion->fecha . 'T' . $ejecucion->hora_inicio;
+                $fechaHoraF = $ejecucion->fecha . 'T' . $ejecucion->hora_final;
+                $events[] = [
+                    'title' => $examen->tema,
+                    'start' => $fechaHoraI,
+                    'end' => $fechaHoraF,
+                ];
+            }
+            
+            return view('VistaWelcome.calendar',compact('events'));
+        }
+    }
 }

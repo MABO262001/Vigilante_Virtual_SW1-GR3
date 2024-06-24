@@ -3,12 +3,12 @@
 <div class="container mx-auto py-8 px-4 md:px-6">
   <div class="flex items-center justify-between mb-6">
     <h1 class="text-3xl font-bold text-gray-800">Calificaciones</h1>
-    <button class="flex items-center justify-center text-sm font-medium text-white bg-yellow-400 hover:bg-yellow-500 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 h-10 px-4 rounded-md">
-          Descargar PDF
-    </button>
+    <button id="downloadPdfBtn" class="flex items-center justify-center text-sm font-medium text-white bg-yellow-400 hover:bg-yellow-500 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 h-10 px-4 rounded-md">
+      Descargar PDF
+  </button>
   </div>
   <div class="overflow-x-auto bg-white shadow-md rounded-lg">
-    <table class="min-w-full divide-y divide-gray-200">
+    <table class="min-w-full divide-y divide-gray-200" id="calificacionesTable">
       <thead class="bg-gray-50">
         <tr>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Examen</th>
@@ -93,3 +93,4 @@
 
 
   @include('components.footer')
+

@@ -81,11 +81,12 @@
           </div>
           <div class="hidden md:block">
             <div class="ml-10 flex items-baseline space-x-4">
-                <a href="/" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Inicio</b></a>
                 @guest
+                    <a href="/" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Inicio</b></a>
                     <a href="{{ route('acerca') }}" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Acerca de</b></a>
                     <a href="{{ route('contacto') }}" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Contacto</b></a>
                 @else
+                  <a href="{{ route('Estudiante.calendar') }}" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Inicio</b></a>
                   <a href="{{ route('Estudiante.index') }}" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Mis Materias</b></a>
                   <a href="{{ route('Estudiante.calificaciones') }}" class="text-white hover:text-blue-900 hover:bg-white px-3 py-2 rounded-md text-sm font-medium nav-link"><b>Mis Notas</b></a>
                 @endguest

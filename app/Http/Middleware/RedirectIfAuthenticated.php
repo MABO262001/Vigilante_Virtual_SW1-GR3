@@ -17,7 +17,7 @@ class RedirectIfAuthenticated
                 $user = Auth::guard($guard)->user();
 
                 if ($user->hasRole('Estudiante')) {
-                    return redirect('/');
+                    return redirect('/calendar');
                 } else {
                     return redirect('/dashboard');
                 }

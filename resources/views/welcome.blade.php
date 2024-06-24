@@ -60,17 +60,15 @@
 <body class="bg-gray-100 text-gray-900">
 
   <x-navbar />
-
-  <header class="hero-bg">
-    <div class="container mx-auto">
-      <h1 class="text-6xl font-bold text-white">Bienvenido a Clases Virtuales con Detección de IA</h1>
-      <p class="mt-4 text-2xl text-white">Únete a tus clases desde cualquier lugar, en cualquier momento, con seguridad avanzada.</p>
-      <div class="mt-8 space-x-4">
-        <a href="#" class="cta-button">Comienza ya</a>
+    <header class="hero-bg">
+      <div class="container mx-auto">
+        <h1 class="text-6xl font-bold text-white">Bienvenido a Clases Virtuales con Detección de IA</h1>
+        <p class="mt-4 text-2xl text-white">Únete a tus clases desde cualquier lugar, en cualquier momento, con seguridad avanzada.</p>
+        <div class="mt-8 space-x-4">
+          <a href="#" class="cta-button">Comienza ya</a>
+        </div>
       </div>
-    </div>
-  </header>
-
+    </header>
     <main class="container mx-auto px-4 py-16">
       <div class="text-center mb-16">
         <h2 class="text-4xl font-bold text-blue-900">¿Por qué elegir nuestras clases?</h2>
@@ -109,6 +107,8 @@
       });
     });
   </script>
+
+  
 
 </body>
 </html>
