@@ -74,7 +74,7 @@
                     <div class="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-r from-blue-500 to-black opacity-30"></div>
                 </div>
             @endforeach
-        
+
             @endif
         </div>
 
@@ -91,7 +91,7 @@
             });
         });
         </script>
-        
-        
+
+
 
 @endsection

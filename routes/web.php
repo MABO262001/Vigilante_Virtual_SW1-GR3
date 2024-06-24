@@ -31,7 +31,7 @@ Route::get('/contacto', function () {
 Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('can:Ver Dashboard')->name('Dashboard');
 
-    
+
     //Rutas pertenecientes a los usuarios
     // Route::middleware('can:Ver Usuarios')->group(function () {
         Route::controller(UsuarioController::class)->group(function () {
@@ -44,6 +44,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
             Route::delete('/usuarios/{id}', 'destroy')->name('Usuario.destroy');
             Route::get('/usuarios/buscar', 'buscar')->name('Usuario.buscar');
             Route::get('/obtener-carnet/{carnet_identidad}', 'obtenerCarnet');
+            Route::get('/usuario/editar-perfil/{id}', 'editarPerfil')->name('Usuario.editarPerfil');
         });
     // });
 
@@ -112,7 +113,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
             Route::put('/grupo-materia/{id}', 'update')->name('GrupoMateria.update');
             Route::delete('/grupo-materia/{id}', 'destroy')->name('GrupoMateria.destroy');
             Route::get('/grupo-materia/estudiantes', 'listaestudiantes')->name('GrupoMateria.listaestudiantes');
-            Route::get('/grupo-materia/{id}', 'prueba')->name('GrupoMateria.prueba');
+            Route::get('/grupo-materia/{id}/prueba', 'prueba')->name('GrupoMateria.prueba');
         });
     });
 
