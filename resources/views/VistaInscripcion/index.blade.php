@@ -1,30 +1,27 @@
+{{-- resources/views/VistaInscripcion/index.blade.php --}}
+
 @extends('Panza')
 @section('Panza')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <h1 class="font-extrabold text-blue-900 text-3xl mt-2 uppercase">Inscripcion</h1>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 items-stretch justify-center">
             <a href="{{ route('Inscripcion.index') }}" class="transform transition duration-300 ease-in-out hover:scale-105">
-                <div class="bg-red-500 p-4 rounded-xl shadow-md text-center hover:bg-red-600 hover:text-white">
-                    <h3 id="totalMatriculados" class="font-extrabold text-4xl sm:text-5xl lg:text-6xl">
-                        {{ $totalMatriculados }}</h3>
-                    <i class="fas fa-book text-2xl sm:text-3xl lg:text-4xl"></i>
-                    <span class="mt-1 font-semibold text-lg sm:text-xl lg:text-2xl">Total De Matriculados</span>
+                <div class="bg-green-500 p-4 rounded-xl shadow-md text-center hover:bg-green-600 hover:text-white">
+                    <h3 id="creados" class="font-extrabold text-4xl sm:text-5xl lg:text-6xl">{{ $totalMatriculados }}</h3>
+                    <i class="fas fa-users-cog text-2xl sm:text-3xl lg:text-4xl"></i>
+                    <span class="mt-1 font-semibold text-lg sm:text-xl lg:text-2xl">Total De Materias Con Grupos</span>
                 </div>
             </a>
-            <a href="{{ route('Inscripcion.index') }}"
-                class="transform transition duration-300 ease-in-out hover:scale-105">
+            <a href="{{ route('Inscripcion.index') }}" class="transform transition duration-300 ease-in-out hover:scale-105">
                 <div class="bg-cyan-500 p-4 rounded-xl shadow-md text-center hover:bg-cyan-600 hover:text-white">
-                    <h3 id="totalAusentes" class="font-extrabold text-4xl sm:text-5xl lg:text-6xl">
-                        {{ $totalMatriculasNoUsadas}}</h3>
+                    <h3 id="totalNoUsadas" class="font-extrabold text-4xl sm:text-5xl lg:text-6xl">
+                        {{ $totalMatriculasNoUsadas }}</h3>
                     <i class="fas fa-users-cog text-2xl sm:text-3xl lg:text-4xl"></i>
-                    <span class="mt-1 font-semibold text-lg sm:text-xl lg:text-2xl">Total De Matriculas Ausentes</span>
+                    <span class="mt-1 font-semibold text-lg sm:text-xl lg:text-2xl">Total De Matrículas No Usadas</span>
                 </div>
             </a>
         </div>
-
-
 
         <div class="flex justify-center mt-8 space-x-4">
             <a href="{{ route('Inscripcion.create') }}"
@@ -36,6 +33,7 @@
                 {{ session('success') }}
             </div>
         @endif
+
         <div class="mt-8 flex justify-center">
             <form id="searchForm" method="GET" action="{{ route('Inscripcion.index') }}" class="w-full max-w-lg">
                 <div class="flex items-center border-b-2 border-teal-500 py-2">
@@ -58,9 +56,6 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById('totalMatriculados').textContent = "{{ $totalMatriculados }}";
-        });
         window.onload = function() {
             var flashMessage = document.getElementById('flash-message');
             if (flashMessage) {
@@ -90,9 +85,9 @@
                 });
         });
 
-
         document.getElementById('clearButton').addEventListener('click', function() {
             document.getElementById('searchInput').value = '';
+            document.getElementById('fechaInput').value = '';
             this.style.display = 'none';
             document.getElementById('searchForm').dispatchEvent(new Event('submit'));
         });
