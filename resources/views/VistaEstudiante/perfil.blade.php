@@ -4,7 +4,7 @@
     <div class="bg-white shadow-lg rounded-lg p-8 flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8">
         <div class="flex justify-center md:justify-start">
             <div class="relative w-48 h-48 rounded-lg overflow-hidden shadow-md bg-gray-200">
-                <img src="{{ asset('storage/' . $usuario->profile_photo_path) }}" alt="Foto de Perfil" class="object-cover w-full h-full">
+                <img src="{{ asset( $usuario->profile_photo_path) }}" alt="Foto de Perfil" class="object-cover w-full h-full">
                 <label for="upload-photo" class="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v16h16V4H4z"/>
@@ -73,7 +73,7 @@
             @method('POST')
             <div class="mb-4 flex flex-wrap -mx-2">
                 <div class="relative w-24 h-24 rounded-lg overflow-hidden shadow-md bg-gray-200 mx-auto mb-4">
-                    <img src="{{ asset('storage/' . $usuario->profile_photo_path) }}" alt="Foto de Perfil" class="object-cover w-full h-full">
+                    <img src="{{ asset( $usuario->profile_photo_path) }}" alt="Foto de Perfil" class="object-cover w-full h-full">
                     <label for="edit-upload-photo" class="absolute bottom-0 right-0 bg-blue-600 text-white p-1 rounded-full cursor-pointer">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v16h16V4H4z"/>

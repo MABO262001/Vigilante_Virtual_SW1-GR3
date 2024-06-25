@@ -99,7 +99,7 @@
                   @auth
                       <span class="mr-2 text-white text-sm font-medium">{{ auth()->user()->name }}</span>
                       @if(auth()->user()->profile_photo_path)
-                        <img class="h-8 w-8 rounded-full" src="{{ asset('storage/' . auth()->user()->profile_photo_path) }}" alt="Foto de perfil">
+                        <img class="h-8 w-8 rounded-full" src="{{ asset( auth()->user()->profile_photo_path) }}" alt="Foto de perfil">
                       @else
                           <span class="h-8 w-8 rounded-full bg-gray-300 inline-block"></span>
                       @endif
