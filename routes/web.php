@@ -113,6 +113,9 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
             Route::delete('/grupo-materia/{id}', 'destroy')->name('GrupoMateria.destroy');
             Route::get('/grupo-materia/estudiantes', 'listaestudiantes')->name('GrupoMateria.listaestudiantes');
             Route::get('/grupo-materia/{id}/prueba', 'prueba')->name('GrupoMateria.prueba');
+
+
+            Route::get('/grupo-materia/{docente_id}/select', 'selectGrupoMateria')->name('GrupoMateria.docente');
         });
     // });
 

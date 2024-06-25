@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Calificacion;
 use App\Models\Ejecucion;
 use App\Models\Examen;
+use App\Models\GrupoMateria;
 use App\Models\Pregunta;
 use App\Models\PreguntaSeleccionada;
 use App\Models\Respuesta;
@@ -60,10 +61,15 @@ class ExamenController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create($id)
+    public function create($grupo_materia_id)
     {
         //dd($id);
-        return view('VistaExamen.create');
+        $grupo_materia = GrupoMateria::find($grupo_materia_id);
+
+        $data = compact(
+            'grupo_materia'
+        );
+        return view('VistaExamen.create', $data);
     }
 
     /**
@@ -84,9 +90,10 @@ class ExamenController extends Controller
             ]);
 
             $examen = Examen::create([
-                'tema'          =>  $request->tema,
-                'descripcion'   =>  $request->descripcion,
-                'user_id'       =>  $user->id
+                'tema'              =>  $request->tema,
+                'descripcion'       =>  $request->descripcion,
+                'user_id'           =>  $user->id,
+                'grupo_materia_id'  => $request->grupo_materia_id
             ]);
 
             $preguntas = $request->preguntas;
@@ -640,5 +647,9 @@ class ExamenController extends Controller
 
         //dd($preguntas_respuestas);
         
+    }
+
+    public function ausente(){
+        return view('VistaExamen.ausente');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class GrupoMateria extends Model
 {
@@ -51,5 +52,15 @@ class GrupoMateria extends Model
         return $this->hasMany(GrupoMateriaBoletaInscripcion::class, 'grupo_materia_id');
     }
 
+    
+    public static function getData($data){
+        $query = DB::table('grupo_materias')
+        ->select('materias.nombre as materia' , 'grupos.nombre as grupo', 'grupo_materias.id')
+        ->leftJoin('materias', 'materias.id', '=', 'grupo_materias.materia_id')
+        ->leftJoin('grupos', 'grupos.id', '=', 'grupo_materias.grupo_id')
+        ->where('grupo_materias.user_docente_id', $data['docente_id']);
+
+        return $query->get();
+    }
 
 }

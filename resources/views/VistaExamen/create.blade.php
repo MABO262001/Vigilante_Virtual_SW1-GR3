@@ -210,6 +210,7 @@
 </div>
 
 <input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
+<input type="hidden" id="grupo_materia_id" value="{{ $grupo_materia->id }}">
 <script src="{{asset('js/examenes.js')}}"></script>
 
 @endsection

@@ -13,6 +13,7 @@ class Examen extends Model
         'tema',
         'descripcion',
         'user_id',
+        'grupo_materia_id'
     ];
 
     public function user()

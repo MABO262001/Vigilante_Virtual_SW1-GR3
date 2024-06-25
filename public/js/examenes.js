@@ -303,7 +303,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const grupo_materia_id = document.getElementById('grupo_materia_id').value;
+
         var data = {
+            'grupo_materia_id': grupo_materia_id,
             'preguntas':        preguntas,
             'tema':             tema.value,
             'descripcion':      descripcion.value,

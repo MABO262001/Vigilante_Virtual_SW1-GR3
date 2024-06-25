@@ -153,5 +153,19 @@ class GrupoMateriaController extends Controller
     }
 
 
+    public function selectGrupoMateria($docente_id){
+        $user = User::find($docente_id);
+
+        if($user->hasRole('Docente')){
+            $grupo_materias = GrupoMateria::getData(['docente_id'=>$user->id]);
+            
+            $data = compact(
+                'grupo_materias'
+            );
+            return view('VistaGrupoMateria.select', $data);
+        }
+    }
+
+
 
 }
