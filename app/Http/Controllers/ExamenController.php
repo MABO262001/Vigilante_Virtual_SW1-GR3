@@ -180,7 +180,8 @@ class ExamenController extends Controller
 
         $user = Auth::user();
         $user = User::findOrFail($user->id);
-        $calificacion = $user->ejecuciones()->where('ejecucion_id', $ejecucion->id)->first();
+        $calificacion = Calificacion::where('user_id', $user->id)
+        ->where('ejecucion_id', $ejecucion->id)->first();
 
         if ($this->verificarEjecucion($ejecucion)) {
             $ejecucion->estado_ejecucion_id = '2';
@@ -502,50 +503,11 @@ class ExamenController extends Controller
                 }
 
                 if ($pregunta->tipo_pregunta_id == '2') {
-                    $respuestas_correctas = Respuesta::where('pregunta_id', $pregunta->id)
-                        ->where('es_correcta', 1)->get();
 
-                    $cantidad_respuestas = count(Respuesta::where('pregunta_id', $pregunta->id)->get());
+                    $notaParcial = $this->calcularNotaPreguntaMultiple($pregunta->id, $calificacion->id);
 
-                    $cantidad_verdaderas = count($respuestas_correctas);
+                    $nota += $notaParcial;
 
-                    $ponderacion_verdadera = $pregunta->ponderacion / $cantidad_verdaderas;
-
-                    $ponderacion_falsa = $pregunta->ponderacion / ($cantidad_respuestas - $cantidad_verdaderas);
-
-
-                    $verdaderas_respondidas = 0;
-
-                    $notaParcial = 0;
-
-                    foreach ($respuestas_correctas as $respuesta_correcta) {
-                        $respondio = RespuestaCalificacion::where('respuesta_id', $respuesta_correcta->id)->first();
-
-                        if ($respondio) {
-                            $verdaderas_respondidas++;
-                        }
-                    }
-
-                    $respuestas_dadas = RespuestaCalificacion::where('calificacion_id', $calificacion_id)
-                        ->where('pregunta_id', $pregunta->id)->get();
-
-                    $incorrectas_respondidas = 0;
-
-                    foreach ($respuestas_dadas as $respuesta_dada) {
-                        $respuesta = Respuesta::where('id', $respuesta_dada->respuesta_id)
-                            ->whereNot('es_correcta', 1)->first();
-
-                        if ($respuesta) {
-                            $incorrectas_respondidas++;
-                        }
-                    }
-
-                    $notaParcial = $verdaderas_respondidas * $ponderacion_verdadera;
-                    $notaParcial -= $incorrectas_respondidas * $ponderacion_falsa;
-
-                    if ($notaParcial > 0) {
-                        $nota += $notaParcial;
-                    }
                 }
 
                 if($pregunta->tipo_pregunta_id == '3'){
@@ -598,18 +560,22 @@ class ExamenController extends Controller
 
                     $respuestas = Respuesta::where('pregunta_id', $pregunta->id)->get();
 
-                    $respuesta_enviada = RespuestaCalificacion::where('calificacion_id', $calificacion->id)
-                    ->where('pregunta_id', $pregunta->id)->first();
+                    $respuestas_enviadas = RespuestaCalificacion::where('calificacion_id', $calificacion->id)
+                    ->where('pregunta_id', $pregunta->id)->get();
+                    
+                    $pregunta->nota = $this->calcularNotaPreguntaMultiple($pregunta->id, $calificacion->id);
 
                     //Si ha respondido la pregunta o no 
-                    if ($respuesta_enviada) {
-                        foreach ($respuestas as $respuesta) {
-                            if ($respuesta->id == $respuesta_enviada->respuesta_id) {
-                                $respuesta->respondida = '1';
-                            } else {
-                                $respuesta->respondida = '0';
+                    if (count($respuestas_enviadas)> 0) {
+                        
+                            foreach ($respuestas as $respuesta) {
+                                if ($respuestas_enviadas->pluck('respuesta_id')->contains($respuesta->id)) {
+                                    $respuesta->respondida = '1';
+                                } else {
+                                    $respuesta->respondida = '0';
+                                }
                             }
-                        }
+                        
                     }else{
                         foreach ($respuestas as $respuesta) {
                             $respuesta->respondida = '0';
@@ -647,6 +613,62 @@ class ExamenController extends Controller
 
         //dd($preguntas_respuestas);
         
+    }
+
+    private function calcularNotaPreguntaMultiple($pregunta_id, $calificacion_id)
+    {
+        $nota = 0;
+        $pregunta = Pregunta::find($pregunta_id);
+
+        $calificacion = Calificacion::find($calificacion_id);
+
+        $respuestas_correctas = Respuesta::where('pregunta_id', $pregunta->id)
+            ->where('es_correcta', 1)->get();
+
+        $cantidad_respuestas = count(Respuesta::where('pregunta_id', $pregunta->id)->get());
+
+        $cantidad_verdaderas = count($respuestas_correctas);
+
+        $ponderacion_verdadera = $pregunta->ponderacion / $cantidad_verdaderas;
+
+        $ponderacion_falsa = $pregunta->ponderacion / ($cantidad_respuestas - $cantidad_verdaderas);
+
+
+        $verdaderas_respondidas = 0;
+
+        $notaParcial = 0;
+
+        foreach ($respuestas_correctas as $respuesta_correcta) {
+            $respondio = RespuestaCalificacion::where('respuesta_id', $respuesta_correcta->id)->first();
+
+            if ($respondio) {
+                $verdaderas_respondidas++;
+            }
+        }
+
+        $respuestas_dadas = RespuestaCalificacion::where('calificacion_id', $calificacion_id)
+            ->where('pregunta_id', $pregunta->id)->get();
+
+        $incorrectas_respondidas = 0;
+
+        foreach ($respuestas_dadas as $respuesta_dada) {
+            $respuesta = Respuesta::where('id', $respuesta_dada->respuesta_id)
+                ->whereNot('es_correcta', 1)->first();
+
+            if ($respuesta) {
+                $incorrectas_respondidas++;
+            }
+        }
+
+        $notaParcial = $verdaderas_respondidas * $ponderacion_verdadera;
+        $notaParcial -= $incorrectas_respondidas * $ponderacion_falsa;
+
+        if ($notaParcial > 0) {
+            $nota += $notaParcial;
+            $nota = round($nota, 2);
+        }
+
+        return $nota;
     }
 
     public function ausente(){

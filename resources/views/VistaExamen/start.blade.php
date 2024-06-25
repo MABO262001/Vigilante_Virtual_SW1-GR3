@@ -60,18 +60,25 @@
                 </div>
 
                 <div class="border-b border-gray-300 p-4">
-                    <strong>Estado de la entrega: </strong><span class="">{{!$calificacion ?'No entregada':'Entregada'}}</span>
+                    <strong>Estado de la entrega: </strong><span class="{{!$calificacion || !$calificacion->finalizado  ? 'text-red-500' : 'text-green-500'}}">{{!$calificacion || !$calificacion->finalizado ?'No entregada':'Entregada'}}</span>
                 </div>
 
                 <div class="border-b border-gray-300 p-4">
                     <strong>Tiempo restante: </strong><span class="">{{$restante}}</span>
                 </div>
 
+                @if($calificacion && $calificacion->finalizado == '1')
+                <div class="border-b border-gray-300 p-4">
+                    <strong>Nota: </strong><span class="">{{$calificacion->nota }} / 100 pts.</span>
+                </div>
+                @endif
+
             </div>
         </div>
 
         <div class="mt-8">
-            <button id="comenzar_btn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold p-4 rounded-md " {{ $ejecucion->estado_ejecucion_id != 1 ? 'disabled' : '' }} href="#">Realizar intento</button>
+            <button id="comenzar_btn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold p-4 rounded-md "
+            {{ $ejecucion->estado_ejecucion_id != 1 || ($calificacion && $calificacion->nota != 0) ? 'disabled' : '' }} >Realizar intento</button>
         </div>
     </div>
 

@@ -5,7 +5,7 @@
         <div class="spinner"></div>
     </div>
     <div class="control2 hidden"></div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.1/camera_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils@0.1/control_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.1/drawing_utils.js" crossorigin="anonymous"></script>
@@ -17,7 +17,7 @@
         const canvasCtx = out2.getContext('2d');
         let isChecking = true;
         let detectionPaused = false;
-        const ejecucionId = {{ $ejecucion_id }};
+        const ejecucionId = {{$ejecucion_id}};
         const fpsControl = new FPS();
         const spinner = document.querySelector('.loading');
         spinner.ontransitionend = () => {
@@ -32,6 +32,18 @@
             canvasCtx.clearRect(0, 0, out2.width, out2.height);
             canvasCtx.drawImage(
                 results.image, 0, 0, out2.width, out2.height);
+            //console.log(results);
+
+            if(results.multiFaceLandmarks != undefined && results.multiFaceLandmarks.length == 1){
+                desactivarBloqueo();
+            }else{
+                if(results.multiFaceLandmarks == undefined){
+                    activarBloqueo('nf');
+                }else{
+                    activarBloqueo('mf');
+                }
+            }
+
             if (results.multiFaceLandmarks) {
                 drawFaceMesh(results);
                 if (!detectionPaused) {
@@ -79,6 +91,22 @@
             }
         }
 
+        const bloqueo = document.getElementById('bloqueo');
+        const motivo = document.getElementById('motivo');
+
+        function activarBloqueo(razon) {
+            bloqueo.classList.remove('hidden');
+            if (razon == 'nf') {
+                motivo.textContent = 'No se detectan rostros en la pantalla';
+            } else {
+                motivo.textContent = 'Mas de un rostro detectado en la pantalla';
+            }
+        }
+
+        function desactivarBloqueo() {
+            bloqueo.classList.add('hidden');
+        }
+
         function startFaceCheck() {
             isChecking = true;
         }
@@ -96,23 +124,23 @@
             const imageData = out2.toDataURL('image/jpeg');
             // Envía la imagen al servidor usando fetch
             fetch('{{ route("guardar_foto_anomalia") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({
-                    image: imageData,
-                    tipo_anomalia_id: tipoAnomalia,
-                    ejecucion_id: ejecucionId
-                })
-            }).then(response => response.json())
-              .then(data => {
-                  console.log('Success:', data);
-                  pauseDetection();
-              }).catch((error) => {
-                  console.error('Error:', error);
-              });
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        image: imageData,
+                        tipo_anomalia_id: tipoAnomalia,
+                        ejecucion_id: ejecucionId
+                    })
+                }).then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                    pauseDetection();
+                }).catch((error) => {
+                    console.error('Error:', error);
+                });
         }
 
         const faceMesh = new FaceMesh({
@@ -124,7 +152,9 @@
 
         const camera = new Camera(video2, {
             onFrame: async () => {
-                await faceMesh.send({ image: video2 });
+                await faceMesh.send({
+                    image: video2
+                });
             },
             width: 512,
             height: 512
@@ -132,17 +162,26 @@
         camera.start();
 
         new ControlPanel(controlsElement2, {
-            maxNumFaces: 5,
-            minDetectionConfidence: 0.5,
-            minTrackingConfidence: 0.5
-        })
-        .add([
-            fpsControl
-        ])
-        .on(options => {
-            faceMesh.setOptions(options);
-        });
+                maxNumFaces: 5,
+                minDetectionConfidence: 0.5,
+                minTrackingConfidence: 0.5
+            })
+            .add([
+                fpsControl
+            ])
+            .on(options => {
+                faceMesh.setOptions(options);
+            });
 
         startFaceCheck();
+
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                console.log('La ventana está minimizada o el usuario ha cambiado de pestaña.');
+            } else {
+                console.log('La ventana está activa.');
+            }
+        });
+
     </script>
 </div>

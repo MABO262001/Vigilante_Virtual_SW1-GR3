@@ -20,12 +20,8 @@
                     $puntua = 0;
                     if($pregunta_respuesta['pregunta']['tipo_pregunta_id'] != '3'){
 
-                        foreach ($pregunta_respuesta['respuestas'] as $respuesta) {
-                            if ($respuesta['respondida'] == '1' && $respuesta['es_correcta'] == '1') {
-                                $puntua = $pregunta_respuesta['pregunta']['ponderacion'];
-                                break; 
-                            }
-                        }
+                        $puntua = $pregunta_respuesta['pregunta']['nota'];
+                        
 
                     }else{
                         if($pregunta_respuesta['respuestas'][0]['puntaje']){
@@ -36,6 +32,7 @@
                     }
                     $nota_total += $puntua;
                 @endphp
+                
                 <div class="border p-8 mb-4">
                     <div class="flex flex-wrap md:flex-nowrap gap-8">
                         <div class="rounded p-4 bg-blue-500 w-full md:w-auto">

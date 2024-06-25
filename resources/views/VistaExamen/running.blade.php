@@ -1,6 +1,9 @@
 @extends('Panza_min')
 @section('Panza')
-<div class="flex justify-center ">
+<div class="flex justify-center relative">
+    <div class="w-full h-full bg-black/40 absolute flex justify-center items-center" id="bloqueo" style="z-index: 500;">
+        <span id="motivo" class="text-red-500 font-bold text-5xl">No se detectan rostros en la pantalla</span>
+    </div>
     <div class="container">
         <div class="flex gap-4 flex-wrap md:flex-nowrap">
             <div class="border p-8 mt-8 w-full mb-auto">
