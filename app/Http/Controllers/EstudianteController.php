@@ -32,10 +32,12 @@ class EstudianteController extends Controller
             $gmateria = GrupoMateria::find($detalleboleta->grupo_materia_id);
             $materia = Materia::find($gmateria->materia_id);
             $grupo = Grupo::find($gmateria->grupo_id);
+            $docente = User::find($gmateria->user_docente_id);
             $grupomaterias[] = [
                 'gp' => $gmateria,
                 'materia' => $materia,
                 'grupo' => $grupo,
+                'docente' => $docente
             ];
         }
         return view('VistaEstudiante.index', compact('grupomaterias'));

@@ -83,15 +83,15 @@
                 </div>
                 <div class="w-full md:w-1/2 px-2 mb-4">
                     <label for="nombre" class="block text-gray-700 font-semibold">Nombre</label>
-                    <input type="text" id="nombre" name="nombre" class="w-full px-3 py-2 border rounded-lg" value="{{ $usuario->nombre }}">
+                    <input type="text" id="nombre" name="nombre" class="w-full px-3 py-2 border rounded-lg" value="{{ $usuario->nombre }}" readonly>
                 </div>
                 <div class="w-full md:w-1/2 px-2 mb-4">
                     <label for="apellido_paterno" class="block text-gray-700 font-semibold">Apellido Paterno</label>
-                    <input type="text" id="apellido_paterno" name="apellido_paterno" class="w-full px-3 py-2 border rounded-lg" value="{{ $usuario->apellido_paterno }}">
+                    <input type="text" id="apellido_paterno" name="apellido_paterno" class="w-full px-3 py-2 border rounded-lg" value="{{ $usuario->apellido_paterno }}" readonly>
                 </div>
                 <div class="w-full md:w-1/2 px-2 mb-4">
                     <label for="apellido_materno" class="block text-gray-700 font-semibold">Apellido Materno</label>
-                    <input type="text" id="apellido_materno" name="apellido_materno" class="w-full px-3 py-2 border rounded-lg" value="{{ $usuario->apellido_materno }}">
+                    <input type="text" id="apellido_materno" name="apellido_materno" class="w-full px-3 py-2 border rounded-lg" value="{{ $usuario->apellido_materno }}" readonly>
                 </div>
                 <div class="w-full md:w-1/2 px-2 mb-4">
                     <label for="email" class="block text-gray-700 font-semibold">Correo Electrónico</label>
