@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^3.0",
         "spatie/laravel-permission": "^6.4",
+        "twilio/sdk": "^8.2",
         "yoeunes/toastr": "^2.3"
     },
     "require-dev": {

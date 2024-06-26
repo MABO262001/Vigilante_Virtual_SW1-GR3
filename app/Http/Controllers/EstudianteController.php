@@ -85,21 +85,23 @@ class EstudianteController extends Controller
         return view('VistaEstudiante.perfil', compact('usuario'));
     }
 
-    public function materia($id){
+    public function materia($id)
+    {
         $user = Auth::user();
         $gp = GrupoMateria::find($id);
         $materia = Materia::find($gp->materia_id);
         $docente = User::find($gp->user_docente_id);
         $grupo = Grupo::find($gp->grupo_id);
         $estudiantes = [];
-        $detalles = GrupoMateriaBoletaInscripcion::where('grupo_materia_id',$id)->get();
-        foreach ($detalles as $detalle){
-
-            $boleta = BoletaInscripcion::where('id',$detalle->boleta_inscripcion_id)->first();
-            $alumno = User::where('id',$boleta->user_estudiante_id)->first();
+        $detalles = GrupoMateriaBoletaInscripcion::where('grupo_materia_id', $id)->get();
+        foreach ($detalles as $detalle) {
+            $boleta = BoletaInscripcion::where('id', $detalle->boleta_inscripcion_id)->first();
+            $alumno = User::where('id', $boleta->user_estudiante_id)->first();
             $estudiantes[] = $alumno;
         }
-        return view('VistaEstudiante.materia', compact('materia','gp','estudiantes','grupo','docente'));
+        $examenes = Examen::where('grupo_materia_id', $id)->get();
+        $ejecuciones = Ejecucion::whereIn('examen_id', $examenes->pluck('id'))->get();
+        return view('VistaEstudiante.materia', compact('materia', 'gp', 'estudiantes', 'grupo', 'docente', 'examenes', 'ejecuciones'));
     }
 
     public function editar($id){
