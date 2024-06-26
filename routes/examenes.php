@@ -26,3 +26,12 @@ Route::post('/get-anomalias', [ExamenController::class, 'getAnomalias'])->name('
 Route::get('/meet/{ejecucion}', [ExamenController::class, 'meet'])->name('Examen.meet');
 
 Route::get('/ausente', [ExamenController::class, 'ausente'])->name('Examen.ausente');
+
+
+
+
+
+Route::get('/{id}/edit', [ExamenController::class, 'edit'])->name('Examen.edit');
+Route::put('/{id}/update', [ExamenController::class, 'update'])->name('Examen.update');
+Route::delete('/{id}', [ExamenController::class, 'destroy'])->name('Examen.destroy');
+Route::get('/{id}', [ExamenController::class, 'show'])->name('Examen.show');

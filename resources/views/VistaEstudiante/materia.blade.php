@@ -36,7 +36,7 @@
                                 @foreach ($ejecuciones->where('examen_id', $examen->id) as $ejecucion)
                                     <p class="text-gray-500"><strong>Abre:</strong> {{ \Carbon\Carbon::parse($ejecucion->fecha . ' ' . $ejecucion->hora_inicio)->locale('es_BO')->isoFormat('dddd, D [de] MMMM [de] YYYY, H:mm') }}</p>
                                     <p class="text-gray-500"><strong>Cierra:</strong> {{ \Carbon\Carbon::parse($ejecucion->fecha . ' ' . $ejecucion->hora_final)->locale('es_BO')->isoFormat('dddd, D [de] MMMM [de] YYYY, H:mm') }}</p>
-                                    <p class="text-gray-500"><strong>Estado:</strong> 
+                                    <p class="text-gray-500"><strong>Estado:</strong>
                                         @if ($ejecucion->estado_ejecucion_id == 1)
                                             <span class="text-yellow-500">En Proceso</span>
                                         @elseif ($ejecucion->estado_ejecucion_id == 2)
@@ -118,7 +118,7 @@
                                     <td class="py-3 px-4 text-sm text-gray-600">{{ \Carbon\Carbon::parse($calificacion->ejecucion->fecha)->locale('es_BO')->isoFormat('dddd, D [de] MMMM [de] YYYY') }}</td>
                                     <td class="py-3 px-4 text-sm text-gray-600">{{ $calificacion->nota }}</td>
                                     <td class="py-3 px-4 text-sm text-gray-600">
-                                        <a href="" class="text-blue-600 hover:text-blue-900">Ver</a>
+                                        <a href="{{ route('Examen.verIntento', ['calificacion' => $calificacion]) }}" class="text-blue-600 hover:text-blue-900">Ver</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -175,18 +175,18 @@
         const timer{{ $ejecucion->id }} = setInterval(function() {
             const now = new Date().getTime();
             const distance = endTime{{ $ejecucion->id }} - now;
-        
+
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        
+
             document.getElementById("timer-{{ $ejecucion->id }}").innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
-        
+
             if (distance < 0) {
                 clearInterval(timer{{ $ejecucion->id }});
                 document.getElementById("timer-{{ $ejecucion->id }}").innerHTML = "EXAMEN TERMINADO";
             }
-        }, 1000);       
+        }, 1000);
     });
 
     // Mostrar inicialmente la tabla de estudiantes

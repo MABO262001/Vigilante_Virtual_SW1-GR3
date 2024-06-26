@@ -23,21 +23,7 @@
                 <h2 class="text-xl font-semibold">Exámenes</h2>
                 <a href="{{ route('Examen.create', ['id' => $gp->id]) }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Crear Examen</a>
             </div>
-            <div class="border rounded-lg overflow-hidden">
-                <table class="w-full table-auto">
-                    <thead class="bg-gray-100 dark:bg-gray-800">
-                        <tr>
-                            <th class="px-4 py-2 text-left">ID</th>
-                            <th class="px-4 py-2 text-left">Examen</th>
-                            <th class="px-4 py-2 text-left">Fecha</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{-- Agregar filas de exámenes aquí --}}
-                    </tbody>
-                </table>
-            </div>
-        </div>        
+        </div>
         <div id="contentEstudiantes" class="mt-4 hidden">
             <h2 class="text-xl font-semibold mb-2">Estudiantes Inscritos</h2>
             <div class="border rounded-lg overflow-hidden">

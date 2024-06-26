@@ -142,36 +142,104 @@ class ExamenController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        //
+        $examen = Examen::findOrFail($id);
+        $preguntas = $examen->preguntas()->with('respuestas')->get();
+        $grupo_materia = GrupoMateria::find($examen->grupo_materia_id);
+        $ejecucion = $examen->ejecucion; 
+
+        $data = compact(
+            'examen',
+            'preguntas',
+            'grupo_materia',
+            'ejecucion'
+        );
+        return view('VistaExamen.edit', $data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, string $id)
     {
-        //
+        $examen = Examen::findOrFail($id);
+
+        $request->validate([
+            'tema' => 'required|string|max:100',
+            'descripcion' => 'required|string|max:255',
+        ]);
+
+        $examen->update([
+            'tema' => $request->tema,
+            'descripcion' => $request->descripcion,
+        ]);
+
+        $preguntas = $request->preguntas;
+
+        // Eliminar preguntas anteriores
+        $examen->preguntas()->delete();
+
+        // Crear nuevas preguntas y respuestas
+        foreach ($preguntas as $item_pregunta) {
+            $pregunta = Pregunta::create([
+                'descripcion' => $item_pregunta['descripcion_pregunta'],
+                'ponderacion' => $item_pregunta['ponderacion_pregunta'],
+                'comentario' => $item_pregunta['comentario_pregunta'],
+                'tipo_pregunta_id' => $item_pregunta['tipo_pregunta'],
+                'examen_id' => $examen->id,
+            ]);
+
+            $respuestas = $item_pregunta['respuestas'];
+            foreach ($respuestas as $item_respuesta) {
+                Respuesta::create([
+                    'descripcion' => $item_respuesta['descripcion'],
+                    'es_correcta' => $item_respuesta['es_correcta'],
+                    'pregunta_id' => $pregunta->id,
+                ]);
+            }
+        }
+
+        if ($request->ejecucion) {
+            Ejecucion::updateOrCreate(
+                ['examen_id' => $examen->id],
+                [
+                    'fecha' => $request->fecha,
+                    'hora_inicio' => $request->hora_inicio,
+                    'hora_final' => $request->hora_final,
+                    'ponderacion' => $request->ponderacion,
+                    'contrasena' => $request->contrasena,
+                    'nro_preguntas' => $request->nro_preguntas,
+                    'estado_ejecucion_id' => 3,
+                    'navegacion' => $request->navegacion == 'on' ? '1' : '0',
+                    'retroalimentacion' => $request->retroalimentacion == 'on' ? '1' : '0',
+                ]
+            );
+        }
+
+        toastr('Examen actualizado correctamente', 'success', 'Examen');
+        return redirect()->back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function show(string $id)
+    {
+        $examen = Examen::findOrFail($id);
+        $preguntas = $examen->preguntas()->with('respuestas')->get();
+        $grupo_materia = GrupoMateria::find($examen->grupo_materia_id);
+
+        $data = compact(
+            'examen',
+            'preguntas',
+            'grupo_materia'
+        );
+        return view('VistaExamen.show', $data);
+    }
+
     public function destroy(string $id)
     {
-        //
+        $examen = Examen::findOrFail($id);
+        $examen->delete();
+
+        toastr('Examen eliminado correctamente', 'success', 'Examen');
+        return redirect()->route('Examen.index');
     }
 
     public function start($id)
@@ -182,14 +250,14 @@ class ExamenController extends Controller
         $user = Auth::user();
         $user = User::findOrFail($user->id);
         $calificacion = Calificacion::where('user_id', $user->id)
-        ->where('ejecucion_id', $ejecucion->id)->first();
+            ->where('ejecucion_id', $ejecucion->id)->first();
 
         //Da 2 vueltas por si acaso
-        for ($i=0; $i < 2; $i++) { 
+        for ($i = 0; $i < 2; $i++) {
             $ejecucion->estado_ejecucion_id = $this->verificarEjecucion($ejecucion);
             $ejecucion->save();
         }
-        
+
 
         $now = Carbon::now();
         $fecha = Carbon::parse($ejecucion->fecha);
@@ -503,10 +571,10 @@ class ExamenController extends Controller
                     $nota += $notaParcial;
                 }
 
-                if($pregunta->tipo_pregunta_id == '3'){
+                if ($pregunta->tipo_pregunta_id == '3') {
                     $respuesta_enviada = RespuestaCalificacion::where('calificacion_id', $calificacion->id)
-                    ->where('pregunta_id', $pregunta->id)->first();
-                    if($respuesta_enviada && $respuesta_enviada->puntaje){
+                        ->where('pregunta_id', $pregunta->id)->first();
+                    if ($respuesta_enviada && $respuesta_enviada->puntaje) {
                         $nota += $respuesta_enviada->puntaje;
                     }
                 }
@@ -529,68 +597,67 @@ class ExamenController extends Controller
         return view('VistaExamen.finalizado', $data);
     }
 
-    public function verIntento($calificacion_id) {
+    public function verIntento($calificacion_id)
+    {
         $user = User::find(Auth::id());
 
         $calificacion = Calificacion::find($calificacion_id);
 
         $ejecucion = Ejecucion::find($calificacion->ejecucion_id);
 
-        if($calificacion->user_id == $user->id && $ejecucion->retroalimentacion) {
+        if ($calificacion->user_id == $user->id && $ejecucion->retroalimentacion) {
             $preguntas_seleccionadas = PreguntaSeleccionada::where('calificacion_id', $calificacion->id)->get();
 
             $preguntas_respuestas = new Collection;
 
-            foreach($preguntas_seleccionadas as $pregunta_seleccionada) {
+            foreach ($preguntas_seleccionadas as $pregunta_seleccionada) {
 
                 $pregunta_respuesta = new Collection;
-                
-                $pregunta = Pregunta::where('id',$pregunta_seleccionada->pregunta_id)->first();
 
-                if($pregunta->tipo_pregunta_id != '3') {
+                $pregunta = Pregunta::where('id', $pregunta_seleccionada->pregunta_id)->first();
+
+                if ($pregunta->tipo_pregunta_id != '3') {
 
                     $respuestas = Respuesta::where('pregunta_id', $pregunta->id)->get();
 
                     $respuestas_enviadas = RespuestaCalificacion::where('calificacion_id', $calificacion->id)
-                    ->where('pregunta_id', $pregunta->id)->get();
-                    
+                        ->where('pregunta_id', $pregunta->id)->get();
+
                     $pregunta->nota = $this->calcularNotaPreguntaMultiple($pregunta->id, $calificacion->id);
 
-                    //Si ha respondido la pregunta o no 
-                    if (count($respuestas_enviadas)> 0) {
-                        
-                            foreach ($respuestas as $respuesta) {
-                                if ($respuestas_enviadas->pluck('respuesta_id')->contains($respuesta->id)) {
-                                    $respuesta->respondida = '1';
-                                } else {
-                                    $respuesta->respondida = '0';
-                                }
+                    //Si ha respondido la pregunta o no
+                    if (count($respuestas_enviadas) > 0) {
+
+                        foreach ($respuestas as $respuesta) {
+                            if ($respuestas_enviadas->pluck('respuesta_id')->contains($respuesta->id)) {
+                                $respuesta->respondida = '1';
+                            } else {
+                                $respuesta->respondida = '0';
                             }
-                        
+                        }
                     } else {
                         foreach ($respuestas as $respuesta) {
                             $respuesta->respondida = '0';
                         }
                     }
-
                 } else {
 
                     $respuesta_libre = RespuestaCalificacion::where('calificacion_id', $calificacion->id)
-                    ->where('pregunta_id', $pregunta->id)->first();
+                        ->where('pregunta_id', $pregunta->id)->first();
                     $respuestas = new Collection;
-                    if($respuesta_libre){
-                        $respuestas []  = $respuesta_libre;
+                    if ($respuesta_libre) {
+                        $respuestas[]  = $respuesta_libre;
                     } else {
-                        $respuestas [] = [];
+                        $respuestas[] = [];
                     }
                 }
 
                 $pregunta_respuesta['pregunta'] = $pregunta;
                 $pregunta_respuesta['respuestas'] = $respuestas;
 
-                $preguntas_respuestas [] = $pregunta_respuesta;
+                $preguntas_respuestas[] = $pregunta_respuesta;
             }
-            
+
             $examen = Examen::find($ejecucion->examen_id);
 
             $data = compact(
@@ -604,7 +671,7 @@ class ExamenController extends Controller
         }
 
         //dd($preguntas_respuestas);
-        
+
     }
 
     private function calcularNotaPreguntaMultiple($pregunta_id, $calificacion_id)
@@ -663,11 +730,13 @@ class ExamenController extends Controller
         return $nota;
     }
 
-    public function ausente(){
+    public function ausente()
+    {
         return view('VistaExamen.ausente');
     }
 
-    public function supervicion($ejecucion_id){
+    public function supervicion($ejecucion_id)
+    {
         $ejecucion = Ejecucion::find($ejecucion_id);
 
         $data = compact(
@@ -676,35 +745,39 @@ class ExamenController extends Controller
 
         return view('VistaExamen.supervicion', $data);
     }
-    
-    public function meet($ejecucion_id) {
+
+    public function meet($ejecucion_id)
+    {
         $ejecucion = Ejecucion::find($ejecucion_id);
         $teacherName = auth()->user()->name; // Obtener el nombre del docente autenticado
-    
+
         $data = compact('ejecucion', 'teacherName');
-    
+
         return view('teacher_video', $data);
     }
-    
 
-    public function getEstudiantes(Request $request){
+
+    public function getEstudiantes(Request $request)
+    {
         $ejecucion_id = $request->ejecucion_id;
 
         $calificaciones = Calificacion::where('ejecucion_id', $ejecucion_id)
-        ->get();
+            ->get();
 
-        foreach($calificaciones as $calificacion){
+        foreach ($calificaciones as $calificacion) {
             $user = User::where('id', $calificacion->user_id)->first();
             $calificacion->usuario = $user;
 
             $anomalias =  Anomalia::where('user_id', $user->id)
-            ->where('ejecucion_id', $ejecucion_id)->get();
+                ->where('ejecucion_id', $ejecucion_id)->get();
 
             $calificacion->anomalias = $anomalias;
         }
 
-        return ['msg' => 'ok',
-        'data' => $calificaciones];
+        return [
+            'msg' => 'ok',
+            'data' => $calificaciones
+        ];
     }
 
     public function getAnomalias(Request $request)
@@ -724,13 +797,14 @@ class ExamenController extends Controller
         ];
     }
 
-    public function storeEjecucion(Request $request){
+    public function storeEjecucion(Request $request)
+    {
         $examen = Examen::find($request->examen_id);
 
         $preguntas = Pregunta::where('examen_id', $examen->id)->get();
 
-        if(count($preguntas) < $request->nro_preguntas){
-            return ['msg'=> 'neq'];//not enougth questions
+        if (count($preguntas) < $request->nro_preguntas) {
+            return ['msg' => 'neq']; //not enougth questions
         }
 
         $ejecucion = Ejecucion::create([
