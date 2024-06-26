@@ -53,7 +53,13 @@
                         </div>
                         <div class="ml-6">
                             <div class="flex space-x-2">
-                                <a href="" class="bg-blue-500 text-white px-4 py-2 rounded-md shadow hover:bg-blue-600 transition">Realizar Examen</a>
+                                @foreach ($ejecuciones->where('examen_id', $examen->id) as $ejecucion)
+                                    @if ($ejecucion->estado_ejecucion_id == 3)
+                                        <a href="{{ route('Examen.start', $ejecucion->id) }}" class="bg-blue-500 text-white px-4 py-2 rounded-md shadow hover:bg-blue-600 transition">Realizar Examen</a>
+                                    @elseif ($ejecucion->estado_ejecucion_id == 1)
+                                        <a href="{{ route('Examen.start', $ejecucion->id) }}" class="bg-gray-500 text-white px-4 py-2 rounded-md shadow cursor-not-allowed">Continuar Examen</a>
+                                    @endif
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -97,17 +103,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($calificaciones as $index => $calificacion)
-                            <tr class="border-b border-gray-200 hover:bg-gray-50">
-                                <td class="py-3 px-4 text-sm text-gray-600">{{ $index + 1 }}</td>
-                                <td class="py-3 px-4 text-sm text-gray-600">{{ $calificacion->ejecucion->examen->tema }}</td>
-                                <td class="py-3 px-4 text-sm text-gray-600">{{ \Carbon\Carbon::parse($calificacion->ejecucion->fecha)->locale('es_BO')->isoFormat('dddd, D [de] MMMM [de] YYYY') }}</td>
-                                <td class="py-3 px-4 text-sm text-gray-600">{{ $calificacion->nota }}</td>
-                                <td class="py-3 px-4 text-sm text-gray-600">
-                                    <a href="{{ route('examen.ver', $calificacion->ejecucion->examen->id) }}" class="text-blue-600 hover:text-blue-900">Ver</a>
+                        @if($calificaciones->isEmpty())
+                            <tr>
+                                <td colspan="5" class="py-3 px-4 text-sm text-gray-600 text-center">
+                                    <img src="{{ asset('path/to/your/icon.png') }}" alt="No hay notas de exámenes" class="mx-auto" style="width: 50px;">
+                                    <p>No hay notas de exámenes</p>
                                 </td>
                             </tr>
-                        @endforeach
+                        @else
+                        @endif
                     </tbody>
                 </table>
             </div>

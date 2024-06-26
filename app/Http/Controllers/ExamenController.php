@@ -216,12 +216,15 @@ class ExamenController extends Controller
     {
         //dd($ejecucion);
         $now = Carbon::now();
+        //dd($now);
+        
         if ($ejecucion->estado_ejecucion_id == '1') {
+            
             if ($now->format('Y-m-d') > $ejecucion->fecha) {
-                // dd($now->format('Y-m-d'));
+                //dd($now->format('Y-m-d'));
 
                 return true;
-            } else if ($now->format('Y-m-d') == $ejecucion->fecha && $now->format('h:m:s') >= $ejecucion->hora_final) {
+            } else if ($now->format('Y-m-d') == $ejecucion->fecha && $now->format('h:i:s') >= $ejecucion->hora_final) {
                 return true;
             }
         }
