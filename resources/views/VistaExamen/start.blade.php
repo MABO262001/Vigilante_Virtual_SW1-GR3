@@ -98,7 +98,8 @@
 
         <!-- Botón de Comenzar Intento -->
         <div class="mt-8 text-center">
-            <button id="comenzar_btn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-md {{ $ejecucion->estado_ejecucion_id != 1 || ($calificacion && $calificacion->nota != 0) ? 'disabled-link' : '' }}">
+            <button id="comenzar_btn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-md {{ $ejecucion->estado_ejecucion_id != 1 || ($calificacion && $calificacion->finalizado == '1') ? 'disabled-link' : '' }}"
+            {{ $ejecucion->estado_ejecucion_id != 1 || ($calificacion && $calificacion->finalizado == '1') ? 'disabled' : '' }}>
                 Realizar intento
             </button>
         </div>

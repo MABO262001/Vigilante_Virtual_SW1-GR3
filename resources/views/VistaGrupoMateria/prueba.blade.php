@@ -74,45 +74,114 @@
                     </thead>
                     <tbody class="text-black text-sm font-light">
                         @foreach ($usuarios as $usuario)
-                            <tr class="border-b border-gray-200 hover:bg-gray-50 transition duration-200 ease-in-out">
-                                <td class="py-3 px-6 text-left">
-                                    <a href="{{ route('Usuario.show', $usuario->id) }}" class="flex items-center text-blue-600 hover:text-blue-800">
-                                        <div class="mr-4 flex justify-center items-center w-12 h-12 rounded-full border-2 border-blue-500 shadow-lg bg-blue-900 text-white">
-                                            @if ($usuario->profile_photo_path)
-                                                <img class="w-12 h-12 rounded-full" src="{{ asset('images/user/' . basename($usuario->profile_photo_path)) }}" alt="Profile Photo">
-                                            @else
-                                                <span class="text-xl">{{ strtoupper(substr($usuario->name, 0, 1)) }}</span>
-                                            @endif
-                                        </div>
-                                        <div>
-                                            <span class="font-semibold text-lg">{{ $usuario->name }}</span>
-                                            <p class="text-gray-500 text-xs">{{ $usuario->email }}</p>
-                                        </div>
-                                    </a>
-                                </td>
-                                <td class="py-3 px-6 text-left">
-                                    <a href="{{ route('Usuario.show', $usuario->id) }}" class="font-medium text-blue-600 hover:text-blue-800">{{ $usuario->nombre }} {{ $usuario->apellido_paterno }} {{ $usuario->apellido_materno }}</a>
-                                </td>
-                                <td class="py-3 px-6 text-center">
-                                    <div class="flex items-center justify-center">
-                                        @if ($usuario->roles->isNotEmpty())
-                                            @foreach ($usuario->roles as $rol)
-                                                <span class="bg-blue-300 text-black-700 py-1 px-3 rounded-full text-xs mr-2">{{ $rol->name }}</span>
-                                            @endforeach
+                        <tr class="border-b border-gray-200 hover:bg-gray-50 transition duration-200 ease-in-out">
+                            <td class="py-3 px-6 text-left">
+                                <a href="{{ route('Usuario.show', $usuario->id) }}" class="flex items-center text-blue-600 hover:text-blue-800">
+                                    <div class="mr-4 flex justify-center items-center w-12 h-12 rounded-full border-2 border-blue-500 shadow-lg bg-blue-900 text-white">
+                                        @if ($usuario->profile_photo_path)
+                                        <img class="w-12 h-12 rounded-full" src="{{ asset('images/user/' . basename($usuario->profile_photo_path)) }}" alt="Profile Photo">
                                         @else
-                                            <span class="bg-yellow-200 text-yellow-700 py-1 px-3 rounded-full text-xs">Por designar</span>
+                                        <span class="text-xl">{{ strtoupper(substr($usuario->name, 0, 1)) }}</span>
                                         @endif
                                     </div>
-                                </td>
-                            </tr>
+                                    <div>
+                                        <span class="font-semibold text-lg">{{ $usuario->name }}</span>
+                                        <p class="text-gray-500 text-xs">{{ $usuario->email }}</p>
+                                    </div>
+                                </a>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <a href="{{ route('Usuario.show', $usuario->id) }}" class="font-medium text-blue-600 hover:text-blue-800">{{ $usuario->nombre }} {{ $usuario->apellido_paterno }} {{ $usuario->apellido_materno }}</a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center justify-center">
+                                    @if ($usuario->roles->isNotEmpty())
+                                    @foreach ($usuario->roles as $rol)
+                                    <span class="bg-blue-300 text-black-700 py-1 px-3 rounded-full text-xs mr-2">{{ $rol->name }}</span>
+                                    @endforeach
+                                    @else
+                                    <span class="bg-yellow-200 text-yellow-700 py-1 px-3 rounded-full text-xs">Por designar</span>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
-        
+
     </div>
 </main>
+
+<div id="ejecutarModal" class=" fixed hidden z-50 inset-0 overflow-auto ">
+    <div class="modal-overlay absolute w-full h-full bg-gray-900 bg-opacity-75"></div>
+    <div class="modal-container mx-auto mt-8 rounded-lg overflow-hidden shadow-lg bg-white animate-fade-down animate-duration-300 max-w-4xl">
+        <div class="modal-content text-left relative">
+            <div class="bg-blue-600 p-4 shadow-inner text-white flex justify-between">
+                <span class="text-white text-2xl font-bold uppercase">Programar ejecucion</span>
+                <button id="closeModalCancel" class="text-red-500 text-xl" type="button" onclick="closeEjecutarModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="bg-white p-4 ">
+                <div class="grid md:grid-cols-2 gap-x-4 mb-4">
+
+                    <input type="hidden" name="" id="examen_id">
+
+                    <div class="mt-4">
+                        <label for="fecha" class="text-sm font-semibold block text-gray-700 translate-x-2">Fecha</label>
+                        <input type="date" name="fecha" id="fecha" class="rounded-xl w-full">
+                    </div>
+
+                    <div></div>
+
+                    <div class="mt-4">
+                        <label for="hora_inicio" class="text-sm font-semibold block text-gray-700 translate-x-2">Hora inicio</label>
+                        <input type="time" name="hora_inicio" id="hora_inicio" class="rounded-xl w-full">
+                    </div>
+
+                    <div class="mt-4">
+                        <label for="hora_final" class="text-sm font-semibold block text-gray-700 translate-x-2">Hora final</label>
+                        <input type="time" name="hora_final" id="hora_final" class="rounded-xl w-full">
+                    </div>
+
+                    <div class="mt-4">
+                        <label for="ponderacion" class="text-sm font-semibold block text-gray-700 translate-x-2">Ponderacion</label>
+                        <input type="number" name="ponderacion" id="ponderacion" class="rounded-xl w-full" min="0" max="100">
+                    </div>
+
+                    <div class="mt-4">
+                        <label for="nro_preguntas" class="text-sm font-semibold block text-gray-700 translate-x-2">Cantidad de preguntas</label>
+                        <input type="number" name="nro_preguntas" id="nro_preguntas" class="rounded-xl w-full" min="0" max="100">
+                    </div>
+
+                    <div class="mt-4">
+                        <label for="contrasena" class="text-sm font-semibold block text-gray-700 translate-x-2">Contraseña</label>
+                        <input type="text" name="contrasena" id="contrasena" class="rounded-xl w-full">
+                    </div>
+
+
+                    <div class="flex mt-4">
+                        
+                    </div>
+
+
+                    <div class="mt-4">
+                        <input type="checkbox" name="navegacion" id="navegacion" class="rounded">
+                        <label for="navegacion">Permitir navegacion?</label>
+                    </div>
+                    <div class="mt-4">
+                        <input type="checkbox" name="retroalimentacion" id="retroalimentacion" class="rounded">
+                        <label for="retroalimentacion">Permitir retroalimentacion?</label>
+                    </div>
+
+                </div>
+
+                <button id="save" class="rounded bg-blue-600 py-1 px-2 text-white">Guardar</button>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     document.getElementById('tabExamenes').addEventListener('click', function(event) {
@@ -163,6 +232,83 @@
 
     // Mostrar inicialmente la tabla de estudiantes
     document.getElementById('tabEstudiantes').click();
+
+    const ejecutarModal = document.getElementById('ejecutarModal');
+    const input_examen_id = document.getElementById('examen_id');
+
+    function showModal(examen_id){
+        ejecutarModal.classList.remove('hidden');
+        input_examen_id.value = examen_id;
+    }
+
+    function closeEjecutarModal(){
+        ejecutarModal.classList.add('hidden');
+        input_examen_id.value = '';
+    }
+
+
+    const save = document.getElementById('save');
+
+    const hora_inicio = document.getElementById('hora_inicio');
+    const hora_final = document.getElementById('hora_final');
+    const fecha = document.getElementById('fecha');
+    const nro_preguntas = document.getElementById('nro_preguntas');
+
+    const fechaActual = new Date();
+    const fechaString = fechaActual.toISOString().split('T')[0]; 
+    const horaInicioString = '12:00';
+    const horaFinalString = '13:00';
+    const navegacion = document.getElementById('navegacion');
+    const retroalimentacion = document.getElementById('retroalimentacion');
+
+    
+    fecha.value = fechaString;
+    hora_inicio.value = horaInicioString;
+    hora_final.value = horaFinalString;
+    ponderacion.value = 40;
+    nro_preguntas.value = 1;
+
+
+    save.addEventListener('click', () => {
+
+        const grupo_materia_id = '{{$gp->id}}';
+
+        var data = {
+            'examen_id':        input_examen_id.value,
+            'grupo_materia_id': grupo_materia_id,
+            'fecha':            fecha.value,
+            'hora_inicio':      hora_inicio.value,
+            'hora_final':       hora_final.value,
+            'ponderacion':      ponderacion.value,
+            'contrasena':       contrasena.value,
+            'nro_preguntas':    nro_preguntas.value,
+            'navegacion':       navegacion.value,
+            'retroalimentacion':retroalimentacion.value,
+        }
+        console.log(data);
+        fetch('/examenes/ejecucion/store', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al enviar los datos');
+                }
+                return response.json();
+            })
+            .then(responseData => {
+                if (responseData['msg'] == 'ok') {
+                    window.location.href = '/grupo-materia/'+grupo_materia_id+'/prueba';
+                }else{
+                    alert('Numero de preguntas invalido');
+                }
+                console.log(responseData);
+            });
+    });
 </script>
 
 @endsection

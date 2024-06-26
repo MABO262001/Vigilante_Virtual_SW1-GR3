@@ -20,7 +20,9 @@
 <script>
     const estudiantesContainer = document.getElementById('estudiantesContainer');
 
-    getEstudiantes();
+    if(){
+        setInterval(getEstudiantes, 3000);
+    }
 
     function getEstudiantes() {
         let data = {
