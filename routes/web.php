@@ -14,6 +14,7 @@ use App\Http\Controllers\Roles;
 use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\VideoCallController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -31,6 +32,8 @@ Route::get('/contacto', function () {
 Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('can:Ver Dashboard')->name('Dashboard');
 
+    Route::post('/video/token', [VideoCallController::class, 'generateToken']);
+    Route::get('/vid', [VideoCallController::class, 'vid']);
 
     //Rutas pertenecientes a los usuarios
         Route::controller(UsuarioController::class)->group(function () {
