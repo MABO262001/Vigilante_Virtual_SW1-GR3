@@ -22,8 +22,11 @@ class DatabaseSeeder extends Seeder
             MateriaSeeder::class,
             GestionSeeder::class,
             ServicioSeeder::class,
-            // GrupoMateriaSeeder::class,
-            // ComprobanteSeeder::class,
+            GrupoMateriaSeeder::class,
+            ComprobanteSeeder::class,
+            ServicioComprobanteSeeder::class,
+            BoletaInscripcionSeeder::class,
+            GrupoMateriaBoletaInscripcionSeeder::class,
         ]);
     }
 }

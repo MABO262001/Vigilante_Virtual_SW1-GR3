@@ -65,7 +65,7 @@ class FortifyServiceProvider extends ServiceProvider
                     $user = Auth::user();
 
                     if ($user->hasRole('Estudiante')) {
-                        return redirect()->intended('/');
+                        return redirect()->intended('/calendar');
                     } else {
                         return redirect()->intended('/dashboard');
                     }
