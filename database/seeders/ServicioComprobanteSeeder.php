@@ -13,29 +13,9 @@ class ServicioComprobanteSeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = Faker::create();
-
-        $adminIds = range(1, 11);
-        $studentIds = range(12, 125);
-        shuffle($studentIds); // Mezclar los IDs de estudiantes para asegurar aleatoriedad
-
-        foreach ($studentIds as $studentId) {
-            $adminId = $faker->randomElement($adminIds);
-            DB::table('comprobantes')->insert([
-                'user_estudiante_id' => $studentId,
-                'user_administrativo_id' => $adminId,
-                'hora' => $faker->time(),
-                'fecha' => $faker->date(),
-                'monto_total' => 45.00,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
-
-        $comprobanteIds = DB::table('comprobantes')->pluck('id');
         $servicioId = 1;
 
-        foreach ($comprobanteIds as $comprobanteId) {
+        for ($comprobanteId = 1; $comprobanteId <= 114; $comprobanteId++) {
             DB::table('servicio_comprobantes')->insert([
                 'comprobante_id' => $comprobanteId,
                 'servicio_id' => $servicioId,
