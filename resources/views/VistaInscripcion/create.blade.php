@@ -65,15 +65,17 @@
                 Deseleccionar Todos
             </button>
         </div>
-        <div class="mt-8 overflow-x-auto" id="tableContainer">
-            @include('VistaInscripcion.tablacreate')
-        </div>
         <div class="flex justify-center mt-8">
             <button type="submit"
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110">
                 Registrar
             </button>
         </div>
+        
+        <div class="mt-8 overflow-x-auto" id="tableContainer">
+            @include('VistaInscripcion.tablacreate')
+        </div>
+
     </form>
 
     <script>

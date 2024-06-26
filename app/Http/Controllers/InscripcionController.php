@@ -80,10 +80,6 @@ class InscripcionController extends Controller
         $carnet_identidad = $request->get('carnet_identidad');
         $usuario = User::where('carnet_identidad', $carnet_identidad)->first();
 
-        if (!$usuario || (!$usuario->hasRole('Estudiante') && !$usuario->hasRole('Docente'))) {
-            return redirect()->back()->with('error', 'Usuario no encontrado o no tiene el rol adecuado');
-        }
-
         $grupomaterias = GrupoMateria::query()
             ->where(function ($query) use ($search) {
                 $query->whereHas('materia', function ($query) use ($search) {
