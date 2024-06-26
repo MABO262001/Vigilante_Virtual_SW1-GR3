@@ -31,9 +31,11 @@
         <div class="space-x-5 flex items-center">
             <a href="{{ route('Usuario.show', Auth::user()->id) }}" class="relative flex items-center">
                 @if (Auth::user()->profile_photo_path)
-                <img src="{{ asset(Auth::user()->profile_photo_path) }}" alt="Avatar" class="w-8 h-8 rounded-full">
+                    <img src="{{ asset(Auth::user()->profile_photo_path) }}" alt="Avatar"
+                        class="w-8 h-8 rounded-full">
                 @else
-                <span class="w-8 h-8 bg-blue-900 text-white flex justify-center items-center rounded-full">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
+                    <span
+                        class="w-8 h-8 bg-blue-900 text-white flex justify-center items-center rounded-full">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
                 @endif
                 <span class="text-blue-900 hidden md:inline ml-2">{{ Auth::user()->name }}</span>
             </a>
@@ -53,7 +55,9 @@
             <div class="space-y-6">
                 <a href="{{ route('Usuario.show', Auth::user()->id) }}" class="block text-center mb-6">
                     <div class="space-y-3 p-4 shadow-md rounded-lg bg-white">
-                        <img src="{{ Auth::user()->profile_photo_path ? asset(Auth::user()->profile_photo_path) : 'https://img.freepik.com/premium-vector/user-profile-icon-flat-style-member-avatar-vector-illustration-isolated-background-human-permission-sign-business-concept_157943-15752.jpg' }}" alt="Avatar de {{ Auth::user()->name }}" class="w-20 h-20 md:w-24 md:h-24 rounded-full mx-auto border-4 border-blue-500 shadow-md" />
+                        <img src="{{ Auth::user()->profile_photo_path ? asset(Auth::user()->profile_photo_path) : 'https://img.freepik.com/premium-vector/user-profile-icon-flat-style-member-avatar-vector-illustration-isolated-background-human-permission-sign-business-concept_157943-15752.jpg' }}"
+                            alt="Avatar de {{ Auth::user()->name }}"
+                            class="w-20 h-20 md:w-24 md:h-24 rounded-full mx-auto border-4 border-blue-500 shadow-md" />
                         <div>
                             <h2 class="font-medium text-lg md:text-xl text-blue-900">{{ Auth::user()->name }}</h2>
                             <p class="text-sm md:text-base text-gray-500">{{ Auth::user()->email }}</p>
@@ -62,58 +66,71 @@
                 </a>
 
                 <nav class="space-y-2">
-                    @if (Auth::user()->hasRole('Master') || Auth::user()->hasRole('Administrativo') || Auth::user()->hasRole('Docente') || Auth::user()->hasRole('Estudiante'))
-                    <a class="flex items-center text-gray-700 py-2 px-4 rounded transition duration-300 hover:bg-blue-50 shadow" href="{{ route('Dashboard') }}">
-                        <i class="fa-solid fa-home text-lg mr-2 text-blue-900"></i><span class="text-base">Inicio</span>
-                    </a>
+                    @if (Auth::user()->hasRole('Master') ||
+                            Auth::user()->hasRole('Administrativo') ||
+                            Auth::user()->hasRole('Docente') ||
+                            Auth::user()->hasRole('Estudiante'))
+                        <a class="flex items-center text-gray-700 py-2 px-4 rounded transition duration-300 hover:bg-blue-50 shadow"
+                            href="{{ route('Dashboard') }}">
+                            <i class="fa-solid fa-home text-lg mr-2 text-blue-900"></i><span
+                                class="text-base">Inicio</span>
+                        </a>
                     @endif
 
                     @if (Auth::user()->hasRole('Docente'))
-                    <a class="flex items-center text-gray-700 py-2 px-4 rounded transition duration-300 hover:bg-blue-50 shadow" href="{{ route('GrupoMateria.docente', Auth::user()->id) }}">
-                        <i class="fa-solid fa-home text-lg mr-2 text-blue-900"></i><span class="text-base">Mis grupos</span>
-                    </a>
+                        <a class="flex items-center text-gray-700 py-2 px-4 rounded transition duration-300 hover:bg-blue-50 shadow"
+                            href="{{ route('GrupoMateria.docente', Auth::user()->id) }}">
+                            <i class="fa-solid fa-home text-lg mr-2 text-blue-900"></i><span class="text-base">Mis
+                                grupos</span>
+                        </a>
                     @endif
 
                     @if (Auth::user()->hasRole('Master') || Auth::user()->hasRole('Administrativo'))
-                    <a class="flex items-center text-gray-700 py-2 px-4 rounded transition duration-300 hover:bg-blue-50 shadow" href="{{ route('Usuario.index') }}">
-                        <i class="fa-solid fa-user text-lg mr-2 text-blue-900"></i><span class="text-base">Usuario</span>
-                    </a>
+                        <a class="flex items-center text-gray-700 py-2 px-4 rounded transition duration-300 hover:bg-blue-50 shadow"
+                            href="{{ route('Usuario.index') }}">
+                            <i class="fa-solid fa-user text-lg mr-2 text-blue-900"></i><span
+                                class="text-base">Usuario</span>
+                        </a>
                     @endif
 
                     @if (Auth::user()->hasRole('Master'))
-                    <a class="flex items-center text-gray-700 py-2 px-4 rounded transition duration-300 hover:bg-blue-50 shadow" href="{{ route('Roles.index') }}">
-                        <i class="fa-solid fa-lock text-lg mr-2 text-blue-900"></i><span class="text-base">Roles y Permisos</span>
-                    </a>
-                    @endif
-
-                    @if (Auth::user()->hasRole('Master'))
-                    <a class="flex items-center text-gray-700 py-2 px-4 rounded transition duration-300 hover:bg-blue-50 shadow" href="{{ route('Examen.index') }}">
-                        <i class="fa-solid fa-file-lines text-lg mr-2 text-blue-900"></i><span class="text-base">Examenes</span>
-                    </a>
+                        <a class="flex items-center text-gray-700 py-2 px-4 rounded transition duration-300 hover:bg-blue-50 shadow"
+                            href="{{ route('Roles.index') }}">
+                            <i class="fa-solid fa-lock text-lg mr-2 text-blue-900"></i><span class="text-base">Roles y
+                                Permisos</span>
+                        </a>
                     @endif
 
                     @if (Auth::user()->hasRole('Master') || Auth::user()->hasRole('Administrativo'))
-                    <a class="flex items-center text-gray-700 py-2 px-4 rounded transition duration-300 hover:bg-blue-50 shadow" href="{{ route('Inscripcion.index') }}">
-                        <i class="fas fa-edit text-lg mr-2 text-blue-900"></i><span class="text-base">Inscripcion</span>
-                    </a>
+                        <a class="flex items-center text-gray-700 py-2 px-4 rounded transition duration-300 hover:bg-blue-50 shadow"
+                            href="{{ route('Inscripcion.index') }}">
+                            <i class="fas fa-edit text-lg mr-2 text-blue-900"></i><span
+                                class="text-base">Inscripcion</span>
+                        </a>
                     @endif
 
                     @if (Auth::user()->hasRole('Master') || Auth::user()->hasRole('Administrativo'))
-                    <a class="flex items-center text-gray-700 py-2 px-4 rounded transition duration-300 hover:bg-blue-50 shadow" href="{{ route('PagoServicio.index') }}">
-                        <i class="fas fa-shopping-cart text-lg mr-2 text-blue-900"></i><span class="text-base">Pagos</span>
-                    </a>
+                        <a class="flex items-center text-gray-700 py-2 px-4 rounded transition duration-300 hover:bg-blue-50 shadow"
+                            href="{{ route('PagoServicio.index') }}">
+                            <i class="fas fa-shopping-cart text-lg mr-2 text-blue-900"></i><span
+                                class="text-base">Pagos</span>
+                        </a>
                     @endif
 
                     @if (Auth::user()->hasRole('Master') || Auth::user()->hasRole('Administrativo'))
-                    <a class="flex items-center text-gray-700 py-2 px-4 rounded transition duration-300 hover:bg-blue-50 shadow" href="{{ route('Servicio.index') }}">
-                        <i class="fas fa-store text-lg mr-2 text-blue-900"></i><span class="text-base">Servicios</span>
-                    </a>
+                        <a class="flex items-center text-gray-700 py-2 px-4 rounded transition duration-300 hover:bg-blue-50 shadow"
+                            href="{{ route('Servicio.index') }}">
+                            <i class="fas fa-store text-lg mr-2 text-blue-900"></i><span
+                                class="text-base">Servicios</span>
+                        </a>
                     @endif
 
                     @if (Auth::user()->hasRole('Master') || Auth::user()->hasRole('Administrativo'))
-                    <a class="flex items-center text-gray-700 py-2 px-4 rounded transition duration-300 hover:bg-blue-50 shadow" href="{{ route('GrupoMateria.index') }}">
-                        <i class="fas fa-users text-lg mr-2 text-blue-900"></i><span class="text-base">Grupos y Materias</span>
-                    </a>
+                        <a class="flex items-center text-gray-700 py-2 px-4 rounded transition duration-300 hover:bg-blue-50 shadow"
+                            href="{{ route('GrupoMateria.index') }}">
+                            <i class="fas fa-users text-lg mr-2 text-blue-900"></i><span class="text-base">Grupos y
+                                Materias</span>
+                        </a>
                     @endif
                 </nav>
             </div>

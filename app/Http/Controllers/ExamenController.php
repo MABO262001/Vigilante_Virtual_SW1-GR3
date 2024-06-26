@@ -388,18 +388,12 @@ class ExamenController extends Controller
             ->where('ejecucion_id', $ejecucion_id)->first();
 
         if ($calificacion) {
-
             $respuestasCalificacion = RespuestaCalificacion::where('calificacion_id', $calificacion->id)->get();
-
             $preguntas_seleccionadas = PreguntaSeleccionada::where('calificacion_id', $calificacion->id)->get();
-
             foreach ($preguntas_seleccionadas as $pregunta_sel) {
-
                 foreach ($respuestasCalificacion as $respuesta) {
-
                     if ($respuesta->respuesta_id) {
                         $respuestaEncontrada = Respuesta::find($respuesta->respuesta_id);
-
                         if ($respuestaEncontrada->pregunta_id == $pregunta_sel->pregunta_id) {
                             $pregunta_sel->hecha = '1';
                         }
@@ -409,7 +403,6 @@ class ExamenController extends Controller
                         }
                     }
                 }
-
                 if (!$pregunta_sel->hecha) {
                     $pregunta_sel->hecha = '0';
                 }
@@ -434,7 +427,6 @@ class ExamenController extends Controller
 
     public function verificarNavegabilidad(Request $request)
     {
-
         $ejecucion_id = $request->ejecucion_id;
         $user = Auth::user();
 
@@ -442,18 +434,12 @@ class ExamenController extends Controller
             ->where('user_id', $user->id)->first();
 
         if ($calificacion) {
-
             $respuestasCalificacion = RespuestaCalificacion::where('calificacion_id', $calificacion->id)->get();
-
             $preguntas_seleccionadas = PreguntaSeleccionada::where('calificacion_id', $calificacion->id)->get();
-
             foreach ($preguntas_seleccionadas as $pregunta_sel) {
-
                 foreach ($respuestasCalificacion as $respuesta) {
-
                     if ($respuesta->respuesta_id) {
                         $respuestaEncontrada = Respuesta::find($respuesta->respuesta_id);
-
                         if ($respuestaEncontrada->pregunta_id == $pregunta_sel->pregunta_id) {
                             $pregunta_sel->hecha = '1';
                         }
@@ -479,17 +465,12 @@ class ExamenController extends Controller
 
     public function terminarIntento($calificacion_id)
     {
-
         $calificacion = Calificacion::find($calificacion_id);
-
         if ($calificacion->finaliado != '0') {
             $preguntas_seleccionadas = PreguntaSeleccionada::where('calificacion_id', $calificacion->id)->get();
-
             $nota = 0;
-
             foreach ($preguntas_seleccionadas as $pregunta_seleccionada) {
                 $pregunta = Pregunta::find($pregunta_seleccionada->pregunta_id);
-
                 if ($pregunta->tipo_pregunta_id == '1') {
                     $respuesta_correcta = Respuesta::where('pregunta_id', $pregunta->id)
                         ->where('es_correcta', 1)->first();
@@ -503,18 +484,13 @@ class ExamenController extends Controller
                 }
 
                 if ($pregunta->tipo_pregunta_id == '2') {
-
                     $notaParcial = $this->calcularNotaPreguntaMultiple($pregunta->id, $calificacion->id);
-
                     $nota += $notaParcial;
-
                 }
 
                 if($pregunta->tipo_pregunta_id == '3'){
-
                     $respuesta_enviada = RespuestaCalificacion::where('calificacion_id', $calificacion->id)
                     ->where('pregunta_id', $pregunta->id)->first();
-
                     if($respuesta_enviada && $respuesta_enviada->puntaje){
                         $nota += $respuesta_enviada->puntaje;
                     }
@@ -538,25 +514,25 @@ class ExamenController extends Controller
         return view('VistaExamen.finalizado', $data);
     }
 
-    public function verIntento($calificacion_id){
+    public function verIntento($calificacion_id) {
         $user = User::find(Auth::id());
 
         $calificacion = Calificacion::find($calificacion_id);
 
         $ejecucion = Ejecucion::find($calificacion->ejecucion_id);
 
-        if($calificacion->user_id == $user->id && $ejecucion->retroalimentacion){
+        if($calificacion->user_id == $user->id && $ejecucion->retroalimentacion) {
             $preguntas_seleccionadas = PreguntaSeleccionada::where('calificacion_id', $calificacion->id)->get();
 
             $preguntas_respuestas = new Collection;
 
-            foreach($preguntas_seleccionadas as $pregunta_seleccionada){
+            foreach($preguntas_seleccionadas as $pregunta_seleccionada) {
 
                 $pregunta_respuesta = new Collection;
                 
                 $pregunta = Pregunta::where('id',$pregunta_seleccionada->pregunta_id)->first();
 
-                if($pregunta->tipo_pregunta_id != '3'){
+                if($pregunta->tipo_pregunta_id != '3') {
 
                     $respuestas = Respuesta::where('pregunta_id', $pregunta->id)->get();
 
@@ -576,20 +552,20 @@ class ExamenController extends Controller
                                 }
                             }
                         
-                    }else{
+                    } else {
                         foreach ($respuestas as $respuesta) {
                             $respuesta->respondida = '0';
                         }
                     }
 
-                }else{
+                } else {
 
                     $respuesta_libre = RespuestaCalificacion::where('calificacion_id', $calificacion->id)
                     ->where('pregunta_id', $pregunta->id)->first();
                     $respuestas = new Collection;
                     if($respuesta_libre){
                         $respuestas []  = $respuesta_libre;
-                    }else{
+                    } else {
                         $respuestas [] = [];
                     }
                 }

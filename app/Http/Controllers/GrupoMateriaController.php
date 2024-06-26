@@ -85,8 +85,6 @@ class GrupoMateriaController extends Controller
         return view('VistaGrupoMateria.show', compact('grupoMateria', 'usuarios'));
     }
 
-
-
     public function edit($id)
     {
         $grupoMateria = GrupoMateria::findOrFail($id);
@@ -128,7 +126,6 @@ class GrupoMateriaController extends Controller
     public function listaestudiantes()
     {
         return view('VistaGrupoMateria.listadoestudiantes');
-
     }
 
     public function prueba($id)
@@ -158,7 +155,7 @@ class GrupoMateriaController extends Controller
 
         if($user->hasRole('Docente')){
             $grupo_materias = GrupoMateria::getData(['docente_id'=>$user->id]);
-            
+
             $data = compact(
                 'grupo_materias'
             );

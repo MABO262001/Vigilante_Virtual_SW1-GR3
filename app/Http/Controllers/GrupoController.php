@@ -36,7 +36,6 @@ class GrupoController extends Controller
             return redirect()->back()->with('error', 'El nombre del grupo ya existe. Por favor, elige otro nombre.');
         }
 
-
         $grupo = new Grupo;
         $grupo->nombre = $request->nombre;
         $grupo->save();
