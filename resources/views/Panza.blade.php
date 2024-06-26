@@ -86,12 +86,6 @@
                     </a>
                     @endif
 
-                    @if (Auth::user()->hasRole('Master'))
-                    <a class="flex items-center text-gray-700 py-2 px-4 rounded transition duration-300 hover:bg-blue-50 shadow" href="{{ route('Examen.index') }}">
-                        <i class="fa-solid fa-file-lines text-lg mr-2 text-blue-900"></i><span class="text-base">Examenes</span>
-                    </a>
-                    @endif
-
                     @if (Auth::user()->hasRole('Master') || Auth::user()->hasRole('Administrativo'))
                     <a class="flex items-center text-gray-700 py-2 px-4 rounded transition duration-300 hover:bg-blue-50 shadow" href="{{ route('Inscripcion.index') }}">
                         <i class="fas fa-edit text-lg mr-2 text-blue-900"></i><span class="text-base">Inscripcion</span>

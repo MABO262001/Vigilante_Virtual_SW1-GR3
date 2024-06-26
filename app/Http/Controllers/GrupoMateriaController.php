@@ -158,7 +158,7 @@ class GrupoMateriaController extends Controller
 
         if($user->hasRole('Docente')){
             $grupo_materias = GrupoMateria::getData(['docente_id'=>$user->id]);
-            
+
             $data = compact(
                 'grupo_materias'
             );

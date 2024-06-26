@@ -38,7 +38,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- Agregar filas de exámenes aquí --}}
+
                     </tbody>
                 </table>
             </div>
