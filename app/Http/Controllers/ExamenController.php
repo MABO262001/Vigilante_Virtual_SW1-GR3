@@ -653,4 +653,8 @@ class ExamenController extends Controller
     public function ausente(){
         return view('VistaExamen.ausente');
     }
+
+    public function supervicion($ejecucion_id){
+        
+    }
 }

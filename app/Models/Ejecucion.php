@@ -68,4 +68,16 @@ class Ejecucion extends Model
         return $this->belongsToMany(User::class, 'calificacions', 'user_id', 'ejecucion_id')->withTimestamps();
 
     }
+
+    public static function getData($data){
+        $query = DB::table('ejecucions')
+        ->select('examens.tema', 'ejecucions.*', 'estado_ejecucions.nombre as estado_ejecucion')
+            ->leftJoin('examens', 'examens.id', '=','ejecucions.examen_id')
+            ->leftJoin('estado_ejecucions', 'estado_ejecucions.id', '=','ejecucions.estado_ejecucion_id')
+            ->where('examens.grupo_materia_id', $data['grupo_materia_id']);
+            
+        
+
+        return $query->get();
+    }
 }

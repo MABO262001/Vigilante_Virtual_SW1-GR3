@@ -18,4 +18,7 @@ Route::get('/enviar/{ejecucion}', [ExamenController::class, 'enviar'])->name('Ex
 Route::post('/verificar-navegabilidad', [ExamenController::class, 'verificarNavegabilidad'])->name('Examen.verificarNavegabilidad');
 Route::post('/terminar-intento/{calificacion}', [ExamenController::class, 'terminarIntento'])->name('Examen.terminarIntento');
 Route::get('/ver-intento/{calificacion}', [ExamenController::class, 'verIntento'])->name('Examen.verIntento');
+
+Route::get('/supervision/{ejecucion}', [ExamenController::class, 'supervicion'])->name('Examen.supervicion');
+
 Route::get('/ausente', [ExamenController::class, 'ausente'])->name('Examen.ausente');

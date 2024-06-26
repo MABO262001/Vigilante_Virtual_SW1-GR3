@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Models\GrupoMateriaBoletaInscripcion;
 use App\Models\BoletaInscripcion;
+use App\Models\Ejecucion;
+use App\Models\Examen;
 use Illuminate\Support\Facades\Auth;
 class GrupoMateriaController extends Controller
 {
@@ -138,6 +140,23 @@ class GrupoMateriaController extends Controller
         $estudiantes = [];
         $detalles = GrupoMateriaBoletaInscripcion::where('grupo_materia_id', $id)->get();
 
+        $examenes = Examen::where('grupo_materia_id', $gp->id)->get();
+
+        foreach($examenes as $examen){
+            $ejecucion_en_proceso = Ejecucion::where('examen_id', $examen->id)
+            ->whereNot('estado_ejecucion_id', 2)->get();
+
+            if(count($ejecucion_en_proceso) > 0){
+                $examen->ejecutandose = '1';
+            }else{
+                $examen->ejecutandose = '0';
+            }
+        }
+        
+        $ejecuciones = Ejecucion::getData(['grupo_materia_id' => $gp->id]);
+        //dd($ejecuciones);
+        //dd($examenes);
+
         foreach ($detalles as $detalle) {
             $boleta = BoletaInscripcion::where('id', $detalle->boleta_inscripcion_id)->first();
             $alumno = User::where('id', $boleta->user_estudiante_id)->first();
@@ -146,7 +165,7 @@ class GrupoMateriaController extends Controller
 
         $usuarios = collect([$docente])->merge($estudiantes);
 
-        return view('VistaGrupoMateria.prueba', compact('materia', 'gp', 'usuarios', 'grupo', 'docente', 'user'));
+        return view('VistaGrupoMateria.prueba', compact('materia', 'gp', 'usuarios', 'grupo', 'docente', 'user', 'examenes', 'ejecuciones'));
     }
 
 
