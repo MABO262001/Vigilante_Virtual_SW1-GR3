@@ -11,7 +11,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.1/face_mesh.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1>Student Video Call with Face Detection</h1>
     <div class="relative w-full h-full flex items-center justify-center">
         <video class="input_video2 w-full h-full object-cover" autoplay></video>
         <canvas class="output2 w-full h-full absolute top-0 left-0"></canvas>
@@ -179,11 +178,9 @@
             const data = await response.json();
             const token = data.token;
 
-            Twilio.Video.createLocalTracks({
-                audio: true,
-                video: { width: 640 }
-            }).then(localTracks => {
-                const localVideoTrack = localTracks.find(track => track.kind === 'video');
+            Twilio.Video.createLocalVideoTrack({
+                width: 640
+            }).then(localVideoTrack => {
                 video2.srcObject = new MediaStream([localVideoTrack.mediaStreamTrack]);
 
                 const camera = new Camera(video2, {
@@ -198,7 +195,7 @@
                 camera.start();
 
                 Twilio.Video.connect(token, {
-                    tracks: localTracks
+                    tracks: [localVideoTrack]
                 });
             });
         }
