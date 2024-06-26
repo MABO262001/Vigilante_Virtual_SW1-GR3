@@ -32,6 +32,9 @@ Route::get('/contacto', function () {
 Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('can:Ver Dashboard')->name('Dashboard');
 
+    Route::get('/teacher/video', function () {
+        return view('teacher_video');
+    });
     Route::post('/video/token', [VideoCallController::class, 'generateToken']);
     Route::get('/vid', [VideoCallController::class, 'vid']);
 

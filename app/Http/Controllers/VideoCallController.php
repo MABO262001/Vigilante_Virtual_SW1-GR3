@@ -8,32 +8,36 @@ use Twilio\Jwt\Grants\VideoGrant;
 
 class VideoCallController extends Controller
 {
-    //
-    // En VideoCallController
-
     public function generateToken(Request $request)
     {
         $identity = $request->input('identity');
         $roomName = $request->input('room');
 
-        $token = new AccessToken(
-            env('TWILIO_ACCOUNT_SID'),
-            env('TWILIO_API_KEY_SID'),
-            env('TWILIO_API_KEY_SECRET'),
-            3600,
-            $identity
-        );
+        $accountSid = env('TWILIO_ACCOUNT_SID');
+        $apiKeySid = env('TWILIO_API_KEY_SID');
+        $apiKeySecret = env('TWILIO_API_KEY_SECRET');
 
-        $videoGrant = new VideoGrant();
-        $videoGrant->setRoom($roomName); // Especifica la sala
+        if (!$accountSid || !$apiKeySid || !$apiKeySecret) {
+            return response()->json(['error' => 'Twilio credentials are missing'], 500);
+        }
 
-        $token->addGrant($videoGrant);
+        try {
+            $token = new AccessToken(
+                $accountSid,
+                $apiKeySid,
+                $apiKeySecret,
+                3600,
+                $identity
+            );
 
-        return response()->json(['token' => $token->toJWT()]);
-    }
+            $videoGrant = new VideoGrant();
+            $videoGrant->setRoom($roomName);
 
+            $token->addGrant($videoGrant);
 
-    public function vid(){
-        return view('video');
+            return response()->json(['token' => $token->toJWT()]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error generating Twilio token: ' . $e->getMessage()], 500);
+        }
     }
 }

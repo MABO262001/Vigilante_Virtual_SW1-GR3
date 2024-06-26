@@ -1,15 +1,26 @@
-<div class="relative w-full h-full flex items-center justify-center">
-    <video class="input_video2 w-full h-full object-cover" autoplay></video>
-    <canvas class="output2 w-full h-full absolute top-0 left-0"></canvas>
-    <div class="loading absolute top-0 left-0 w-full h-full flex items-center justify-center">
-        <div class="spinner"></div>
-    </div>
-    <div class="control2 hidden"></div>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Video Call with Face Detection</title>
+    <script src="https://sdk.twilio.com/js/video/releases/2.14.0/twilio-video.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.1/camera_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils@0.1/control_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.1/drawing_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.1/face_mesh.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <h1>Student Video Call with Face Detection</h1>
+    <div class="relative w-full h-full flex items-center justify-center">
+        <video class="input_video2 w-full h-full object-cover" autoplay></video>
+        <canvas class="output2 w-full h-full absolute top-0 left-0"></canvas>
+        <div class="loading absolute top-0 left-0 w-full h-full flex items-center justify-center">
+            <div class="spinner"></div>
+        </div>
+        <div class="control2 hidden"></div>
+    </div>
+
     <script>
         const video2 = document.getElementsByClassName('input_video2')[0];
         const out2 = document.getElementsByClassName('output2')[0];
@@ -17,7 +28,7 @@
         const canvasCtx = out2.getContext('2d');
         let isChecking = true;
         let detectionPaused = false;
-        const ejecucionId = {{$ejecucion_id}};
+        const ejecucionId = '{{ $ejecucion_id }}';
         const fpsControl = new FPS();
         const spinner = document.querySelector('.loading');
         spinner.ontransitionend = () => {
@@ -32,14 +43,13 @@
             canvasCtx.clearRect(0, 0, out2.width, out2.height);
             canvasCtx.drawImage(
                 results.image, 0, 0, out2.width, out2.height);
-            //console.log(results);
 
-            if(results.multiFaceLandmarks != undefined && results.multiFaceLandmarks.length == 1){
+            if (results.multiFaceLandmarks != undefined && results.multiFaceLandmarks.length == 1) {
                 desactivarBloqueo();
-            }else{
-                if(results.multiFaceLandmarks == undefined){
+            } else {
+                if (results.multiFaceLandmarks == undefined) {
                     activarBloqueo('nf');
-                }else{
+                } else {
                     activarBloqueo('mf');
                 }
             }
@@ -120,21 +130,19 @@
         }
 
         function captureAndSendScreenshot(tipoAnomalia) {
-            // Captura la imagen del canvas
             const imageData = out2.toDataURL('image/jpeg');
-            // Envía la imagen al servidor usando fetch
             fetch('{{ route("guardar_foto_anomalia") }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        image: imageData,
-                        tipo_anomalia_id: tipoAnomalia,
-                        ejecucion_id: ejecucionId
-                    })
-                }).then(response => response.json())
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    image: imageData,
+                    tipo_anomalia_id: tipoAnomalia,
+                    ejecucion_id: ejecucionId
+                })
+            }).then(response => response.json())
                 .then(data => {
                     console.log('Success:', data);
                     pauseDetection();
@@ -150,22 +158,56 @@
         });
         faceMesh.onResults(onResultsFaceMesh);
 
-        const camera = new Camera(video2, {
-            onFrame: async () => {
-                await faceMesh.send({
-                    image: video2
+        async function joinRoom() {
+            const roomName = '{{ $ejecucion_id }}'; // Usar el ID de ejecución directamente
+
+            const response = await fetch('/video/token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ identity: 'student-{{ uniqid() }}', room: roomName })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                alert('Error: ' + errorData.error);
+                return;
+            }
+
+            const data = await response.json();
+            const token = data.token;
+
+            Twilio.Video.createLocalTracks({
+                audio: true,
+                video: { width: 640 }
+            }).then(localTracks => {
+                const localVideoTrack = localTracks.find(track => track.kind === 'video');
+                video2.srcObject = new MediaStream([localVideoTrack.mediaStreamTrack]);
+
+                const camera = new Camera(video2, {
+                    onFrame: async () => {
+                        await faceMesh.send({
+                            image: video2
+                        });
+                    },
+                    width: 512,
+                    height: 512
                 });
-            },
-            width: 512,
-            height: 512
-        });
-        camera.start();
+                camera.start();
+
+                Twilio.Video.connect(token, {
+                    tracks: localTracks
+                });
+            });
+        }
 
         new ControlPanel(controlsElement2, {
-                maxNumFaces: 5,
-                minDetectionConfidence: 0.5,
-                minTrackingConfidence: 0.5
-            })
+            maxNumFaces: 5,
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5
+        })
             .add([
                 fpsControl
             ])
@@ -175,6 +217,11 @@
 
         startFaceCheck();
 
+        // Conectar automáticamente cuando se carga la página
+        document.addEventListener('DOMContentLoaded', (event) => {
+            joinRoom();
+        });
+
         document.addEventListener('visibilitychange', function() {
             if (document.hidden) {
                 console.log('La ventana está minimizada o el usuario ha cambiado de pestaña.');
@@ -182,6 +229,6 @@
                 console.log('La ventana está activa.');
             }
         });
-
     </script>
-</div>
+</body>
+</html>
