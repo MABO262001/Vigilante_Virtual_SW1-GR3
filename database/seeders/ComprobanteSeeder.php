@@ -14,7 +14,7 @@ class ComprobanteSeeder extends Seeder
         $faker = Faker::create();
 
         $adminIds = range(7, 11);
-        $studentIds = range(12, 125);
+        $studentIds = range(42, 125);
         shuffle($studentIds);
 
         foreach ($studentIds as $studentId) {

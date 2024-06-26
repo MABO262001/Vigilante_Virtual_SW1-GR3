@@ -8,12 +8,12 @@ use Faker\Factory as Faker;
 
 class GrupoMateriaBoletaInscripcionSeeder extends Seeder
 {
-    
+
     public function run(): void
     {
         $faker = Faker::create();
 
-        $boletaIds = range(1, 114);
+        $boletaIds = range(1, 83);
         $grupoMateriaIds = range(1, 24);
 
         foreach ($boletaIds as $boletaId) {

@@ -15,11 +15,11 @@ class ServicioComprobanteSeeder extends Seeder
     {
         $servicioId = 1;
 
-        for ($comprobanteId = 1; $comprobanteId <= 114; $comprobanteId++) {
+        for ($comprobanteId = 1; $comprobanteId <= 72; $comprobanteId++) {
             DB::table('servicio_comprobantes')->insert([
                 'comprobante_id' => $comprobanteId,
                 'servicio_id' => $servicioId,
-                'usado' => false,
+                'usado' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
