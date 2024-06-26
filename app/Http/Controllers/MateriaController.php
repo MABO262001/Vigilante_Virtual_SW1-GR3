@@ -43,7 +43,6 @@ class MateriaController extends Controller
             return redirect()->back()->with('error', 'La sigla de la materia ya existe. Por favor, elige otra sigla.');
         }
 
-
         $materia = new Materia;
         $materia->nombre = $request->nombre;
         $materia->sigla = $request->sigla;
@@ -51,7 +50,6 @@ class MateriaController extends Controller
 
         return redirect()->route('Materia.index')->with('success', 'Materia creada con éxito.');
     }
-
 
     public function show(Request $request, $id)
     {

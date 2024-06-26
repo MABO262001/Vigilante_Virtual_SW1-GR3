@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Validator;
 
 class InscripcionController extends Controller
 {
-
     public function index(Request $request)
     {
         $search = $request->get('search');
@@ -254,7 +253,6 @@ class InscripcionController extends Controller
                 'total' => $total_materias_inscritas,
             ]);
         }
-
         return view('VistaInscripcion.edit', compact('grupomaterias', 'boleta_inscripcion', 'user_estudiante', 'total_materias_inscritas', 'inscribedGrupoMaterias'));
     }
 
@@ -272,7 +270,6 @@ class InscripcionController extends Controller
             if ($errors->has('carnet_identidad')) {
                 $error = 'Carnet no encontrado';
             }
-
             return redirect()->back()->withErrors($error)->withInput();
         }
 

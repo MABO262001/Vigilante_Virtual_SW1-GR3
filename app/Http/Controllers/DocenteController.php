@@ -34,15 +34,14 @@ class DocenteController extends Controller
     }
 
 
-    public function materia($id){
+    public function materia($id) {
         $user = Auth::user();
         $gp = GrupoMateria::find($id);
         $materia = Materia::find($gp->materia_id);
         $grupo = Grupo::find($gp->grupo_id);
         $estudiantes = [];
         $detalles = GrupoMateriaBoletaInscripcion::where('grupo_materia_id',$id)->get();
-        foreach ($detalles as $detalle){
-            
+        foreach ($detalles as $detalle) {
             $boleta = BoletaInscripcion::where('id',$detalle->boleta_inscripcion_id)->first();
             $alumno = User::where('id',$boleta->user_estudiante_id)->first();
             $estudiantes[] = $alumno;

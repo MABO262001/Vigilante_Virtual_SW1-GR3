@@ -213,7 +213,6 @@ class PagoServicioController extends Controller
         if ($validator->fails()) {
             $errors = $validator->errors();
             $error = '';
-
             if ($errors->has('carnet_identidad')) {
                 $error = 'Carnet no encontrado';
             } elseif ($errors->has('servicios')) {

@@ -85,8 +85,6 @@ class GrupoMateriaController extends Controller
         return view('VistaGrupoMateria.show', compact('grupoMateria', 'usuarios'));
     }
 
-
-
     public function edit($id)
     {
         $grupoMateria = GrupoMateria::findOrFail($id);
@@ -128,7 +126,6 @@ class GrupoMateriaController extends Controller
     public function listaestudiantes()
     {
         return view('VistaGrupoMateria.listadoestudiantes');
-
     }
 
     public function prueba($id)
