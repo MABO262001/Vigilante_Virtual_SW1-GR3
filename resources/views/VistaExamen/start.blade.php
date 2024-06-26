@@ -78,7 +78,7 @@
 
         <div class="mt-8">
             <button id="comenzar_btn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold p-4 rounded-md "
-            {{ $ejecucion->estado_ejecucion_id != 1 || ($calificacion && $calificacion->nota != 0) ? 'disabled' : '' }} >Realizar intento</button>
+            {{ $ejecucion->estado_ejecucion_id != 3 || ($calificacion && $calificacion->nota != 0) ? 'disabled' : '' }} >Realizar intento</button>
         </div>
     </div>
 
