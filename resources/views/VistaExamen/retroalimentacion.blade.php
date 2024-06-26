@@ -21,16 +21,17 @@
                     if($pregunta_respuesta['pregunta']['tipo_pregunta_id'] != '3'){
 
                         $puntua = $pregunta_respuesta['pregunta']['nota'];
-                        
+                        $nota_total += $puntua;
 
                     }else{
                         if($pregunta_respuesta['respuestas'][0]['puntaje']){
                             $puntua = $pregunta_respuesta['respuestas'][0]['puntaje'];
+                            $nota_total += $puntua;
                         }else{
                             $puntua = 'n/a';
                         }
                     }
-                    $nota_total += $puntua;
+                    
                 @endphp
                 
                 <div class="border p-8 mb-4">

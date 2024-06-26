@@ -70,7 +70,7 @@
 
                                 @case(3)
                                 <div class="mb-1">
-                                    <textarea id="{{$respuesta->id}}" name="{{$pregunta['id']}}" class="w-full max-h-80 respuesta_{{$pregunta['id']}}" checked id=""></textarea>
+                                    <textarea id="" name="{{$pregunta['id']}}" class="w-full max-h-80 respuesta_{{$pregunta['id']}}" checked id=""></textarea>
                                 </div>
 
                                 @break
