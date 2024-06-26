@@ -7,6 +7,7 @@ use App\Models\Grupo;
 use App\Models\Examen;
 use App\Models\Materia;
 use App\Models\Ejecucion;
+use App\Models\Calificacion;
 use App\Models\GrupoMateria;
 use Illuminate\Http\Request;
 use App\Models\BoletaInscripcion;
@@ -101,7 +102,8 @@ class EstudianteController extends Controller
         }
         $examenes = Examen::where('grupo_materia_id', $id)->get();
         $ejecuciones = Ejecucion::whereIn('examen_id', $examenes->pluck('id'))->get();
-        return view('VistaEstudiante.materia', compact('materia', 'gp', 'estudiantes', 'grupo', 'docente', 'examenes', 'ejecuciones'));
+        $calificaciones = Calificacion::whereIn('ejecucion_id', $ejecuciones->pluck('id'))->get();
+        return view('VistaEstudiante.materia', compact('materia', 'gp', 'estudiantes', 'grupo', 'docente', 'examenes', 'ejecuciones', 'calificaciones'));
     }
 
     public function editar($id){
