@@ -30,7 +30,7 @@ Route::get('/contacto', function () {
 })->name('contacto');
 
 Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('can:Ver Dashboard')->name('Dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('Dashboard');
 
     Route::get('/teacher/video', function () {
         return view('teacher_video');
@@ -54,10 +54,10 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
     // });
 
     // Routes Permisos y Roles
-    Route::middleware('can:Ver Roles y Permisos')->group(function () {
+    // Route::middleware('can:Ver Roles y Permisos')->group(function () {
         Route::resource('Permisos', Permisos::class);
         Route::resource('Roles', Roles::class);
-    });
+    // });
 
     // Rutas DE IA
     Route::controller(ReconocimientoFacialController::class)->group(function () {
