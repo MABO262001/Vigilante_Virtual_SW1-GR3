@@ -7,7 +7,11 @@
         <a href="{{route('Examen.supervicion', $ejecucion->id)}}" class="bg-gradient-to-t text-white font-bold rounded transition duration-200
         from-blue-600 to-blue-500 py-1 px-2">
             Ver
-    </a>
+        </a>
+        <a href="{{route('Examen.meet', $ejecucion->id)}}" class="bg-gradient-to-t text-white font-bold rounded transition duration-200
+            from-blue-600 to-blue-500 py-1 px-2">
+                Meet
+            </a>
     </td>
 </tr>
 @endforeach
