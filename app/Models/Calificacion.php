@@ -26,7 +26,7 @@ class Calificacion extends Model
     //     return $this->belongsTo(User::class);
     // }
 
-    // public function ejecucion(){
-    //     return $this->belongsTo(Ejecucion::class);
-    // }
+    public function ejecucion(){
+        return $this->belongsTo(Ejecucion::class);
+    }
 }

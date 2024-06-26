@@ -594,7 +594,8 @@ class ExamenController extends Controller
             $data = compact(
                 'preguntas_respuestas',
                 'examen',
-                'calificacion'
+                'calificacion',
+                'user'
             );
 
             return view('VistaExamen.retroalimentacion', $data);

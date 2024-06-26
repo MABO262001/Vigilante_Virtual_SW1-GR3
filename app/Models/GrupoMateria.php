@@ -63,4 +63,8 @@ class GrupoMateria extends Model
         return $query->get();
     }
 
+    public function grupoMateriaBoletaInscripcions()
+    {
+        return $this->hasMany(GrupoMateriaBoletaInscripcion::class, 'grupo_materia_id');
+    }
 }

@@ -11,6 +11,7 @@ use App\Models\Calificacion;
 use App\Models\GrupoMateria;
 use Illuminate\Http\Request;
 use App\Models\BoletaInscripcion;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\GrupoMateriaBoletaInscripcion;
@@ -78,7 +79,19 @@ class EstudianteController extends Controller
     public function calificaciones()
     {
         $usuario = Auth::user();
-        return view('VistaEstudiante.calificaciones', compact('usuario'));
+
+        // Obtener todas las calificaciones del usuario autenticado
+        $calificaciones = Calificacion::whereHas('ejecucion.examen.grupoMateria.grupoMateriaBoletaInscripcions', function ($query) use ($usuario) {
+            $query->whereHas('boleta_inscripcion', function ($query) use ($usuario) {
+                $query->where('user_estudiante_id', $usuario->id);
+            });
+        })->with([
+            'ejecucion.examen.grupoMateria.materia',
+            'ejecucion.examen.grupoMateria.userDocente',
+            'ejecucion.examen.grupoMateria.grupo'
+        ])->get();
+
+        return view('VistaEstudiante.calificaciones', compact('usuario', 'calificaciones'));
     }
 
 
@@ -105,6 +118,11 @@ class EstudianteController extends Controller
         $examenes = Examen::where('grupo_materia_id', $id)->get();
         $ejecuciones = Ejecucion::whereIn('examen_id', $examenes->pluck('id'))->get();
         $calificaciones = Calificacion::whereIn('ejecucion_id', $ejecuciones->pluck('id'))->get();
+        foreach ($calificaciones as $calificacion) {
+            Log::info('Calificacion:', ['calificacion' => $calificacion]);
+            Log::info('Ejecucion:', ['ejecucion' => $calificacion->ejecucion]);
+            Log::info('Examen:', ['examen' => $calificacion->ejecucion->examen]);
+        }
         return view('VistaEstudiante.materia', compact('materia', 'gp', 'estudiantes', 'grupo', 'docente', 'examenes', 'ejecuciones', 'calificaciones'));
     }
 

@@ -1,5 +1,5 @@
-@extends('Panza_min')
-@section('Panza')
+<x-navbar />
+
 <div class="flex justify-center relative">
     <div class="w-full h-full bg-black/40 absolute flex justify-center items-center" id="bloqueo" style="z-index: 500;">
         <span id="motivo" class="text-red-500 font-bold text-5xl">No se detectan rostros en la pantalla</span>
@@ -337,4 +337,4 @@
             });
     }
 </script>
-@endsection
+@include('components.footer')

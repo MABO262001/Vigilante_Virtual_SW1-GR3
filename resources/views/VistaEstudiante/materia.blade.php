@@ -111,6 +111,17 @@
                                 </td>
                             </tr>
                         @else
+                            @foreach ($calificaciones as $index => $calificacion)
+                                <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                    <td class="py-3 px-4 text-sm text-gray-600">{{ $index + 1 }}</td>
+                                    <td class="py-3 px-4 text-sm text-gray-600">{{ $calificacion->ejecucion->examen->tema ?? 'N/A' }}</td>
+                                    <td class="py-3 px-4 text-sm text-gray-600">{{ \Carbon\Carbon::parse($calificacion->ejecucion->fecha)->locale('es_BO')->isoFormat('dddd, D [de] MMMM [de] YYYY') }}</td>
+                                    <td class="py-3 px-4 text-sm text-gray-600">{{ $calificacion->nota }}</td>
+                                    <td class="py-3 px-4 text-sm text-gray-600">
+                                        <a href="" class="text-blue-600 hover:text-blue-900">Ver</a>
+                                    </td>
+                                </tr>
+                            @endforeach
                         @endif
                     </tbody>
                 </table>
