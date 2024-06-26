@@ -19,6 +19,8 @@
 
     async function joinRoom() {
         const roomName = document.getElementById('room-id').value;
+        const teacherIdentity = 'teacher-{{ $teacherName }}'; // Usar el nombre del docente
+
         if (!roomName) {
             alert('Room ID is missing');
             return;
@@ -30,7 +32,7 @@
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
-            body: JSON.stringify({ identity: 'teacher-{{ uniqid() }}', room: roomName })
+            body: JSON.stringify({ identity: teacherIdentity, room: roomName })
         });
 
         if (!response.ok) {
@@ -44,34 +46,42 @@
 
         Twilio.Video.connect(token, { name: roomName }).then(room => {
             room.participants.forEach(participant => {
-                participant.tracks.forEach(publication => {
-                    if (publication.isSubscribed) {
-                        const track = publication.track;
-                        attachTrack(track, participant.identity);
-                    }
-                });
+                if (participant.identity !== teacherIdentity) {
+                    participant.tracks.forEach(publication => {
+                        if (publication.isSubscribed) {
+                            const track = publication.track;
+                            attachTrack(track, participant.identity);
+                        }
+                    });
 
-                participant.on('trackSubscribed', track => {
-                    attachTrack(track, participant.identity);
-                });
+                    participant.on('trackSubscribed', track => {
+                        attachTrack(track, participant.identity);
+                    });
+                }
             });
 
             room.on('participantConnected', participant => {
-                participant.tracks.forEach(publication => {
-                    if (publication.isSubscribed) {
-                        const track = publication.track;
-                        attachTrack(track, participant.identity);
-                    }
-                });
+                if (participant.identity !== teacherIdentity) {
+                    participant.tracks.forEach(publication => {
+                        if (publication.isSubscribed) {
+                            const track = publication.track;
+                            attachTrack(track, participant.identity);
+                        }
+                    });
 
-                participant.on('trackSubscribed', track => {
-                    attachTrack(track, participant.identity);
-                });
+                    participant.on('trackSubscribed', track => {
+                        attachTrack(track, participant.identity);
+                    });
+                }
             });
 
             room.on('participantDisconnected', participant => {
                 removeTrack(participant.identity);
             });
+
+            setInterval(() => {
+                checkInactiveParticipants(room);
+            }, 1000); // Verificar cada 1 segundo
         }).catch(error => {
             console.error('Error connecting to Twilio:', error);
         });
@@ -83,6 +93,7 @@
 
         const videoContainer = document.createElement('div');
         videoContainer.classList.add('video-container');
+        videoContainer.setAttribute('data-identity', identity); // Agregar atributo para identificar al participante
 
         // Crear la superposición de nombre
         const nameOverlay = document.createElement('div');
@@ -97,7 +108,22 @@
     function removeTrack(identity) {
         const containers = document.querySelectorAll('.video-container');
         containers.forEach(container => {
-            if (container.querySelector('.name-overlay').textContent === identity) {
+            if (container.getAttribute('data-identity') === identity) {
+                container.remove();
+            }
+        });
+    }
+
+    function checkInactiveParticipants(room) {
+        const activeParticipants = new Set();
+        room.participants.forEach(participant => {
+            activeParticipants.add(participant.identity);
+        });
+
+        const containers = document.querySelectorAll('.video-container');
+        containers.forEach(container => {
+            const identity = container.getAttribute('data-identity');
+            if (!activeParticipants.has(identity)) {
                 container.remove();
             }
         });

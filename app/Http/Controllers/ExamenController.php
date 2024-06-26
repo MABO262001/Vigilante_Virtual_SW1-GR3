@@ -675,15 +675,15 @@ class ExamenController extends Controller
         return view('VistaExamen.supervicion', $data);
     }
     
-    public function meet($ejecucion_id){
+    public function meet($ejecucion_id) {
         $ejecucion = Ejecucion::find($ejecucion_id);
-
-        $data = compact(
-            'ejecucion'
-        );
-
+        $teacherName = auth()->user()->name; // Obtener el nombre del docente autenticado
+    
+        $data = compact('ejecucion', 'teacherName');
+    
         return view('teacher_video', $data);
     }
+    
 
     public function getEstudiantes(Request $request){
         $ejecucion_id = $request->ejecucion_id;
