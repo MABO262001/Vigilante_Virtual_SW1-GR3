@@ -35,7 +35,6 @@ class Roles extends Controller
         $request->validate([
             'name' => 'required|unique:roles,name',
         ]);
-    
         $role = Role::create(['name' => $request->name,
         'guard_name' => 'web'    
     ]);

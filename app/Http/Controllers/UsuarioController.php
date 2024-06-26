@@ -72,7 +72,6 @@ class UsuarioController extends Controller
         if ($request->ajax()) {
             return view('VistaUsuario.table', compact('usuarios'));
         }
-
         return view('VistaUsuario.index', compact('usuarios', 'totalUsuarios', 'totalDocentes', 'totalEstudiantes', 'usuarios_creables', 'roles'));
     }
 

@@ -24,7 +24,7 @@ class EstudianteController extends Controller
         $boletas = BoletaInscripcion::where('user_estudiante_id',$user->id)->get();
         foreach ($boletas as $boleta){
             $detalleboleta = GrupoMateriaBoletaInscripcion::where('boleta_inscripcion_id',$boleta->id)->get();
-            foreach($detalleboleta as $detalle){
+            foreach($detalleboleta as $detalle) {
                 $detalleboletas[] = $detalle;
             }
         }
@@ -75,13 +75,15 @@ class EstudianteController extends Controller
         return view('VistaEstudiante.listaestudiante');
     }
 
-    public function calificaciones(){
+    public function calificaciones()
+    {
         $usuario = Auth::user();
         return view('VistaEstudiante.calificaciones', compact('usuario'));
     }
 
 
-    public function perfil(){
+    public function perfil()
+    {
         $usuario = Auth::user();
         return view('VistaEstudiante.perfil', compact('usuario'));
     }
@@ -106,10 +108,12 @@ class EstudianteController extends Controller
         return view('VistaEstudiante.materia', compact('materia', 'gp', 'estudiantes', 'grupo', 'docente', 'examenes', 'ejecuciones', 'calificaciones'));
     }
 
-    public function editar($id){
+    public function editar($id)
+    {
         $usuario = User::find($id);
         return view('VistaEstudiante.editar', compact('usuario'));
     }
+
     public function update(Request $request, $id)
     {
         $usuario = User::findOrFail($id);
@@ -132,10 +136,9 @@ class EstudianteController extends Controller
         if ($authUser->hasRole('Estudiante')) {
         return redirect()->route('Estudiante.perfil')->with('success', 'Usuario actualizado correctamente');
         }
-        if($authUser->hasRole('Docente')){
+        if($authUser->hasRole('Docente')) {
             return redirect()->route('Docente.index')->with('success', 'Usuario actualizado correctamente');
         }
-
     }
 
     public function calendar()

@@ -11,7 +11,6 @@ class ServicioController extends Controller
     public function index(Request $request)
     {
         $search = $request->get('search');
-
         $servicios = Servicio::query()
             ->where(function ($query) use ($search) {
                 $query->where('nombre', 'LIKE', "%{$search}%")
@@ -22,13 +21,9 @@ class ServicioController extends Controller
         if ($request->ajax()) {
             return view('VistaServicio.table', compact('servicios'));
         }
-
         $totalServicios = $servicios->count();
-
         return view('VistaServicio.index', compact('servicios', 'totalServicios'));
     }
-
-
 
     public function create()
     {
