@@ -5,7 +5,7 @@
     <td>
         @if($examen->ejecutandose != '1')
         <button class="bg-gradient-to-t text-white font-bold rounded transition duration-200
-            from-blue-600 to-blue-500 py-1 px-2 border-b-2 border-blue-800">
+            from-blue-600 to-blue-500 py-1 px-2 border-b-2 border-blue-800" onclick="showModal('{{$examen->id}}')">
             <i class="fa-solid fa-play"></i>
         </button>
         @else

@@ -674,6 +674,7 @@ class ExamenController extends Controller
 
         return view('VistaExamen.supervicion', $data);
     }
+    
     public function meet($ejecucion_id){
         $ejecucion = Ejecucion::find($ejecucion_id);
 
@@ -719,5 +720,32 @@ class ExamenController extends Controller
             'msg' => 'ok',
             'data' => $anomalias
         ];
+    }
+
+    public function storeEjecucion(Request $request){
+        $examen = Examen::find($request->examen_id);
+
+        $preguntas = Pregunta::where('examen_id', $examen->id)->get();
+
+        if(count($preguntas) < $request->nro_preguntas){
+            return ['msg'=> 'neq'];//not enougth questions
+        }
+
+        $ejecucion = Ejecucion::create([
+            'fecha'                 =>  $request->fecha,
+            'hora_inicio'           =>  $request->hora_inicio,
+            'hora_final'            =>  $request->hora_final,
+            'ponderacion'           =>  $request->ponderacion,
+            'contrasena'            =>  $request->contrasena,
+            'nro_preguntas'         =>  $request->nro_preguntas,
+            'examen_id'             =>  $examen->id,
+            'estado_ejecucion_id'   =>  3,
+            'navegacion'            =>  $request->navegacion == 'on' ? '1' : '0',
+            'retroalimentacion'     =>  $request->retroalimentacion == 'on' ? '1' : '0',
+        ]);
+
+        toastr('Ejecucion de examen programada correctamete', 'success', 'Ejecucion de examen');
+
+        return ['msg' => 'ok'];
     }
 }
