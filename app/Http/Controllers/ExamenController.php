@@ -217,29 +217,31 @@ class ExamenController extends Controller
 
     private function verificarEjecucion(Ejecucion $ejecucion)
     {
-        //dd($ejecucion);
         $now = Carbon::now();
-        //dd($now);
-        
-        //si es que esta en proceso
-        if ($ejecucion->estado_ejecucion_id == '1') {
-            
-            if ($now->format('Y-m-d') > $ejecucion->fecha) {
-                //dd($now->format('Y-m-d'));
 
-                return '2';
-            } else if ($now->format('Y-m-d') == $ejecucion->fecha && $now->format('h:i:s') >= $ejecucion->hora_final) {
+        // Si está en proceso
+        if ($ejecucion->estado_ejecucion_id == '1') {
+            // Si la fecha actual es después de la fecha de ejecución
+            if ($now->isAfter(Carbon::createFromFormat('Y-m-d H:i:s', $ejecucion->fecha . ' ' . $ejecucion->hora_final))) {
                 return '2';
             }
         }
-        //Si es que esta pendiente
-        if($ejecucion->estado_ejecucion_id == '3'){
-            if ($now->format('Y-m-d') == $ejecucion->fecha && $now->format('h:i:s') <= $ejecucion->hora_final && $now->format('h:i:s') >= $ejecucion->hora_incio) {
+
+        // Si está pendiente
+        if ($ejecucion->estado_ejecucion_id == '3') {
+            $horaInicio = Carbon::createFromFormat('H:i:s', $ejecucion->hora_inicio);
+            $horaFinal = Carbon::createFromFormat('H:i:s', $ejecucion->hora_final);
+            $nowTime = $now->format('H:i:s');
+
+            // Si la fecha actual es igual a la fecha de ejecución y la hora actual está entre la hora de inicio y la hora final
+            if ($now->format('Y-m-d') == $ejecucion->fecha && $nowTime >= $horaInicio->format('H:i:s') && $nowTime <= $horaFinal->format('H:i:s')) {
                 return '1';
             }
         }
+
         return $ejecucion->estado_ejecucion_id;
     }
+
 
     public function running($id)
     {
