@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('profile_photo_path', 2048)->nullable();
             $table->unsignedBigInteger('jefe_id')->nullable();
 
-
             //Perfil del usuario
             $table->integer('carnet_identidad')->nullable();
             $table->string('nombre')->nullable();

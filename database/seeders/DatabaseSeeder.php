@@ -1,6 +1,7 @@
 <?php
 
 namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,7 +22,7 @@ class DatabaseSeeder extends Seeder
             GestionSeeder::class,
             ServicioSeeder::class,
             GrupoMateriaSeeder::class,
-            // mas seeders
+            PagosSeeder::class,
         ]);
     }
 }
