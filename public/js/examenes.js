@@ -337,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(responseData => {
                 if (responseData['msg'] == 'ok') {
-                    window.location.href = '/examenes';
+                    window.location.href = '/grupo-materia/'+grupo_materia_id+'/prueba';
                 }
                 console.log(responseData);
             });
