@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Anomalia;
 use App\Models\Calificacion;
 use App\Models\Ejecucion;
 use App\Models\Examen;
@@ -183,10 +184,12 @@ class ExamenController extends Controller
         $calificacion = Calificacion::where('user_id', $user->id)
         ->where('ejecucion_id', $ejecucion->id)->first();
 
-        if ($this->verificarEjecucion($ejecucion)) {
-            $ejecucion->estado_ejecucion_id = '2';
+        //Da 2 vueltas por si acaso
+        for ($i=0; $i < 2; $i++) { 
+            $ejecucion->estado_ejecucion_id = $this->verificarEjecucion($ejecucion);
             $ejecucion->save();
         }
+        
 
         $now = Carbon::now();
         $fecha = Carbon::parse($ejecucion->fecha);
@@ -218,17 +221,24 @@ class ExamenController extends Controller
         $now = Carbon::now();
         //dd($now);
         
+        //si es que esta en proceso
         if ($ejecucion->estado_ejecucion_id == '1') {
             
             if ($now->format('Y-m-d') > $ejecucion->fecha) {
                 //dd($now->format('Y-m-d'));
 
-                return true;
+                return '2';
             } else if ($now->format('Y-m-d') == $ejecucion->fecha && $now->format('h:i:s') >= $ejecucion->hora_final) {
-                return true;
+                return '2';
             }
         }
-        return false;
+        //Si es que esta pendiente
+        if($ejecucion->estado_ejecucion_id == '3'){
+            if ($now->format('Y-m-d') == $ejecucion->fecha && $now->format('h:i:s') <= $ejecucion->hora_final && $now->format('h:i:s') >= $ejecucion->hora_incio) {
+                return '1';
+            }
+        }
+        return $ejecucion->estado_ejecucion_id;
     }
 
     public function running($id)
@@ -655,6 +665,49 @@ class ExamenController extends Controller
     }
 
     public function supervicion($ejecucion_id){
-        
+        $ejecucion = Ejecucion::find($ejecucion_id);
+
+        $data = compact(
+            'ejecucion'
+        );
+
+        return view('VistaExamen.supervicion', $data);
+    }
+
+    public function getEstudiantes(Request $request){
+        $ejecucion_id = $request->ejecucion_id;
+
+        $calificaciones = Calificacion::where('ejecucion_id', $ejecucion_id)
+        ->get();
+
+        foreach($calificaciones as $calificacion){
+            $user = User::where('id', $calificacion->user_id)->first();
+            $calificacion->usuario = $user;
+
+            $anomalias =  Anomalia::where('user_id', $user->id)
+            ->where('ejecucion_id', $ejecucion_id)->get();
+
+            $calificacion->anomalias = $anomalias;
+        }
+
+        return ['msg' => 'ok',
+        'data' => $calificaciones];
+    }
+
+    public function getAnomalias(Request $request)
+    {
+        $ejecucion_id = $request->ejecucion_id;
+        $user_id = $request->user_id;
+
+        $user = User::where('id', $user_id)->first();
+
+        $anomalias =  Anomalia::where('user_id', $user->id)
+            ->where('ejecucion_id', $ejecucion_id)->get();
+
+
+        return [
+            'msg' => 'ok',
+            'data' => $anomalias
+        ];
     }
 }

@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Video Call with Face Detection</title>
-    <script src="https://sdk.twilio.com/js/video/releases/2.14.0/twilio-video.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.1/camera_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils@0.1/control_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.1/drawing_utils.js" crossorigin="anonymous"></script>
@@ -157,31 +156,10 @@
         });
         faceMesh.onResults(onResultsFaceMesh);
 
-        async function joinRoom() {
-            const roomName = '{{ $ejecucion_id }}'; // Usar el ID de ejecución directamente
-
-            const response = await fetch('/video/token', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ identity: 'student-{{ uniqid() }}', room: roomName })
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                alert('Error: ' + errorData.error);
-                return;
-            }
-
-            const data = await response.json();
-            const token = data.token;
-
-            Twilio.Video.createLocalVideoTrack({
-                width: 640
-            }).then(localVideoTrack => {
-                video2.srcObject = new MediaStream([localVideoTrack.mediaStreamTrack]);
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video2.srcObject = stream;
 
                 const camera = new Camera(video2, {
                     onFrame: async () => {
@@ -193,11 +171,9 @@
                     height: 512
                 });
                 camera.start();
-
-                Twilio.Video.connect(token, {
-                    tracks: [localVideoTrack]
-                });
-            });
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+            }
         }
 
         new ControlPanel(controlsElement2, {
@@ -214,9 +190,9 @@
 
         startFaceCheck();
 
-        // Conectar automáticamente cuando se carga la página
+        // Iniciar la cámara automáticamente cuando se carga la página
         document.addEventListener('DOMContentLoaded', (event) => {
-            joinRoom();
+            startCamera();
         });
 
         document.addEventListener('visibilitychange', function() {

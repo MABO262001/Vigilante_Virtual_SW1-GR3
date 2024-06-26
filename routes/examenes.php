@@ -20,5 +20,7 @@ Route::post('/terminar-intento/{calificacion}', [ExamenController::class, 'termi
 Route::get('/ver-intento/{calificacion}', [ExamenController::class, 'verIntento'])->name('Examen.verIntento');
 
 Route::get('/supervision/{ejecucion}', [ExamenController::class, 'supervicion'])->name('Examen.supervicion');
+Route::post('/get-estudiantes', [ExamenController::class, 'getEstudiantes'])->name('Examen.getEstudiantes');
+Route::post('/get-anomalias', [ExamenController::class, 'getAnomalias'])->name('Examen.getAnomalias');
 
 Route::get('/ausente', [ExamenController::class, 'ausente'])->name('Examen.ausente');
