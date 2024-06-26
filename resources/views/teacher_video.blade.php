@@ -42,17 +42,17 @@
         const data = await response.json();
         const token = data.token;
 
-        Twilio.Video.connect(token, {}).then(room => {
+        Twilio.Video.connect(token, { name: roomName }).then(room => {
             room.participants.forEach(participant => {
                 participant.tracks.forEach(publication => {
                     if (publication.isSubscribed) {
                         const track = publication.track;
-                        attachTrack(track);
+                        attachTrack(track, participant.identity);
                     }
                 });
 
                 participant.on('trackSubscribed', track => {
-                    attachTrack(track);
+                    attachTrack(track, participant.identity);
                 });
             });
 
@@ -60,22 +60,47 @@
                 participant.tracks.forEach(publication => {
                     if (publication.isSubscribed) {
                         const track = publication.track;
-                        attachTrack(track);
+                        attachTrack(track, participant.identity);
                     }
                 });
 
                 participant.on('trackSubscribed', track => {
-                    attachTrack(track);
+                    attachTrack(track, participant.identity);
                 });
             });
+
+            room.on('participantDisconnected', participant => {
+                removeTrack(participant.identity);
+            });
+        }).catch(error => {
+            console.error('Error connecting to Twilio:', error);
         });
     }
 
-    function attachTrack(track) {
+    function attachTrack(track, identity) {
+        // Eliminar los contenedores existentes para evitar duplicación
+        removeTrack(identity);
+
         const videoContainer = document.createElement('div');
         videoContainer.classList.add('video-container');
+
+        // Crear la superposición de nombre
+        const nameOverlay = document.createElement('div');
+        nameOverlay.classList.add('name-overlay');
+        nameOverlay.textContent = identity;
+        
         videoContainer.appendChild(track.attach());
+        videoContainer.appendChild(nameOverlay);
         document.getElementById('remote-video').appendChild(videoContainer);
+    }
+
+    function removeTrack(identity) {
+        const containers = document.querySelectorAll('.video-container');
+        containers.forEach(container => {
+            if (container.querySelector('.name-overlay').textContent === identity) {
+                container.remove();
+            }
+        });
     }
 </script>
 
@@ -89,6 +114,7 @@
         position: relative;
         width: 100%;
         padding-top: 56.25%;
+        background-color: black;
     }
     .video-container video {
         position: absolute;
@@ -97,6 +123,18 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+    }
+    .name-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        text-align: center;
+        padding: 5px;
+        font-size: 14px;
+        font-weight: bold;
     }
 </style>
 

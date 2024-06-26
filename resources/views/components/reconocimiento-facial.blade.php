@@ -28,6 +28,7 @@
         let isChecking = true;
         let detectionPaused = false;
         const ejecucionId = '{{ $ejecucion_id }}';
+        const studentName = '{{ Auth::user()->name }}'; // Obtener el nombre del estudiante desde la autenticación de Laravel
         const fpsControl = new FPS();
         const spinner = document.querySelector('.loading');
         spinner.ontransitionend = () => {
@@ -166,7 +167,7 @@
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
-                body: JSON.stringify({ identity: 'student-{{ uniqid() }}', room: roomName })
+                body: JSON.stringify({ identity: studentName, room: roomName })
             });
 
             if (!response.ok) {
